@@ -1,7 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TaskService } from '../task.service';
 import { Task } from '../models';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -16,14 +15,20 @@ import { NgClass } from '@angular/common';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent {
+export class TaskListComponent implements OnInit {
   private taskService = inject(TaskService);
 
-  tasks = toSignal(this.taskService.getTasks(), { initialValue: [] });
+  // Read directly from the service signal — reflects add/update/delete instantly
+  tasks = this.taskService.tasks;
 
   activeStatus = signal<Task['status'] | null>(null);
   activePriority = signal<Task['priority'] | null>(null);
   activeAssignee = signal<string | null>(null);
+
+  ngOnInit(): void {
+    // Trigger initial HTTP load (no-op if already loaded)
+    this.taskService.getTasks().subscribe();
+  }
 
   filteredTasks = computed(() => {
     const status = this.activeStatus();
@@ -47,8 +52,11 @@ export class TaskListComponent {
     this.activeStatus.set(status);
   }
 
-  // Helper
-  // Extract unique assignees for filter dropdown - no mocked-data for them so far.
+  handleDelete(taskId: string): void {
+    this.taskService.deleteTask(taskId).subscribe();
+    /** Tasks updated in the service signal automatically */
+  }
+
   assignees = computed(() => {
     const seen = new Set<string>();
     return this.tasks()

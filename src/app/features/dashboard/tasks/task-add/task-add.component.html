@@ -4,9 +4,9 @@
     <p>Fill in the details below to create a new task</p>
   </header>
 
-  @if (errorMessage) {
+  @if (errorMessage()) {
     <div class="error-banner">
-      {{ errorMessage }}
+      {{ errorMessage() }}
     </div>
   }
 
@@ -16,7 +16,7 @@
     (formCancel)="onFormCancel()"
   ></app-task-form>
 
-  @if (isSubmitting) {
+  @if (isSubmitting()) {
     <div class="loading-overlay">
       <div class="spinner"></div>
       <p>Creating task...</p>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskService } from '../task.service';
@@ -15,25 +15,25 @@ export class TaskAddComponent {
   private taskService = inject(TaskService);
   private router = inject(Router);
 
-  isSubmitting = false;
-  errorMessage = '';
+  isSubmitting = signal(false);
+  errorMessage = signal('');
 
   onFormSubmit(taskData: TaskFormData): void {
-    this.isSubmitting = true;
-    this.errorMessage = '';
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
 
     this.taskService.createTask(taskData).subscribe({
-      next: (task) => {
-        console.log('Task created successfully:', task);
+      next: () => {
+        /** Tasks updated in the service signal automatically */
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error('Error creating task:', error);
-        this.errorMessage = 'Failed to create task. Please try again.';
-        this.isSubmitting = false;
+        this.errorMessage.set('Failed to create task. Please try again.');
+        this.isSubmitting.set(false);
       },
       complete: () => {
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
       }
     });
   }

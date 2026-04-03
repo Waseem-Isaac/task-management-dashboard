@@ -46,7 +46,7 @@
           <span class="task-count badge">{{ (filteredTasks() | filterByStatus:col.status).length }}</span>
         </div>
         @for (task of filteredTasks() | filterByStatus:col.status; track task.id) {
-          <app-task-card [task]="task" />
+          <app-task-card [task]="task" (deleteRequested)="handleDelete($event)" />
         } 
       </div>
     }

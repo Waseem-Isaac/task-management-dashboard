@@ -1,8 +1,16 @@
 <div class="task-card" [ngClass]="{ 'overdue': isOverdue(task()) }">
 
-  <!-- 1. Priority badge + 4. Due date -->
-  <div class="card-header d-flex align-items-center justify-content-between mb-2" >
+  <!-- 1. Priority badge + actions -->
+  <div class="card-header d-flex align-items-center justify-content-between mb-2">
     <span class="priority-badge priority-{{ task().priority }}">{{ task().priority }}</span>
+    <div class="card-actions d-flex gap-1">
+      <a class="action-btn" [routerLink]="['/dashboard/tasks/edit', task().id]" title="Edit task">
+        <mat-icon>edit</mat-icon>
+      </a>
+      <button class="action-btn action-btn--delete" (click)="deleteRequested.emit(task().id)" title="Delete task">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   </div>
 
   <!-- 2. Title -->
