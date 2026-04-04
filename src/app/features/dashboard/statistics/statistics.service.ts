@@ -6,7 +6,7 @@ import { Statistic } from './models';
   providedIn: 'root',
 })
 export class StatisticsService {
-  private _resource = httpResource<{ statistics: Statistic[] }>(() => '/statistics.json');
+  private _resource = httpResource<{ statistics: Statistic[] }>(() => 'statistics.json');
 
   readonly statistics = computed(() => this._resource.value()?.statistics ?? []);
   readonly isLoading = this._resource.isLoading;

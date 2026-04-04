@@ -20,7 +20,7 @@ export class TaskService {
   // httpResource is not used here because _tasks must be mutated (in-memory) after load (add/edit/delete/reorder)
   loadTasks(): Observable<Task[]> {
     if (this.loaded) return of(this._tasks());
-    return this.http.get<{ tasks: Task[] }>('/tasks.json').pipe(
+    return this.http.get<{ tasks: Task[] }>('tasks.json').pipe(
       tap((data) => {
         this._tasks.set(data.tasks);
         this.loaded = true;

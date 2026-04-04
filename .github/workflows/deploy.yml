@@ -29,6 +29,9 @@ jobs:
       - name: Build
         run: npm run build -- --base-href=/${{ github.event.repository.name }}/
 
+      - name: Fix SPA routing
+        run: cp dist/task-management-dashboard/browser/index.html dist/task-management-dashboard/browser/404.html
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
