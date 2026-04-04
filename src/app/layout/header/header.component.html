@@ -1,6 +1,20 @@
 <mat-toolbar color="primary">
   <a routerLink="/tasks" class="brand-link"> 
     <img src="/icons/logo.png" alt="Logo" /> 
-    Task Dashboard
+    Task Manager
   </a>
+
+
+
+  <div class="search-bar-container">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [ngModel]="searchTerm()" (ngModelChange)="onSearchChange($event)" placeholder="Search tasks..." />
+      @if (searchTerm()) {
+      <button mat-icon-button matSuffix (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+    </mat-form-field>
+  </div>
 </mat-toolbar>

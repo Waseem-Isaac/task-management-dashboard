@@ -9,6 +9,7 @@ import { TaskCardComponent } from '../components/task-card/task-card.component';
 import { FilterByStatusPipe } from '../../../../shared/pipes/filter-by-status.pipe';
 import { NgClass } from '@angular/common';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { SearchService } from '../../../../core/services/search.service';
 
 @Component({
   selector: 'app-task-list',
@@ -19,6 +20,7 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 })
 export class TaskListComponent implements OnInit {
   private taskService = inject(TaskService);
+  private searchService = inject(SearchService);
 
   // Read directly from the service signal — reflects add/update/delete instantly
   tasks = this.taskService.tasks;
@@ -36,10 +38,16 @@ export class TaskListComponent implements OnInit {
     const status = this.activeStatus();
     const priority = this.activePriority();
     const assignee = this.activeAssignee();
+    const query = this.searchService.searchTerm().toLowerCase().trim();
     return this.tasks().filter((t) => {
       if (status && t.status !== status) return false;
       if (priority && t.priority !== priority) return false;
       if (assignee && t.assignee.id !== assignee) return false;
+      if (query) {
+        const inTitle = t.title.toLowerCase().includes(query);
+        const inDescription = t.description.toLowerCase().includes(query);
+        if (!inTitle && !inDescription) return false;
+      }
       return true;
     });
   });
