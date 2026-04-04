@@ -1,17 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { computed, Injectable } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 import { Statistic } from './models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StatisticsService {
-  private http = inject(HttpClient);
+  private _resource = httpResource<{ statistics: Statistic[] }>(() => '/statistics.json');
 
-  getStatistics(): Observable<Statistic[]> {
-    return this.http
-      .get<{ statistics: Statistic[] }>('/statistics.json')
-      .pipe(map((data) => data.statistics));
-  }
+  readonly statistics = computed(() => this._resource.value()?.statistics ?? []);
+  readonly isLoading = this._resource.isLoading;
+  readonly error = this._resource.error;
 }

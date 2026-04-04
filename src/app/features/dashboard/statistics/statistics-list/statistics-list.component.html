@@ -1,5 +1,9 @@
-<div class="statistics-grid">
-  @for (stat of statistics(); track stat.id) {
-    <app-statistic-card [statistic]="stat" />
-  }
-</div>
+@if (statisticsService.isLoading()) {
+  <div class="statistics-loading">Loading statistics…</div>
+} @else {
+  <div class="statistics-grid">
+    @for (stat of statisticsService.statistics(); track stat.id) {
+      <app-statistic-card [statistic]="stat" />
+    }
+  </div>
+}
