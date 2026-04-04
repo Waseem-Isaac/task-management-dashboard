@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TaskService } from '../task.service';
 import { Task } from '../models';
 import { RouterLink } from '@angular/router';
@@ -14,7 +14,8 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
   selector: 'app-task-list',
   imports: [RouterLink, MatIconModule, MatSelectModule, MatFormFieldModule, TaskCardComponent, FilterByStatusPipe, NgClass, DragDropModule],
   templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.scss']
+  styleUrls: ['./task-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent implements OnInit {
   private taskService = inject(TaskService);
@@ -28,7 +29,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     // Trigger initial HTTP load (no-op if already loaded)
-    this.taskService.getTasks().subscribe();
+    this.taskService.loadTasks().subscribe();
   }
 
   filteredTasks = computed(() => {

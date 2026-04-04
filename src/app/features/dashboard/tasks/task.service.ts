@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, signal } from "@angular/core";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { Observable, of } from "rxjs";
 import { Task, TaskFormData } from "./models";
 
@@ -14,6 +14,7 @@ export class TaskService {
   private _tasks = signal<Task[]>([]);
   readonly tasks = this._tasks.asReadonly();
 
+  // Prevent _tasks from being overwritten by the cache interceptor's tap() on repeat calls
   private loaded = false;
 
   loadTasks(): Observable<Task[]> {
@@ -23,13 +24,8 @@ export class TaskService {
         this._tasks.set(data.tasks);
         this.loaded = true;
       }),
-      // return just the array downstream if needed
-      // map stays unused — callers use tasks signal directly
-    ) as unknown as Observable<Task[]>;
-  }
-
-  getTasks(): Observable<Task[]> {
-    return this.loadTasks();
+      map((data) => data.tasks),
+    );
   }
 
   getTaskById(id: string): Observable<Task | undefined> {
@@ -51,7 +47,7 @@ export class TaskService {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    this._tasks.update(tasks => [...tasks, newTask]);
+    this._tasks.update(tasks => [newTask, ...tasks]);
     return of(newTask);
   }
 
