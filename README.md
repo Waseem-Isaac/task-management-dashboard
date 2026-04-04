@@ -1,32 +1,61 @@
-# TaskManagementDashboard
+# Task Management Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.5.
+A feature-rich task management SPA built with Angular 21.
 
-## Development server
+**Live demo:** https://waseem-isaac.github.io/task-management-dashboard/dashboard
 
-To start a local development server, run:
+---
+
+## Overview
+
+Kanban-style dashboard for managing tasks across three status columns (To Do, In Progress, Done) with drag-and-drop reordering, real-time filtering and search, and summary statistics.
+
+### Architecture decisions
+
+| Decision | Choice | Reason |
+|---|---|---|
+| State management | Signals + `computed()` | No NgRx needed for this scale; signals are fine-grained and co-locate state with services |
+| HTTP layer | `HttpClient` + cache interceptor | `httpResource` used for read-only statistics; `HttpClient` used for tasks because in-memory mutations must not be overwritten by re-fetches |
+| Search | `Subject` + `debounceTime` in `SearchService` → `toSignal` | Decouples header input from task list; RxJS handles debounce cleanly |
+| Routing | Lazy-loaded feature routes | Dashboard feature is loaded on demand |
+| Change detection | `OnPush` on all list/card components | Safe because all inputs are signals or immutable objects |
+| Styling | SCSS + Angular Material | Material provides accessible UI primitives; custom SCSS for layout and theming |
+| Code quality | ESLint + Prettier + Husky pre-commit | Enforced on staged files only via `lint-staged` |
+| Deployment | GitHub Actions → `gh-pages` branch | Automated on every push to `main` |
+
+---
+
+## Setup
+
+**Prerequisites:** Node.js ≥ 22, npm ≥ 11
 
 ```bash
-ng serve
+# Install dependencies
+npm install
+
+# Generate mock data (tasks + statistics JSON)
+npm run generate:data
+
+# Start dev server → http://localhost:4200
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Scripts
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| Script | Description |
+|---|---|
+| `npm start` | Start development server |
+| `npm run build` | Production build |
+| `npm test` | Run unit tests |
+| `npm run lint` | Check all `src/**/*.{ts,html}` with ESLint |
+| `npm run lint:fix` | Auto-fix ESLint violations |
+| `npm run format` | Format all source files with Prettier |
+| `npm run generate:data` | Regenerate `public/tasks.json` and `public/statistics.json` mock data |
 
-```bash
-ng generate component component-name
-```
+Deployment is handled automatically by the CI pipeline on push to `main`. No manual deploy command is needed.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
 
 To build the project run:
 
