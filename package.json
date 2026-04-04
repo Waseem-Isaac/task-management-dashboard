@@ -11,8 +11,7 @@
     "prepare": "husky",
     "lint": "eslint \"src/**/*.{ts,html}\"",
     "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
-    "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
-    "deploy": "ng deploy --base-href=/task-management-dashboard/"
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\""
   },
   "private": true,
   "packageManager": "npm@11.6.2",
