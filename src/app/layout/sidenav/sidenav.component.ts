@@ -1,6 +1,6 @@
 /**
  * Navigation menu component displaying app routes with icons.
- * DUMB component (presentational)
+ * SMART component (as it injects LayoutService for responsive behavior)
  */
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
