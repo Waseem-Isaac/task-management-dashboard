@@ -1,0 +1,81 @@
+/**
+ * Task edit dialog loading existing task data and handling update operations.
+ * SMART component (manages data loading and submission)
+ */
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TaskFormComponent } from '../components/task-form/task-form.component';
+import { TaskService } from '../task.service';
+import { Task, TaskFormData } from '../models';
+
+@Component({
+  selector: 'app-task-edit',
+  standalone: true,
+  imports: [TaskFormComponent, MatDialogModule],
+  templateUrl: './task-edit.component.html',
+  styleUrls: ['./task-edit.component.scss'],
+})
+export class TaskEditComponent implements OnInit {
+  private taskService = inject(TaskService);
+  private dialogRef = inject(MatDialogRef<TaskEditComponent>);
+  private data = inject<{ taskId: string }>(MAT_DIALOG_DATA);
+
+  task = signal<Task | undefined>(undefined);
+  isLoading = signal(true);
+  isSubmitting = signal(false);
+  errorMessage = signal('');
+
+  ngOnInit(): void {
+    if (this.data?.taskId) {
+      this.loadTask(this.data.taskId);
+    } else {
+      this.errorMessage.set('No task ID provided');
+      this.isLoading.set(false);
+    }
+  }
+
+  private loadTask(id: string): void {
+    this.taskService.getTaskById(id).subscribe({
+      next: (task) => {
+        if (task) {
+          this.task.set(task);
+        } else {
+          this.errorMessage.set('Task not found');
+        }
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading task:', error);
+        this.errorMessage.set('Failed to load task. Please try again.');
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  onFormSubmit(taskData: TaskFormData): void {
+    if (!this.task()) return;
+
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
+
+    this.taskService.updateTask(this.task()!._id, taskData).subscribe({
+      next: (updatedTask) => {
+        /** Tasks updated in the service signal automatically */
+        console.log('Task updated successfully:', updatedTask);
+        this.dialogRef.close(true);
+      },
+      error: (error) => {
+        console.error('Error updating task:', error);
+        this.errorMessage.set('Failed to update task. Please try again.');
+        this.isSubmitting.set(false);
+      },
+      complete: () => {
+        this.isSubmitting.set(false);
+      },
+    });
+  }
+
+  onFormCancel(): void {
+    this.dialogRef.close();
+  }
+}

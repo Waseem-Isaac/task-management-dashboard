@@ -1,0 +1,96 @@
+@use '@angular/material' as mat;
+@use './utils';
+@use './overrides';
+@use './variables';
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      typography: Inter,
+    )
+  );
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+.btn-primary {
+  background: var(--mat-sys-primary-container) !important;
+  color: var(--mat-sys-on-primary-container) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.806rem;
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  color: #fff !important;
+  background-color: var(--color-dark) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.806rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-light-grey);
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Native form controls (non-Material)
+input:not([type='checkbox']):not([type='radio']):not([type='range']),
+select,
+textarea {
+  border-color: var(--color-light-grey) !important;
+}
+
+// Placeholder text for native inputs
+::placeholder,
+select::placeholder,
+label {
+  color: var(--color-neutral) !important;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  font-size: 0.6875rem;
+  &.lg {
+    width: 44px;
+    height: 44px;
+    font-size: 0.875rem;
+  }
+
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  font-weight: 600;
+}

@@ -1,0 +1,92 @@
+:host {
+  display: block;
+
+  .page-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: 1.5rem;
+  }
+
+  .users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .user-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-primary-contrast);
+    border: 1px solid var(--color-light-grey);
+    border-radius: var(--radius-lg);
+    box-shadow: 0px 2px 4px 0px #00000014;
+    transition: transform 0.15s ease;
+    min-height: 72px;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    .delete-btn {
+      position: absolute;
+      // background-color: var(--color-body-bg);
+      color: var(--color-danger);
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      right: 0;
+      font-weight: bolder;
+      line-height: 24px;
+      background: var(--color-body-bg);
+      border-bottom-left-radius: 1rem;
+      box-shadow: 0px 2px 4px 0px #00000014;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    // Let the global shimmer override the card's white background
+    &.skeleton {
+      background: linear-gradient(
+        90deg,
+        var(--color-light-grey) 25%,
+        #fff 50%,
+        var(--color-light-grey) 75%
+      );
+    }
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .user-name,
+  .user-email {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark);
+  }
+
+  .user-email {
+    font-size: 0.75rem;
+    color: var(--color-neutral);
+  }
+}

@@ -1,0 +1,52 @@
+<h1 class="title">Welcome back</h1>
+<p class="subtitle">Sign in to your account</p>
+
+@if (errorMessage()) {
+  <div class="error-banner" role="alert">{{ errorMessage() }}</div>
+}
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="fields" novalidate>
+  <mat-form-field appearance="outline" class="field full-width">
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      formControlName="email"
+      type="email"
+      placeholder="you@example.com"
+      autocomplete="email"
+    />
+    <mat-error>{{ getFieldError('email') }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="field full-width">
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      formControlName="password"
+      [type]="showPassword() ? 'text' : 'password'"
+      placeholder="••••••••"
+      autocomplete="current-password"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="showPassword.set(!showPassword())"
+      [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+    >
+      <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+    <mat-error>{{ getFieldError('password') }}</mat-error>
+  </mat-form-field>
+
+  <div class="spacer"></div>
+
+  <button class="btn-primary submit-btn" type="submit" [disabled]="isSubmitting()">
+    @if (isSubmitting()) {
+      <mat-spinner diameter="18" />
+      Signing in...
+    } @else {
+      Sign In
+    }
+  </button>
+</form>

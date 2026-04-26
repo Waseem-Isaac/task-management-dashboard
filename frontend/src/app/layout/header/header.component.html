@@ -1,0 +1,50 @@
+<mat-toolbar color="primary">
+  @if (layoutService.isMobile()) {
+    <button mat-icon-button (click)="layoutService.toggle()" aria-label="Toggle menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+
+  <a routerLink="/tasks" class="brand-link">
+    <img src="icons/logo.svg" alt="Logo" />
+    Task Manager
+  </a>
+
+  <div class="search-bar-container">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [ngModel]="searchTerm()"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Search tasks..."
+      />
+      @if (searchTerm()) {
+        <button mat-icon-button matSuffix (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </div>
+
+  <button
+    class="d-flex align-items-center"
+    mat-icon-button
+    [matMenuTriggerFor]="userMenu"
+    aria-label="User menu"
+  >
+    <div class="user-avatar">
+      {{ usersService.getAvatarInitials(authService.currentUser()?.name ?? '') }}
+    </div>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item routerLink="/profile">
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </button>
+    <button mat-menu-item (click)="authService.logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

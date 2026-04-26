@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b6ef0"/>
+      <stop offset="100%" style="stop-color:#2d5ee8"/>
+    </linearGradient>
+  </defs>
+  <rect width="38" height="38" rx="11" ry="11" fill="url(#bgGrad)"/>
+  <!-- more padding: icon starts at 11, gap of 3 between squares, each square 7x7 -->
+  <rect x="11" y="11" width="7" height="7" rx="2" fill="white" opacity="0.90"/>
+  <rect x="20" y="11" width="7" height="7" rx="2" fill="white" opacity="0.55"/>
+  <rect x="11" y="20" width="7" height="7" rx="2" fill="white" opacity="0.55"/>
+  <rect x="20" y="20" width="7" height="7" rx="2" fill="white" opacity="0.90"/>
+</svg>

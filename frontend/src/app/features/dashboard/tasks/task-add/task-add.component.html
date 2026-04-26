@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Create New Task</h2>
+
+<mat-dialog-content>
+  @if (errorMessage()) {
+    <div class="error-banner">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (isSubmitting()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Creating task...</p>
+    </div>
+  }
+
+  <app-task-form
+    [submitButtonText]="'Create Task'"
+    (formSubmit)="onFormSubmit($event)"
+    (formCancel)="onFormCancel()"
+  ></app-task-form>
+</mat-dialog-content>

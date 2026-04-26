@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Edit Task</h2>
+
+<mat-dialog-content>
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading task...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="error-banner">
+      {{ errorMessage() }}
+      <button class="btn-back" (click)="onFormCancel()">Go Back</button>
+    </div>
+  } @else if (task()) {
+    @if (isSubmitting()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Updating task...</p>
+      </div>
+    }
+
+    <app-task-form
+      [task]="task()!"
+      [submitButtonText]="'Update Task'"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()"
+    ></app-task-form>
+  }
+</mat-dialog-content>

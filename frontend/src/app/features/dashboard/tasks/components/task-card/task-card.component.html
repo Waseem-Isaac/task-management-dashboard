@@ -1,0 +1,48 @@
+<div class="task-card" [ngClass]="{ overdue: isOverdue(task()) }">
+  <!-- 1. Priority badge + actions -->
+  <div class="card-header d-flex align-items-center justify-content-between mb-2">
+    <span class="priority-badge priority-{{ task().priority }}">{{ task().priority }}</span>
+
+    <!-- use mat-menu for actions, menu item will be the 3 veritcal dots -->
+    <div class="actions">
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="editRequested.emit(task()._id)">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+        <button mat-menu-item (click)="deleteRequested.emit(task()._id)">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <!-- 2. Title -->
+  <h5 class="card-title">{{ task().title }}</h5>
+
+  <!-- 3. Description -->
+  <p class="card-description">{{ task().description }}</p>
+
+  <!-- 4. Due date -->
+  <span class="due-date-badge">{{ task().dueDate | dueDate }}</span>
+
+  <!-- 5. Tags -->
+  <div class="tags d-flex flex-wrap gap-1 mt-1">
+    @for (tag of task().tags; track tag) {
+      <span class="tag">{{ tag }}</span>
+    }
+  </div>
+
+  <!-- 6. Horizontal line -->
+  <hr class="card-divider" />
+
+  <!-- 7. Assignee avatar + name -->
+  <div class="assignee d-flex align-items-center gap-2">
+    <div class="user-avatar">{{ getAvatarInitials(task().assignee.name) }}</div>
+    <span class="assignee-name">{{ task().assignee.name }}</span>
+  </div>
+</div>
