@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '',
+  apiUrl: 'https://task-management-dashboard-waseem-isaacs-projects.vercel.app/',
 };
