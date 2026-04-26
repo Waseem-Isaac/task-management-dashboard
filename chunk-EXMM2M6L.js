@@ -1,0 +1,1 @@
+import"./chunk-IONH7NRB.js";var t=[{path:"join",loadComponent:()=>import("./chunk-7QU43DZQ.js").then(o=>o.JoinComponent)},{path:"",redirectTo:"join",pathMatch:"full"},{path:"**",redirectTo:"join"}];export{t as AUTH_ROUTES};
