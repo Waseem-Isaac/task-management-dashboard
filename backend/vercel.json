@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "ignoreCommand": "git diff --quiet HEAD~1 HEAD -- ./backend",
+  "ignoreCommand": "git diff --quiet $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA -- ./backend",
   "builds": [
     {
       "src": "app.js",
