@@ -7,6 +7,13 @@ import { tap } from 'rxjs/operators';
 
 const cache = new Map<string, HttpResponse<unknown>>();
 
+/** Removes all cache entries whose key starts with the given URL prefix. */
+export function invalidateCache(urlPrefix: string): void {
+  for (const key of cache.keys()) {
+    if (key.startsWith(urlPrefix)) cache.delete(key);
+  }
+}
+
 export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
   if (req.method !== 'GET') {
     return next(req);

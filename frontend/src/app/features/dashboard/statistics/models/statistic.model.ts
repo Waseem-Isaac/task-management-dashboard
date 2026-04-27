@@ -1,5 +1,6 @@
 export interface Statistic {
   id: string;
+  type: string;
   title: string;
   icon: string;
   value: number;

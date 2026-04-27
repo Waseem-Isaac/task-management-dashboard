@@ -1,7 +1,7 @@
-<mat-card class="statistic-card">
+<mat-card class="statistic-card" [class]="statistic().type">
   <mat-card-content>
     <div class="statistic-header">
-      <span class="statistic-icon">{{ statistic().icon }}</span>
+      <i class="statistic-icon " [class]="statistic().type !== 'total' ? ('dot ' + statistic().type) : 'show_chart'"></i>
       <span class="statistic-title">{{ statistic().title }}</span>
     </div>
     <div class="statistic-value">{{ statistic().value }}</div>

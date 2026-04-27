@@ -3,12 +3,14 @@ import { inject, Injectable, signal } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Task, TaskFormData } from './models';
+import { StatisticsService } from '../statistics/statistics.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
   private http = inject(HttpClient);
+  private statisticsService = inject(StatisticsService);
 
   // In-memory store — loaded once from JSON, mutated for add/update/delete, Session-lifetime persistence only
   private _tasks = signal<Task[]>([]);
@@ -51,6 +53,7 @@ export class TaskService {
       tap((updated) => {
         // Reflect the task in the in-memory signal store to reflect changes immediately in the UI
         this._tasks.update((tasks) => tasks.map((t) => (t._id === id ? updated : t)));
+        this.statisticsService.reload();
       }),
     );
   }

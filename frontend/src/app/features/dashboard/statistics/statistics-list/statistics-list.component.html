@@ -10,7 +10,7 @@
   </div>
 } @else {
   <div class="statistics-grid">
-    @for (stat of statisticsService.statistics(); track stat.id) {
+    @for (stat of statisticsService.statistics(); track stat.type) {
       <app-statistic-card [statistic]="stat" />
     }
   </div>

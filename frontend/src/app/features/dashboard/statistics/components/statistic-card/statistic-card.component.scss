@@ -1,5 +1,5 @@
 .statistic-card {
-  border-radius: var(--radius-lg) ;
+  border-radius: var(--radius-lg);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   background-color: var(--color-primary-contrast);
   border: 1px solid var(--color-light-grey);
@@ -8,7 +8,8 @@
   .statistic-header {
     display: flex;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.5rem;
+
     .statistic-title {
       font-size: 0.8125rem;
       color: var(--color-neutral);
@@ -39,5 +40,30 @@
       color: var(--color-neutral);
     }
   }
+
+  
+   border-top-width: 0.3rem ;
+
+  &.overdue {
+      border-top: 0.3rem solid var(--color-danger);
+  }
+
+  &.in-progress {
+      border-top: 0.3rem solid var(--color-info);
+  }
+
+  &.completed {
+      border-top: 0.3rem solid var(--color-success);
+  }
 }
 
+.show_chart::before {
+  font-family: 'Material Icons';
+  /* Or 'Material Icons Outlined' */
+  content: 'show_chart';
+  /* Use the icon name as a ligature */
+  font-feature-settings: 'liga';
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--color-neutral);
+}
