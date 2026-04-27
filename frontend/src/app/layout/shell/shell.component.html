@@ -4,7 +4,7 @@
   <mat-sidenav
     [mode]="layout.isMobile() ? 'over' : 'side'"
     [opened]="layout.isMobile() ? layout.sidenavOpen() : true"
-    (backdropClick)="layout.close()"
+    (openedChange)="layout.sidenavOpen.set($event)"
     class="app-sidenav"
   >
     <app-sidenav />
