@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth.service';
+import { Footer } from '../../../shared/components/footer/footer';
 
 // TODO: postponed — re-enable when confirm password field is added back
 // function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
@@ -25,6 +26,7 @@ import { AuthService } from '../../../core/services/auth.service';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    Footer
   ],
   templateUrl: './set-password.component.html',
   styleUrls: [

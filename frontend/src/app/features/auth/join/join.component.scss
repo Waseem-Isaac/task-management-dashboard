@@ -1,6 +1,7 @@
 // ─── Page layout ────────────────────────────────────────────────
 .join-page {
-  padding : 1rem;
+
+  // padding : 1rem;
   &::before {
     content: '';
     position: absolute;
@@ -16,12 +17,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background-color: var(--color-body-bg);
-  background-image:
-    radial-gradient(ellipse 70% 60% at 20% 10%, rgba(59, 130, 246, 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 40% at 60% 40%, rgba(14, 165, 233, 0.07) 0%, transparent 60%);
+  background-image: radial-gradient(ellipse 70% 60% at 20% 10%, rgba(59, 130, 246, 0.12) 0%, transparent 70%),
+  radial-gradient(ellipse 60% 50% at 85% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 65%),
+  radial-gradient(ellipse 50% 40% at 60% 40%, rgba(14, 165, 233, 0.07) 0%, transparent 60%);
+
+  .join-page-content {
+    padding: 1rem;
+    flex: 1;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
 
   // Header styles
   &__header {
@@ -37,12 +45,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      text-decoration: none;
     }
 
     .logo-name {
       font-size: 1.5rem;
       font-weight: 600;
-      color: #0f172a;
+      color: var(--color-primary);
       letter-spacing: -0.4px;
     }
 
@@ -111,10 +120,12 @@
 }
 
 // ─── Shared card styles — scoped under app-join to prevent global bleed ─────
-app-join, app-set-password {
+app-join,
+app-set-password {
+
   // Cards fill available column width
   app-login,
-  app-register, 
+  app-register,
   .set-password-card {
     &.card {
       flex: 1;

@@ -16,11 +16,11 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'auth/join',
+    loadComponent: () => import('./features/home/home').then(m => m.Home),
     pathMatch: 'full',
   },
   {
     path: '**',
-    redirectTo: 'auth/join',
+    redirectTo: '',
   },
 ];
