@@ -3,6 +3,7 @@
 
   .task-card {
     // background: var(--color-body-bg);
+    background: radial-gradient(ellipse at center top, var(--color-primary-active-rgba) 0%, transparent 100%);
     border: 1px solid var(--color-light-grey);
     border-radius: 8px;
     padding: 1rem;

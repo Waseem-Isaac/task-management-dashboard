@@ -1,39 +1,36 @@
 <header>
-	<mat-toolbar color="primary">
+  <mat-toolbar color="primary">
     <div class="logo-area">
 
-    <div class="logo-sq">
-      <img src="icons/logo.svg" alt="Logo">
-    </div>
-    <span class="logo-name">Boardly</span>
+      <div class="logo-sq">
+        <img src="icons/logo.svg" alt="Logo">
+      </div>
+      <span class="logo-name">Boardly</span>
     </div>
 
     <button class="btn-primary" routerLink="/auth">Get Started</button>
-</mat-toolbar>
+  </mat-toolbar>
 </header>
-
-
-
 <main>
-	
-
 
   <!-- HERO -->
   <div class="hero">
-    <!-- <div class="hero::before"></div> -->
+    <div class="hero::before"></div>
 
-    <div class="announce" routerLink="/auth">
+    <!-- <a routerLink="/auth" class="announce">✦ Ready to get started now? <mat-icon>arrow_right_alt</mat-icon></a> -->
+      <div class="announce" routerLink="/auth">
       <span class="announce-pill">New</span>
-      <span class="announce-text">Analytics dashboard is now live</span>
-      <span class="announce-arr">→</span>
+      <span class="announce-text">Dashboard is now live</span>
+      <span class="announce-icon"> <mat-icon>arrow_right_alt</mat-icon></span>
     </div>
 
     <h1 class="hero-h1">Your team's tasks,<br><span class="grad">organized beautifully.</span></h1>
-    <p class="hero-sub">A visual kanban board that keeps your whole team in sync — move work from To Do to Done without the chaos.</p>
+    <p class="hero-sub">A visual kanban board that keeps your whole team in sync — move work from To Do to Done without
+      the chaos.</p>
 
     <div class="hero-actions">
       <button class="btn-main" routerLink="/auth">Start for free →</button>
-     
+
     </div>
 
     <div class="social-proof">
@@ -43,41 +40,67 @@
         <div class="av" style="background:linear-gradient(135deg,#059669,#047857)">S</div>
         <div class="av" style="background:linear-gradient(135deg,#d97706,#b45309)">M</div>
       </div>
-      <div class="stars">★★★★★</div>
+      <div class="stars">
+        @for (null of [1,2,3,4,5]; track null) {  <mat-icon>star</mat-icon> } 
+      </div> 
+      
+      
       <p class="proof-text">Loved by <strong>many</strong> teams worldwide</p>
     </div>
 
 
-     <div class="preview-wrap">
+    <div class="preview-wrap">
       <div class="preview-glow"></div>
-        <div class="preview">
-          <img src="board-preview.png" width="100%" alt="Board preview">
+      <div class="preview">
+
+        <div class="preview-topbar">
+          <div class="preview-dots">
+            <div class="dot" style="background:#f87171"></div>
+            <div class="dot" style="background:#fbbf24"></div>
+            <div class="dot" style="background:#4ade80"></div>
+          </div>
+          <span class="preview-title">My Workspace</span>
+          <span class="preview-add">+ Add Workspace</span>
         </div>
+
+        <img src="board-preview.png" width="100%" alt="Board preview">
       </div>
     </div>
+  </div>
 
-
-
-
-   <!-- FEATURES -->
+  <!-- FEATURES -->
   <div class="features">
     <div class="feat">
       <div class="feat-icon">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#e3783e" stroke-width="1.8"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5" opacity=".4"/><rect x="1" y="9" width="6" height="6" rx="1.5" opacity=".4"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#e3783e" stroke-width="1.8">
+          <rect x="1" y="1" width="6" height="6" rx="1.5" />
+          <rect x="9" y="1" width="6" height="6" rx="1.5" opacity=".4" />
+          <rect x="1" y="9" width="6" height="6" rx="1.5" opacity=".4" />
+          <rect x="9" y="9" width="6" height="6" rx="1.5" />
+        </svg>
       </div>
       <div class="feat-title">Visual Kanban Board</div>
       <div class="feat-desc">Drag and drop tasks across To Do, In Progress, and Done — instantly.</div>
     </div>
     <div class="feat">
       <div class="feat-icon">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#e3783e" stroke-width="1.8"><circle cx="6" cy="5" r="2.5"/><circle cx="11" cy="5" r="2.5"/><path d="M1 13c0-2.2 2.2-4 5-4s5 1.8 5 4"/><path d="M11 9c1.7.3 3 1.6 3 3.5"/></svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#e3783e" stroke-width="1.8">
+          <circle cx="6" cy="5" r="2.5" />
+          <circle cx="11" cy="5" r="2.5" />
+          <path d="M1 13c0-2.2 2.2-4 5-4s5 1.8 5 4" />
+          <path d="M11 9c1.7.3 3 1.6 3 3.5" />
+        </svg>
       </div>
       <div class="feat-title">Team Collaboration</div>
       <div class="feat-desc">Assign tasks, mention teammates, and track progress together in real time.</div>
     </div>
     <div class="feat">
       <div class="feat-icon">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#e3783e" stroke-width="1.8"><polyline points="1,11 5,6 9,8 13,3"/><line x1="13" y1="3" x2="13" y2="7"/><line x1="13" y1="3" x2="9" y2="3"/></svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#e3783e" stroke-width="1.8">
+          <polyline points="1,11 5,6 9,8 13,3" />
+          <line x1="13" y1="3" x2="13" y2="7" />
+          <line x1="13" y1="3" x2="9" y2="3" />
+        </svg>
       </div>
       <div class="feat-title">Progress Analytics</div>
       <div class="feat-desc">See what's done, what's stuck, and what needs your attention at a glance.</div>
@@ -89,7 +112,7 @@
     <h2 class="cta-h">Ready to <span>clear your board?</span></h2>
     <p class="cta-sub m-0">Join thousands of teams already shipping faster with Boardly.</p>
     <button class="cta-btn" routerLink="/auth">Create your free board →</button>
-    <p class="no-card m-0">No credit card required · Free forever on basic plan</p>
+    <p class="no-card m-0">ree forever on basic plan</p>
   </div>
 
   <!-- FOOTER -->

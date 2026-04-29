@@ -14,7 +14,7 @@ module.exports = transporter;
 // Send invitation email
 // Enhance: logo, app name, color
 const APP_NAME = process.env.APP_NAME || 'Task Manager';
-const LOGO_URL = process.env.APP_LOGO_URL || 'https://waseem-isaac.github.io/task-management-dashboard/icons/logo.svg';
+const LOGO_URL = process.env.APP_LOGO_URL || 'https://waseem-isaac.github.io/boardly/icons/logo.svg';
 const MAIN_COLOR = '#e3783e';
 
 async function sendInvitationEmail(to, token) {

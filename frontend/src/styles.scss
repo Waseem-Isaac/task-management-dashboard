@@ -42,6 +42,9 @@ body {
     opacity: 0.6;
     cursor: not-allowed;
   }
+
+  box-shadow: 0 4px 18px rgba(227, 120, 62, 0.38);
+  //     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
 }
 
 .btn-secondary {
