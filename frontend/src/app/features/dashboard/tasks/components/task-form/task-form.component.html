@@ -62,7 +62,12 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-select formControlName="assignee" placeholder="Assignee">
         @for (user of usersService.users(); track user._id) {
-        <mat-option [value]="user._id">{{ user.name }}</mat-option>
+        <mat-option [value]="user._id">
+          {{ user.name }}
+          @if (user._id === authService.currentUser()?._id) {
+            <span class="me-badge">Me</span>
+          }
+        </mat-option>
         }
       </mat-select>
       <mat-error>{{ getFieldError('assignee') }}</mat-error>

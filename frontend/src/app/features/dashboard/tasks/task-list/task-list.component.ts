@@ -25,6 +25,7 @@ import { TaskAddComponent } from '../task-add/task-add.component';
 import { TaskEditComponent } from '../task-edit/task-edit.component';
 import { Confirmable } from '../../../../shared/decorators/confirmable.decorator';
 import { UsersService } from '../../users/users.service';
+import { AuthService } from '../../../../core/services/auth.service';
 @Component({
   selector: 'app-task-list',
   imports: [
@@ -45,7 +46,7 @@ export class TaskListComponent implements OnInit {
   protected usersService = inject(UsersService);
   private searchService = inject(SearchService);
   private dialog = inject(MatDialog);
-
+  authService = inject(AuthService);
   // Read directly from the service signal — reflects add/update/delete instantly
   tasks = this.taskService.tasks;
   isLoading = this.taskService.isLoading;

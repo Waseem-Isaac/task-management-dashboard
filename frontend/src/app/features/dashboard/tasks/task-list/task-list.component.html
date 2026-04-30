@@ -55,7 +55,12 @@
         >
           <mat-option [value]="null">All Assignees</mat-option>
           @for (assignee of usersService.users(); track assignee._id) {
-            <mat-option [value]="assignee._id">{{ assignee.name }}</mat-option>
+            <mat-option [value]="assignee._id">
+              {{ assignee.name }}
+              @if (assignee._id === authService.currentUser()?._id) {
+                <span class="me-badge">Me</span>
+              }
+            </mat-option>
           }
         </mat-select>
       </mat-form-field>

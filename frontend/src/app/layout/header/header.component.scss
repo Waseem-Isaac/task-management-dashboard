@@ -14,49 +14,11 @@
   mat-toolbar {
   display: flex;
   justify-content: space-between;
+
+   .user-avatar {
+    background-color: var(--color-primary);
+   }
   }
-
-  // .search-bar-container {
-  //   .search-field {
-  //     width: 20rem;
-  //     font-size: 0.9rem;
-
-  //     .mat-icon {
-  //       color: var(--color-neutral);
-  //     }
-  //   }
-  //   margin: 0 auto;
-
-  //   .search-field {
-  //     --mdc-outlined-text-field-container-shape: 8px;
-
-  //     ::ng-deep .mat-mdc-text-field-wrapper {
-  //       height: 40px;
-  //     }
-
-  //     ::ng-deep .mat-mdc-form-field-flex {
-  //       height: 40px;
-  //       align-items: center;
-  //     }
-
-  //     ::ng-deep .mdc-notched-outline__notch {
-  //       border-top: none;
-  //     }
-  //   }
-  // }
-
-  // @media screen and (max-width: 576px) {
-  //   mat-toolbar {
-  //     flex-wrap: wrap;
-  //     height: auto;
-  //     gap: 1rem;
-  //     padding: 1rem;
-
-  //     .search-field {
-  //       max-width: 90%;
-  //     }
-  //   }
-  // }
 }
 
 .page-title {

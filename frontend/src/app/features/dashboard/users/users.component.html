@@ -40,7 +40,12 @@
          
           <div class="user-avatar lg" [style.background]="usersService.getAvatarColor(user.name)">{{ usersService.getAvatarInitials(user.name) }}</div>
           <div class="user-info">
-            <span class="user-name">{{ user.name }}</span>
+            <div class="user-name d-flex align-items-center">
+              {{ user.name }} 
+              @if (user._id === authService.currentUser()?._id) {
+                <span class="me-badge">Me</span>
+              }
+            </div>
             <span class="user-email">{{ user.email }}</span>
           </div>
         </div>

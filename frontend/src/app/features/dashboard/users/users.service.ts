@@ -31,13 +31,6 @@ export class UsersService {
     const params = active === true ? new HttpParams().set('active', 'true') : new HttpParams();
     this.http.get<{ users: User[] }>('users', { params }).subscribe({
       next: (data) => {
-        // intercept users to mark the current user for easier template handling (e.g. disable delete button)
-        data.users.forEach((u) => {
-          if (u._id === this.authService.currentUser()?._id && !u.name.endsWith('(Me)')) {
-            u.name = u.name + ' (Me)';
-          }
-        });
-
         this._users.set(data.users);
         this.isLoading.set(false);
       },

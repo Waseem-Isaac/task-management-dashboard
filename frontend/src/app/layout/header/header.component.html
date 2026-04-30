@@ -13,7 +13,7 @@
     [matMenuTriggerFor]="userMenu"
     aria-label="User menu"
   >
-    <div class="user-avatar" [style.background]="usersService.getAvatarColor(authService.currentUser()?.name)">
+    <div class="user-avatar">
       {{ usersService.getAvatarInitials(authService.currentUser()?.name ?? '') }}
     </div>
   </button>

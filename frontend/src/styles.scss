@@ -117,3 +117,12 @@ label {
     background-color: var(--color-info);
   }
 }
+
+.me-badge {
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+  font-size: 0.8rem;
+  padding: 0rem 0.3rem;
+  border-radius: var(--radius-md);
+  margin-left: 0.3rem;
+}
