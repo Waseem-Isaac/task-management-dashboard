@@ -1,0 +1,27 @@
+<div class="profile-page">
+  <div class="profile-card">
+    <div class="avatar-wrapper">
+      <div class="user-avatar profile-avatar">
+        <img [src]="authService.currentUser()?.avatarUrl" alt="Profile avatar" />
+      </div>
+    </div>
+
+    <h2 class="user-name">{{ authService.currentUser()?.name }}</h2>
+
+    <mat-divider />
+
+    <div class="info-section">
+      <div class="info-row">
+        <mat-icon>mail_outline</mat-icon>
+        <span>{{ authService.currentUser()?.email }}</span>
+      </div>
+      <div class="info-row">
+        <mat-icon>fingerprint</mat-icon>
+        <span class="user-id">{{ authService.currentUser()?._id }}</span>
+        <button class="copy-btn" mat-icon-button (click)="copyId()">
+          <mat-icon>{{ copied ? 'check' : 'content_copy' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -41,6 +41,7 @@ export class TaskService {
     return this.http.post<Task>(`tasks`, taskData).pipe(
       tap((created) => {
         this._tasks.update((tasks) => [...(tasks ?? []) , created]);
+        this.statisticsService.reload();
       }),
     );
 
@@ -62,6 +63,7 @@ export class TaskService {
     return this.http.delete<void>(`tasks/${id}`).pipe(
       tap(() => {
         this._tasks.update((tasks) => tasks?.filter((t) => t._id !== id));
+        this.statisticsService.reload();
       }),
     );
   }

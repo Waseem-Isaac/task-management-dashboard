@@ -5,7 +5,7 @@ const Task = require('../models/task');
 // GET all tasks
 router.get('/', async (req, res, next) => {
   try {
-    const tasks = await Task.find().populate('assignee');
+    const tasks = await Task.find().populate({path: 'assignee reporter', select: '_id name email' });
     const lastUpdated = tasks.length ? new Date(Math.max(...tasks.map(t => new Date(t.updatedAt)))) : null;
     res.json({ tasks , meta : { totalCount: tasks.length, lastUpdated } });
   } catch (err) {
@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 // POST create a new task
 router.post('/', async (req, res, next) => {
   try {
-    const task = await (await Task.create(req.body)).populate('assignee');
+    const task = await (await Task.create(req.body)).populate({path: 'assignee reporter', select: '_id name email' });
     res.status(201).json(task);
   } catch (err) {
     if (err.name === 'ValidationError') {
@@ -29,7 +29,7 @@ router.post('/', async (req, res, next) => {
 // GET a specific task by ID
 router.get('/:id', async (req, res, next) => {
   try {
-    const task = await Task.findById(req.params.id).populate('assignee');
+    const task = await Task.findById(req.params.id).populate({path: 'assignee reporter', select: '_id name email' });
     if (!task) return res.status(404).json({ error: 'Task not found' });
     res.json(task);
   } catch (err) {
@@ -44,7 +44,7 @@ router.put('/:id', async (req, res, next) => {
       req.params.id,
       req.body,
       { new: true, runValidators: true }
-    ).populate('assignee');
+    ).populate({path: 'assignee reporter', select: '_id name email' });
     if (!task) return res.status(404).json({ error: 'Task not found' });
     res.json(task);
   } catch (err) {
@@ -58,7 +58,7 @@ router.put('/:id', async (req, res, next) => {
 // DELETE a specific task by ID
 router.delete('/:id', async (req, res, next) => {
   try {
-    const task = await Task.findByIdAndDelete(req.params.id);
+    const task = await Task.findByIdAndDelete(req.params.id).populate({path: 'assignee reporter', select: '_id name email' });
     if (!task) return res.status(404).json({ error: 'Task not found.' });
     res.status(204).send();
   } catch (err) {

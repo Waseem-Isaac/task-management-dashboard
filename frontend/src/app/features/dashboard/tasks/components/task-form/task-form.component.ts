@@ -69,6 +69,7 @@ export class TaskFormComponent implements OnInit {
         [Validators.required],
       ],
       assignee: [this.task?.assignee?._id || this.authService.currentUser()?._id, [Validators.required]],
+      reporter: [this.task?.reporter?._id || this.authService.currentUser()?._id, [Validators.required]],
       tags: [this.task?.tags || []],
     });
 

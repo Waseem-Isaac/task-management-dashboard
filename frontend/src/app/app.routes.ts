@@ -15,6 +15,19 @@ export const routes: Routes = [
       import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
   },
   {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/profile/profile.component').then((m) => m.ProfileComponent),
+        data: { title: 'My Profile' },
+      },
+    ],
+  },
+  {
     path: '',
     loadComponent: () => import('./features/home/home').then(m => m.Home),
     pathMatch: 'full',

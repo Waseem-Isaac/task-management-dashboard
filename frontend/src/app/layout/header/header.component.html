@@ -14,17 +14,30 @@
     aria-label="User menu"
   >
     <div class="user-avatar">
-      {{ usersService.getAvatarInitials(authService.currentUser()?.name ?? '') }}
+        <img [src]="authService.currentUser()?.avatarUrl" alt="">
     </div>
   </button>
   <mat-menu #userMenu="matMenu">
-    <button mat-menu-item routerLink="/profile">
-      <mat-icon>person</mat-icon>
-      <span>Profile</span>
-    </button>
-    <button mat-menu-item (click)="authService.logout()">
-      <mat-icon>logout</mat-icon>
-      <span>Logout</span>
-    </button>
+    <!-- Disable closing the menu on click on header-->
+    <div class="header-user-menu">
+      <div class="header" (click)="$event.stopPropagation()">
+        <div class="user-avatar lg p-1">
+          <img [src]="authService.currentUser()?.avatarUrl" alt="">
+        </div>
+        <div class="info">
+          <div class="name mb-1">{{ authService.currentUser()?.name }}</div>
+          <div class="email">{{ authService.currentUser()?.email }}</div>
+        </div>
+      </div>
+      <button mat-menu-item routerLink="/profile">
+        <mat-icon>person_outline</mat-icon>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item (click)="authService.logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+
   </mat-menu>
 </mat-toolbar>

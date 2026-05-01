@@ -1,10 +1,11 @@
 export type TaskStatus = 'todo' | 'in_progress' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
 
-export interface Assignee {
+export interface TaskUser {
   _id: string;
   name: string;
   email: string;
+  avatarUrl?: string;
 }
 
 export interface Task {
@@ -14,7 +15,8 @@ export interface Task {
   status: TaskStatus;
   priority: TaskPriority;
   dueDate: string;
-  assignee: Assignee | null;
+  assignee: TaskUser | null | undefined;
+  reporter: TaskUser | null | undefined;
   tags: string[];
   createdAt: string;
   updatedAt: string;
@@ -27,5 +29,6 @@ export interface TaskFormData {
   priority: TaskPriority;
   dueDate: string;
   assignee: string;
+  reporter: string;
   tags: string[];
 }

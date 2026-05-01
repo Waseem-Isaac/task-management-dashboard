@@ -48,6 +48,7 @@ router.post('/register', async (req, res, next) => {
         email: user.email,
         active: user.active,
         createdAt: user.createdAt,
+        avatarUrl: user.avatarUrl
       },
     });
   } catch (err) {
@@ -90,6 +91,7 @@ router.post('/login', async (req, res, next) => {
         name: user.name,
         email: user.email,
         active: user.active,
+        avatarUrl: user.avatarUrl
       },
     });
   } catch (err) {

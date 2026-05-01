@@ -9,6 +9,7 @@ export interface User {
   name: string;
   email: string;
   active?: boolean;
+  avatarUrl?: string;
 }
 
 export interface UserFormData {

@@ -45,7 +45,14 @@
 
   <!-- 7. Assignee avatar + name -->
   <div class="assignee d-flex align-items-center gap-2" [class.not-found]="!task().assignee?.name">
-    <div class="user-avatar" [style.background]="usersService.getAvatarColor(task().assignee?.name)">{{ usersService.getAvatarInitials(task().assignee?.name) }}</div>
+    <div class="user-avatar">
+      @if(task().assignee?.avatarUrl) {
+        <img [src]="task().assignee?.avatarUrl" alt="">
+      } @else {
+        <img [src]="'icons/non-found-user-avatar.png'" alt="">
+      }
+    </div>
+     
     <span class="assignee-name">{{ task().assignee?.name || 'Unassigned' }}</span>
   </div>
 </div>
