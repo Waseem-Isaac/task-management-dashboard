@@ -7,16 +7,18 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskService } from '../task.service';
 import { Task, TaskFormData } from '../models';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-task-edit',
   standalone: true,
-  imports: [TaskFormComponent, MatDialogModule],
+  imports: [TaskFormComponent, MatDialogModule, MatSnackBarModule],
   templateUrl: './task-edit.component.html',
   styleUrls: ['./task-edit.component.scss'],
 })
 export class TaskEditComponent implements OnInit {
   private taskService = inject(TaskService);
+  private snackbar = inject(MatSnackBar);
   private dialogRef = inject(MatDialogRef<TaskEditComponent>);
   private data = inject<{ taskId: string }>(MAT_DIALOG_DATA);
 
@@ -60,13 +62,21 @@ export class TaskEditComponent implements OnInit {
 
     this.taskService.updateTask(this.task()!._id, taskData).subscribe({
       next: (updatedTask) => {
-        /** Tasks updated in the service signal automatically */
-        console.log('Task updated successfully:', updatedTask);
+        this.snackbar.open('Task updated successfully!', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
         this.dialogRef.close(true);
       },
       error: (error) => {
         console.error('Error updating task:', error);
         this.errorMessage.set('Failed to update task. Please try again.');
+        this.snackbar.open('Failed to update task. Please try again.', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
         this.isSubmitting.set(false);
       },
       complete: () => {

@@ -26,6 +26,7 @@ import { TaskEditComponent } from '../task-edit/task-edit.component';
 import { Confirmable } from '../../../../shared/decorators/confirmable.decorator';
 import { UsersService } from '../../users/users.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-task-list',
   imports: [
@@ -36,6 +37,7 @@ import { AuthService } from '../../../../core/services/auth.service';
     FilterByStatusPipe,
     NgClass,
     DragDropModule,
+    MatSnackBarModule,
   ],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
@@ -54,6 +56,7 @@ export class TaskListComponent implements OnInit {
   activeStatus = signal<Task['status'] | null>(null);
   activePriority = signal<Task['priority'] | null>(null);
   activeAssignee = signal<string | null>(null);
+  snackbar = inject(MatSnackBar);
 
   ngOnInit(): void {
     // Trigger initial HTTP load (no-op if already loaded)
@@ -91,7 +94,24 @@ export class TaskListComponent implements OnInit {
 
   @Confirmable({ title: 'Delete Task', message: 'Are you sure you want to remove this task?' })
   handleDelete(taskId: string): void {
-    this.taskService.deleteTask(taskId).subscribe();
+    this.taskService.deleteTask(taskId).subscribe({
+      next: () => {
+        /** Tasks updated in the service signal automatically */
+        this.snackbar.open('Task deleted successfully!', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
+      },
+      error: (err) => {
+        console.error('Error deleting task:', err);
+        this.snackbar.open(err?.error?.message || 'Failed to delete task. Please try again.', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
+      }
+    });
   }
 
   openAddDialog(): void {

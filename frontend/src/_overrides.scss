@@ -70,6 +70,23 @@ html {
   .mat-mdc-form-field-error-wrapper {
     padding: 0;
   }
+
+
+  // Mat-Snackbar overrides
+  --mat-snack-bar-supporting-text-color: var(--color-primary-contrast);
+  --mat-snack-bar-container-shape: var(--radius-md);
+  .snackbar-success {
+    --mat-snack-bar-container-color: var(--color-success);
+  }
+  .snackbar-error {
+    --mat-snack-bar-container-color: var(--color-danger);
+  }
+  .snackbar-warning {
+    --mat-snack-bar-container-color: var(--color-warning);
+  }
+  .snackbar-info {
+    --mat-snack-bar-container-color: var(--color-info);
+  }
 }
 
 // ─── Angular Material — component overrides ──────────────────────────────────
@@ -148,3 +165,17 @@ html {
     padding: 1rem 2rem !important;
   }
 }
+
+
+// Snackbar overrides
+
+// .mat-snack-bar-container {
+//   border-radius: var(--radius-md);
+//   padding: 0.75rem 1.25rem;
+//   font-size: 0.8rem;
+
+//   &.snackbar-success {
+//     background-color: var(--color-primary);
+//     color: var(--color-primary-contrast);
+//   }
+// }

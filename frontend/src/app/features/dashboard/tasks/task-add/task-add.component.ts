@@ -7,18 +7,19 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskService } from '../task.service';
 import { TaskFormData } from '../models';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-task-add',
   standalone: true,
-  imports: [TaskFormComponent, MatDialogModule],
+  imports: [TaskFormComponent, MatDialogModule, MatSnackBarModule],
   templateUrl: './task-add.component.html',
   styleUrls: ['./task-add.component.scss'],
 })
 export class TaskAddComponent {
   private taskService = inject(TaskService);
   private dialogRef = inject(MatDialogRef<TaskAddComponent>);
-
+  private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
   errorMessage = signal('');
 
@@ -30,10 +31,20 @@ export class TaskAddComponent {
       next: () => {
         /** Tasks updated in the service signal automatically */
         this.dialogRef.close(true);
+        this.snackbar.open('Task created successfully!', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
       },
       error: (error) => {
         console.error('Error creating task:', error);
         this.errorMessage.set('Failed to create task. Please try again.');
+        this.snackbar.open('Failed to create task. Please try again.', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
         this.isSubmitting.set(false);
       },
       complete: () => {

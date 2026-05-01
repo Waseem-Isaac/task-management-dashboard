@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth.service';
 import { Footer } from '../../../shared/components/footer/footer';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 // TODO: postponed — re-enable when confirm password field is added back
 // function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
@@ -26,6 +27,7 @@ import { Footer } from '../../../shared/components/footer/footer';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     Footer
   ],
   templateUrl: './set-password.component.html',
@@ -40,6 +42,7 @@ export class SetPasswordComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  private snackbar = inject(MatSnackBar);
 
   token = signal<string | null>(null);
   invitedName = signal<string>('');
@@ -104,9 +107,20 @@ export class SetPasswordComponent implements OnInit {
     const { password } = this.form.value;
 
     this.authService.setPassword(this.token()!, password!).subscribe({
-      next: () => this.router.navigate(['/auth/login']),
+      next: () => {
+        this.snackbar.open('Password set successfully!', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
+        this.router.navigate(['/auth/login']);
+      },
       error: () => {
-        this.errorMessage.set('Failed to set password. Please try again.');
+        this.snackbar.open('Failed to set password. Please try again.', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
         this.isSubmitting.set(false);
       },
     });

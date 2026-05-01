@@ -4,8 +4,7 @@
  */
 import { Component, inject, input, output } from '@angular/core';
 import { Task } from '../../models';
-import { DueDatePipe } from '../../../../../shared/pipes/due-date.pipe';
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconButton } from '@angular/material/button';
@@ -13,7 +12,7 @@ import { UsersService } from '../../../users/users.service';
 
 @Component({
   selector: 'app-task-card',
-  imports: [DueDatePipe, NgClass, MatIconModule, MatMenuModule, MatIconButton],
+  imports: [ NgClass, MatIconModule, MatMenuModule, MatIconButton, DatePipe],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.scss',
 })
@@ -25,7 +24,9 @@ export class TaskCardComponent {
 
   isOverdue(task: Task): boolean {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const dueDate = new Date(task.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
     return dueDate < today && task.status !== 'done';
   }
 }

@@ -31,7 +31,7 @@
   <p class="card-description">{{ task().description }}</p>
 
   <!-- 4. Due date -->
-  <span class="due-date-badge">{{ task().dueDate | dueDate }}</span>
+  <span class="due-date-badge">{{ task().dueDate | date }}</span>
 
   <!-- 5. Tags -->
   <div class="tags d-flex flex-wrap gap-1 mt-1">

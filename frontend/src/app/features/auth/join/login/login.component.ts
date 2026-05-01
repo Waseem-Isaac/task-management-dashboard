@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../../core/services/auth.service';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ import { AuthService } from '../../../../core/services/auth.service';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -25,7 +27,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
+  private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
   errorMessage = signal('');
   showPassword = signal(false);
@@ -57,9 +59,21 @@ export class LoginComponent {
     const { email, password } = this.form.value;
 
     this.authService.login(email!, password!).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => {
+        this.snackbar.open('Login successful!', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
+        this.router.navigate(['/dashboard'])
+      },
       error: (err) => {
-        this.errorMessage.set(err?.error?.message ?? 'Invalid credentials. Please try again.');
+        // this.errorMessage.set(err?.error?.message ?? 'Invalid credentials. Please try again.');
+        this.snackbar.open(err?.error?.message ?? 'Invalid credentials. Please try again.', '',
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
         this.isSubmitting.set(false);
       },
     });

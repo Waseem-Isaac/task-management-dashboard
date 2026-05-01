@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UsersService, UserFormData } from '../users.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-add',
@@ -15,6 +16,7 @@ import { UsersService, UserFormData } from '../users.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule
   ],
   templateUrl: './user-add.component.html',
   styleUrls: ['./user-add.component.scss'],
@@ -23,7 +25,7 @@ export class UserAddComponent {
   private usersService = inject(UsersService);
   private dialogRef = inject(MatDialogRef<UserAddComponent>);
   private fb = inject(FormBuilder);
-
+  private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
   errorMessage = signal('');
 
@@ -53,10 +55,19 @@ export class UserAddComponent {
     this.usersService.addUser(this.form.value as UserFormData).subscribe({
       next: () => {
         this.dialogRef.close(true);
+        this.snackbar.open('User created successfully!', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
       },
       error: (err) => {
         console.error('Error creating user:', err);
-        this.errorMessage.set(err?.error?.message || 'Failed to create user. Please try again.');
+        this.snackbar.open(err?.error?.message || 'Failed to create user. Please try again.', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
         this.isSubmitting.set(false);
       },
       complete: () => this.isSubmitting.set(false),
