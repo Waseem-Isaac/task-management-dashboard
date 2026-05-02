@@ -43,7 +43,7 @@ export class UsersComponent implements OnInit {
   }
 
   openAddUserDialog(): void {
-    this.dialog.open(UserAddComponent, { panelClass: 'task-dialog', disableClose: true });
+    this.dialog.open(UserAddComponent, { panelClass: 'app-dialog', disableClose: true });
   }
 
   @Confirmable({

@@ -32,7 +32,7 @@ export function Confirmable(options: ConfirmableOptions): MethodDecorator {
 
       dialog
         .open(ConfirmationDialogComponent, {
-          panelClass: 'task-dialog',
+          panelClass: 'app-dialog',
           disableClose: true,
           data: { title: options.title, message: options.message } satisfies ConfirmationDialogData,
         })

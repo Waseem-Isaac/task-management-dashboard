@@ -19,6 +19,7 @@ import { UsersService } from '../../../users/users.service';
 export class TaskCardComponent {
   deleteRequested = output<string>();
   editRequested = output<string>();
+  viewRequested = output<string>();
   task = input.required<Task>();
   usersService = inject(UsersService);
 

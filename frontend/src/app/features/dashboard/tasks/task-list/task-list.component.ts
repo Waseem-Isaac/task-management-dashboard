@@ -23,6 +23,7 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { SearchService } from '../../../../core/services/search.service';
 import { TaskAddComponent } from '../task-add/task-add.component';
 import { TaskEditComponent } from '../task-edit/task-edit.component';
+import { TaskViewComponent } from '../task-view/task-view.component';
 import { Confirmable } from '../../../../shared/decorators/confirmable.decorator';
 import { UsersService } from '../../users/users.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -115,13 +116,20 @@ export class TaskListComponent implements OnInit {
   }
 
   openAddDialog(): void {
-    this.dialog.open(TaskAddComponent, { panelClass: 'task-dialog', disableClose: true });
+    this.dialog.open(TaskAddComponent, { panelClass: 'app-dialog', disableClose: true });
   }
 
   openEditDialog(taskId: string): void {
     this.dialog.open(TaskEditComponent, {
-      panelClass: 'task-dialog',
+      panelClass: 'app-dialog',
       disableClose: true,
+      data: { taskId },
+    });
+  }
+
+  openViewDialog(taskId: string): void {
+    this.dialog.open(TaskViewComponent, {
+      panelClass: 'app-dialog',
       data: { taskId },
     });
   }

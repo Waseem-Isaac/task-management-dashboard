@@ -1,10 +1,6 @@
 <h1 class="title">Create an account</h1>
 <p class="subtitle">Get started today — it's free</p>
 
-@if (errorMessage()) {
-<div class="error-banner" role="alert">{{ errorMessage() }}</div>
-}
-
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="fields" novalidate>
   <div class="field">
     <label class="label mb-1" for="name">Full Name</label>

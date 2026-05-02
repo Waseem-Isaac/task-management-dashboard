@@ -91,6 +91,11 @@ label {
     height: 44px;
   }
 
+  &.sm {
+    width: 1rem;
+    height: 1rem;
+  }
+
   border-radius: 50%;
   flex-shrink: 0;
   object-fit: cover;
@@ -123,7 +128,9 @@ label {
   }
 }
 
-.me-badge {
+.me-badge::before {
+    content: "Me";
+
   background-color: var(--color-primary);
   color: var(--color-primary-contrast);
   font-size: 0.8rem;

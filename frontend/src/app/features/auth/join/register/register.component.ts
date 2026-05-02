@@ -29,7 +29,6 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
-  errorMessage = signal('');
   showPassword = signal(false);
 
   form = this.fb.group({
@@ -55,7 +54,6 @@ export class RegisterComponent {
     }
 
     this.isSubmitting.set(true);
-    this.errorMessage.set('');
 
     const { name, email, password } = this.form.value;
 

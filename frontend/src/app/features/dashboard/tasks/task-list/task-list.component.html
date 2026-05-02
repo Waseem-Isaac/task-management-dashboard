@@ -2,32 +2,17 @@
   <div class="task-list-header d-flex align-items-center justify-content-between mb-4">
     <!-- Filter buttons group -->
     <div class="filter-group">
-      <button
-        class="btn btn-primary tab-btn"
-        [class.active]="activeStatus() === null"
-        (click)="setFilter(null)"
-      >
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === null" (click)="setFilter(null)">
         All
       </button>
-      <button
-        class="btn btn-primary tab-btn"
-        [class.active]="activeStatus() === 'todo'"
-        (click)="setFilter('todo')"
-      >
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === 'todo'" (click)="setFilter('todo')">
         To Do
       </button>
-      <button
-        class="btn btn-primary tab-btn"
-        [class.active]="activeStatus() === 'in_progress'"
-        (click)="setFilter('in_progress')"
-      >
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === 'in_progress'"
+        (click)="setFilter('in_progress')">
         In Progress
       </button>
-      <button
-        class="btn btn-primary tab-btn"
-        [class.active]="activeStatus() === 'done'"
-        (click)="setFilter('done')"
-      >
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === 'done'" (click)="setFilter('done')">
         Done
       </button>
     </div>
@@ -35,11 +20,8 @@
     <!-- Additional Filter options - DDLs and action button -->
     <div class="action-group d-flex align-items-center gap-3">
       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-select">
-        <mat-select
-          [value]="activePriority()"
-          (selectionChange)="activePriority.set($event.value)"
-          placeholder="Priority"
-        >
+        <mat-select [value]="activePriority()" (selectionChange)="activePriority.set($event.value)"
+          placeholder="Priority">
           <mat-option [value]="null">All Priorities</mat-option>
           <mat-option value="low">Low</mat-option>
           <mat-option value="medium">Medium</mat-option>
@@ -48,19 +30,22 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-select">
-        <mat-select
-          [value]="activeAssignee()"
-          (selectionChange)="activeAssignee.set($event.value)"
-          placeholder="Assignee"
-        >
+        <mat-select [value]="activeAssignee()" (selectionChange)="activeAssignee.set($event.value)"
+          placeholder="Assignee">
           <mat-option [value]="null">All Assignees</mat-option>
           @for (assignee of usersService.users(); track assignee._id) {
-            <mat-option [value]="assignee._id">
+          <mat-option [value]="assignee._id">
+            <div class="d-flex align-items-center gap-2">
+              <div class="user-avatar">
+                <img [src]="assignee?.avatarUrl" alt="">
+              </div>
               {{ assignee.name }}
               @if (assignee._id === authService.currentUser()?._id) {
-                <span class="me-badge">Me</span>
+            <span class="me-badge d-flex align-items-center justify-content-center"></span>
               }
-            </mat-option>
+            </div>
+
+          </mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -77,54 +62,43 @@
   <!-- 3-column kanban: columns always visible, content filtered by activeStatus -->
   <div class="tasks-columns" cdkDropListGroup>
     @for (col of columns; track col.status) {
-      <div
-        class="column"
-        [ngClass]="{
+    <div class="column" [ngClass]="{
           'non-active-status-column': activeStatus() !== null && activeStatus() !== col.status,
-        }"
-        cdkDropList
-        [cdkDropListData]="col.status"
-        (cdkDropListDropped)="onDrop($event)"
-      >
-        <div class="column-header">
-          <span class="column-title">{{ col.label }}</span>
-          <span class="task-count badge">{{
-            (filteredTasks() | filterByStatus: col.status).length
+        }" cdkDropList [cdkDropListData]="col.status" (cdkDropListDropped)="onDrop($event)">
+      <div class="column-header">
+        <span class="column-title">{{ col.label }}</span>
+        <span class="task-count badge">{{
+          (filteredTasks() | filterByStatus: col.status).length
           }}</span>
-        </div>
-        @if (isLoading()) {
-          @for (n of [1, 2, 3]; track n) {
-            <div class="skeleton-task-card">
-              <div class="skeleton skeleton-badge"></div>
-              <div class="skeleton skeleton-title"></div>
-              <div class="skeleton skeleton-desc"></div>
-              <div class="skeleton skeleton-desc short"></div>
-              <hr class="card-divider" />
-              <div class="skeleton skeleton-avatar-row"></div>
-            </div>
-          }
-        } @else {
-          @for (task of filteredTasks() | filterByStatus: col.status; track task._id) {
-            <app-task-card
-              cdkDrag
-              [cdkDragData]="task"
-              [task]="task"
-              (editRequested)="openEditDialog($event)"
-              (deleteRequested)="handleDelete($event)"
-            >
-
-
-             <div class="task-drag-handle" cdkDragHandle>
-              <button mat-icon-button aria-label="Drag task" class="drag-btn">
-                <mat-icon>drag_indicator</mat-icon>
-              </button>
-            </div>
-
-
-          </app-task-card>
-          }
-        }
       </div>
+      @if (isLoading()) {
+      @for (n of [1, 2, 3]; track n) {
+      <div class="skeleton-task-card">
+        <div class="skeleton skeleton-badge"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-desc"></div>
+        <div class="skeleton skeleton-desc short"></div>
+        <hr class="card-divider" />
+        <div class="skeleton skeleton-avatar-row"></div>
+      </div>
+      }
+      } @else {
+      @for (task of filteredTasks() | filterByStatus: col.status; track task._id) {
+      <app-task-card cdkDrag [cdkDragData]="task" [task]="task" (editRequested)="openEditDialog($event)"
+        (deleteRequested)="handleDelete($event)" (viewRequested)="openViewDialog($event)">
+
+
+        <div class="task-drag-handle" cdkDragHandle (click)="$event.stopPropagation()">
+          <button mat-icon-button aria-label="Drag task" class="drag-btn">
+            <mat-icon>drag_indicator</mat-icon>
+          </button>
+        </div>
+
+
+      </app-task-card>
+      }
+      }
+    </div>
     }
   </div>
 </div>

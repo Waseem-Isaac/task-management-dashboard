@@ -8,11 +8,13 @@ import { TaskFormComponent } from '../components/task-form/task-form.component';
 import { TaskService } from '../task.service';
 import { TaskFormData } from '../models';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-task-add',
   standalone: true,
-  imports: [TaskFormComponent, MatDialogModule, MatSnackBarModule],
+  imports: [TaskFormComponent, MatDialogModule, MatSnackBarModule , MatIconModule , MatButtonModule],
   templateUrl: './task-add.component.html',
   styleUrls: ['./task-add.component.scss'],
 })
@@ -21,11 +23,9 @@ export class TaskAddComponent {
   private dialogRef = inject(MatDialogRef<TaskAddComponent>);
   private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
-  errorMessage = signal('');
 
   onFormSubmit(taskData: TaskFormData): void {
     this.isSubmitting.set(true);
-    this.errorMessage.set('');
 
     this.taskService.createTask(taskData).subscribe({
       next: () => {
@@ -39,7 +39,6 @@ export class TaskAddComponent {
       },
       error: (error) => {
         console.error('Error creating task:', error);
-        this.errorMessage.set('Failed to create task. Please try again.');
         this.snackbar.open('Failed to create task. Please try again.', '', 
           { 
             duration: 3000 , 

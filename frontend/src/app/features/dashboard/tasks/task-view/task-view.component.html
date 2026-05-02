@@ -1,0 +1,97 @@
+<div mat-dialog-title class="dialog-title">
+  <span>Task Details</span>
+  <button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading task…</p>
+    </div>
+  } @else if (task(); as t) {
+    <div class="task-view" [ngClass]="{ overdue: isOverdue(t) }">
+
+      <!-- Header row: priority + status -->
+      <div class="meta-row">
+        <span class="priority-badge priority-{{ t.priority }}">{{ t.priority }}</span>
+        <span class="status-badge status-{{ t.status }}">{{ statusLabels[t.status] }}</span>
+        @if (isOverdue(t)) {
+          <span class="overdue-badge">
+            <mat-icon>schedule</mat-icon> Overdue
+          </span>
+        }
+      </div>
+
+      <!-- Title -->
+      <h2 class="task-title">{{ t.title }}</h2>
+
+      <!-- Description -->
+      <p class="task-description">{{ t.description }}</p>
+
+      <mat-divider />
+
+      <!-- Details grid -->
+      <div class="details-grid">
+
+        <div class="detail-item">
+          <span class="detail-label">
+            <mat-icon>calendar_today</mat-icon> Due Date
+          </span>
+          <span class="detail-value" [class.overdue-text]="isOverdue(t)">
+            {{ t.dueDate + 'T00:00:00' | date: 'mediumDate' }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">
+            <mat-icon>schedule</mat-icon> Created
+          </span>
+          <span class="detail-value">{{ t.createdAt | date: 'mediumDate' }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">
+            <mat-icon>person_outline</mat-icon> Assignee
+          </span>
+          <span class="detail-value user-cell">
+            @if (t.assignee?.avatarUrl) {
+              <div class="user-avatar sm"><img [src]="t.assignee!.avatarUrl" alt="" /></div>
+            }
+            <span>{{ t.assignee?.name || 'Unassigned' }}</span>
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">
+            <mat-icon>manage_accounts</mat-icon> Reporter
+          </span>
+          <span class="detail-value user-cell">
+            @if (t.reporter?.avatarUrl) {
+              <div class="user-avatar sm"><img [src]="t.reporter!.avatarUrl" alt="" /></div>
+            }
+            <span>{{ t.reporter?.name || '—' }}</span>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Tags -->
+      @if (t.tags?.length) {
+        <div class="tags-section">
+          <span class="detail-label">
+            <mat-icon>label_outline</mat-icon> Tags
+          </span>
+          <div class="tags-row">
+            @for (tag of t.tags; track tag) {
+              <span class="tag">{{ tag }}</span>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+</mat-dialog-content>

@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UsersService, UserFormData } from '../users.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-user-add',
@@ -16,7 +17,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   templateUrl: './user-add.component.html',
   styleUrls: ['./user-add.component.scss'],
@@ -27,7 +29,6 @@ export class UserAddComponent {
   private fb = inject(FormBuilder);
   private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
-  errorMessage = signal('');
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -50,7 +51,6 @@ export class UserAddComponent {
     }
 
     this.isSubmitting.set(true);
-    this.errorMessage.set('');
 
     this.usersService.addUser(this.form.value as UserFormData).subscribe({
       next: () => {

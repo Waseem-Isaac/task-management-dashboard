@@ -29,6 +29,6 @@ export class SidenavComponent {
   ];
 
   openAddTaskDialog(): void {
-    this.dialog.open(TaskAddComponent, { panelClass: 'task-dialog', disableClose: true });
+    this.dialog.open(TaskAddComponent, { panelClass: 'app-dialog', disableClose: true });
   }
 }

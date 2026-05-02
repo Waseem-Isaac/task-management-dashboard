@@ -50,7 +50,6 @@ export class SetPasswordComponent implements OnInit {
   isValidating = signal(false);
   tokenError = signal('');
   isSubmitting = signal(false);
-  errorMessage = signal('');
   showPassword = signal(false);
   // showConfirm = signal(false); // TODO: postponed
 
@@ -102,7 +101,6 @@ export class SetPasswordComponent implements OnInit {
     }
 
     this.isSubmitting.set(true);
-    this.errorMessage.set('');
 
     const { password } = this.form.value;
 

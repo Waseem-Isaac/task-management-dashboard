@@ -29,9 +29,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
-  errorMessage = signal('');
   showPassword = signal(false);
-
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -54,7 +52,6 @@ export class LoginComponent {
     }
 
     this.isSubmitting.set(true);
-    this.errorMessage.set('');
 
     const { email, password } = this.form.value;
 
@@ -68,7 +65,6 @@ export class LoginComponent {
         this.router.navigate(['/dashboard'])
       },
       error: (err) => {
-        // this.errorMessage.set(err?.error?.message ?? 'Invalid credentials. Please try again.');
         this.snackbar.open(err?.error?.message ?? 'Invalid credentials. Please try again.', '',
           { 
             duration: 3000 , 

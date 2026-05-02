@@ -10,7 +10,7 @@
 
   .task-card {
    position: relative;
-
+   cursor: pointer;
  
     // background: var(--color-body-bg);
     background: radial-gradient(ellipse at center top, var(--color-primary-active-rgba) 0%, transparent 100%);

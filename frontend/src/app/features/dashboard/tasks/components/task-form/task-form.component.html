@@ -63,10 +63,15 @@
       <mat-select formControlName="assignee" placeholder="Assignee">
         @for (user of usersService.users(); track user._id) {
         <mat-option [value]="user._id">
-          {{ user.name }}
-          @if (user._id === authService.currentUser()?._id) {
-            <span class="me-badge">Me</span>
-          }
+          <div class="d-flex align-items-center gap-2">
+            <div class="user-avatar">
+              <img [src]="user?.avatarUrl" alt="">
+            </div>
+            {{ user.name }}
+            @if (user._id === authService.currentUser()?._id) {
+            <span class="me-badge d-flex align-items-center justify-content-center"></span>
+            }
+          </div>
         </mat-option>
         }
       </mat-select>

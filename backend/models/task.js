@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema(
   {
+    referenceId: { type: String, required: true, unique: true, trim: true },
     title:       { type: String, required: true, trim: true },
     description: { type: String, required: true, default: '' },
     status:      { type: String, required: true, enum: ['todo', 'in_progress', 'done'], default: 'todo' },

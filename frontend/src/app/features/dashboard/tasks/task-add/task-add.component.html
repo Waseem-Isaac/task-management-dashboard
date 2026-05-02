@@ -1,12 +1,11 @@
-<h2 mat-dialog-title>Create New Task</h2>
+<div mat-dialog-title class="dialog-title">
+  <span>New Task</span>
+  <button mat-icon-button (click)="onFormCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 
 <mat-dialog-content>
-  @if (errorMessage()) {
-    <div class="error-banner">
-      {{ errorMessage() }}
-    </div>
-  }
-
   @if (isSubmitting()) {
     <div class="loading-overlay">
       <div class="spinner"></div>
