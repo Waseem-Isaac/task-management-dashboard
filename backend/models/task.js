@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema(
   {
-    referenceId: { type: String, required: true, unique: true, trim: true },
+    referenceId: { type: String, unique: true, trim: true },
     title:       { type: String, required: true, trim: true },
     description: { type: String, required: true, default: '' },
     status:      { type: String, required: true, enum: ['todo', 'in_progress', 'done'], default: 'todo' },
@@ -14,6 +14,19 @@ const taskSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+taskSchema.pre('validate', async function () {
+  if (this.isNew && !this.referenceId) {
+    const prefix = 'BO-';
+    const last = await mongoose.model('Task').findOne(
+      { referenceId: new RegExp(`^${prefix}\\d{4}$`) },
+      { referenceId: 1 },
+      { sort: { referenceId: -1 } }
+    );
+    const nextNum = last ? parseInt(last.referenceId.replace(prefix, ''), 10) + 1 : 1;
+    this.referenceId = `${prefix}${String(nextNum).padStart(4, '0')}`;
+  }
+});
 
 const Task = mongoose.model('Task', taskSchema);
 

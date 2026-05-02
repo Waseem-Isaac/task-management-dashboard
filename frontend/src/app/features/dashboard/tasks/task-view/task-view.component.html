@@ -1,5 +1,5 @@
 <div mat-dialog-title class="dialog-title">
-  <span>Task Details</span>
+  <span>{{ task()?.referenceId || 'Task Details' }}</span>
   <button mat-icon-button (click)="close()">
     <mat-icon>close</mat-icon>
   </button>

@@ -10,6 +10,7 @@ export interface TaskUser {
 
 export interface Task {
   _id: string;
+  referenceId: string;
   title: string;
   description: string;
   status: TaskStatus;

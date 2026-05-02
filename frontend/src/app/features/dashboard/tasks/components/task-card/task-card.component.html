@@ -12,10 +12,6 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <!-- <button mat-menu-item ">
-          <mat-icon>open_in_new</mat-icon>
-          View
-        </button> -->
         <button mat-menu-item (click)="editRequested.emit(task()._id)">
           <mat-icon>edit</mat-icon>
           Edit
