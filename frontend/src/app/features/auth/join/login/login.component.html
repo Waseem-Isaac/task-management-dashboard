@@ -17,7 +17,7 @@
       <input matInput formControlName="password" [type]="showPassword() ? 'text' : 'password'" placeholder="••••••••"
         autocomplete="current-password" />
       <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())"
-        [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+        [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'" class="showHidePassword-btn">
         <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
       <mat-error>{{ getFieldError('password') }}</mat-error>
@@ -26,7 +26,7 @@
 
   <div class="spacer"></div>
 
-  <button class="btn-primary submit-btn" type="submit" [disabled]="isSubmitting()">
+  <button class="btn-primary submit-btn" type="submit" [disabled]="isSubmitting() || form.invalid"W>
     @if (isSubmitting()) {
     <mat-spinner diameter="18" />
     Signing in...
