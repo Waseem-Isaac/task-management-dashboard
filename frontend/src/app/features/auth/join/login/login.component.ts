@@ -62,7 +62,7 @@ export class LoginComponent {
             duration: 3000 , 
             panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
           });
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['/tasks']);
       },
       error: (err) => {
         this.snackbar.open(err?.error?.message ?? 'Invalid credentials. Please try again.', '',

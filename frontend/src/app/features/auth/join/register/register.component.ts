@@ -69,7 +69,7 @@ export class RegisterComponent {
             panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
           });
       
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['/tasks']);
       },
       error: (err) => {
         this.snackbar.open(err?.error?.message ?? 'Registration failed. Please try again.', '',

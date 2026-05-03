@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Task } from '../../features/dashboard/tasks/models';
+import { Task } from '../../features/tasks/models';
 
 @Pipe({
   name: 'filterByStatus',

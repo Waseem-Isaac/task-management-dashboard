@@ -17,16 +17,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskCardComponent } from '../components/task-card/task-card.component';
-import { FilterByStatusPipe } from '../../../../shared/pipes/filter-by-status.pipe';
+import { FilterByStatusPipe } from '../../../shared/pipes/filter-by-status.pipe';
 import { NgClass } from '@angular/common';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { SearchService } from '../../../../core/services/search.service';
+import { SearchService } from '../../../core/services/search.service';
 import { TaskAddComponent } from '../task-add/task-add.component';
 import { TaskEditComponent } from '../task-edit/task-edit.component';
 import { TaskViewComponent } from '../task-view/task-view.component';
-import { Confirmable } from '../../../../shared/decorators/confirmable.decorator';
+import { Confirmable } from '../../../shared/decorators/confirmable.decorator';
 import { UsersService } from '../../users/users.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-task-list',

@@ -7,13 +7,49 @@ export const routes: Routes = [
     canActivate: [noAuthGuard],
     loadChildren: () => import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
+
   {
-    path: 'dashboard',
+
+    path: 'tasks',
     canActivate: [authGuard],
     loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
-    loadChildren: () =>
-      import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/tasks/task-list/task-list.component').then((m) => m.TaskListComponent),
+        data: { title: 'Tasks' },
+      },
+    ],
+
   },
+  {
+    path: 'analytics',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/analytics/analytics.component').then((m) => m.AnalyticsComponent),
+        data: { title: 'Analytics' },
+      },
+    ],
+  },
+  {
+    path: 'users',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/users/users.component').then((m) => m.UsersComponent),
+        data: { title: 'Users' },
+      },
+    ],
+  },
+
+  // Profile route with auth guard and lazy loading
   {
     path: 'profile',
     canActivate: [authGuard],

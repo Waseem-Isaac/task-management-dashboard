@@ -18,7 +18,7 @@ export interface Task {
   dueDate: string;
   assignee: TaskUser | null | undefined;
   reporter: TaskUser | null | undefined;
-  tags: string[];
+  tags: string[] | null | undefined;
   createdAt: string;
   updatedAt: string;
 }

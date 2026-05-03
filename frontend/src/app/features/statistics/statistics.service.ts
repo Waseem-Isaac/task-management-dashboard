@@ -4,8 +4,8 @@ import { httpResource } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, timer } from 'rxjs';
 import { Statistic } from './models';
-import { environment } from '../../../../environments/environment';
-import { invalidateCache } from '../../../core/interceptors/cache.interceptor';
+import { environment } from '../../../environments/environment';
+import { invalidateCache } from '../../core/interceptors/cache.interceptor';
 
 @Injectable({
   providedIn: 'root',

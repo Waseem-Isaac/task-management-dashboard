@@ -14,7 +14,7 @@ import { SearchService } from '../../core/services/search.service';
 import { LayoutService } from '../../core/services/layout.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../core/services/auth.service';
-import { UsersService } from '../../features/dashboard/users/users.service';
+import { UsersService } from '../../features/users/users.service';
 
 @Component({
   selector: 'app-header',

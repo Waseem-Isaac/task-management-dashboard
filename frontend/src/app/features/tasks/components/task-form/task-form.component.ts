@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Task, TaskFormData } from '../../models';
 import { UsersService } from '../../../users/users.service';
-import { AuthService } from '../../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-task-form',

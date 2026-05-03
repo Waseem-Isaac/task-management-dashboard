@@ -8,9 +8,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { UserAddComponent } from './user-add/user-add.component';
-import { Confirmable } from '../../../shared/decorators/confirmable.decorator';
+import { Confirmable } from '../../shared/decorators/confirmable.decorator';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
