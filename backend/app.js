@@ -7,7 +7,7 @@ const logger = require('morgan');
 const connectDB = require('./config/db');
 
 const usersRouter = require('./routes/users');
-const tasksRouter = require('./routes/tasks');
+const boardRouter = require('./routes/boards/boards');
 const authRouter  = require('./routes/auth');
 const statisticsRouter = require('./routes/statistics');
 const isAuthenticated = require('./middleware/isAuthenticated');
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 app.use('/auth', authRouter);
 app.use('/users', isAuthenticated, usersRouter);
-app.use('/tasks', isAuthenticated, tasksRouter);
+app.use('/boards', isAuthenticated , boardRouter);
 app.use('/statistics', isAuthenticated, statisticsRouter);
 
 module.exports = app;

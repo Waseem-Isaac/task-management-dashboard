@@ -1,6 +1,15 @@
 <div mat-dialog-title class="dialog-title">
   <span>New Board</span>
 </div>
+
 <mat-dialog-content>
-  <!-- Board add form will go here -->
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-100">
+    <mat-label>Board name</mat-label>
+    <input matInput [(ngModel)]="boardName" (keyup.enter)="submit()" cdkFocusInitial />
+  </mat-form-field>
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!boardName.trim()" (click)="submit()">Create</button>
+</mat-dialog-actions>

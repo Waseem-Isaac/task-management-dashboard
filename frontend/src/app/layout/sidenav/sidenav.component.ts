@@ -24,7 +24,7 @@ export class SidenavComponent {
   navItems = [
     { label: 'Board', route: '/board', matIcon: 'dashboard' },
     { label: 'Analytics', route: '/analytics', matIcon: 'show_chart' },
-    { label: 'Team (Users)', route: '/users', matIcon: 'supervisor_account' },
+    { label: 'Team', route: '/users', matIcon: 'supervisor_account' },
   ];
 
   openAddTaskDialog(): void {

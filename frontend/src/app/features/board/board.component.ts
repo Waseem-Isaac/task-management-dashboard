@@ -1,147 +1,60 @@
 /**
- * Board component — Kanban view of all tasks with filtering, search, drag-drop and delete.
- * SMART component (manages state, filtering, and task operations)
+ * Board shell — renders the board header and delegates task management to BoardTasksComponent.
+ * SMART component (manages board-level state: active board selection)
  */
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { BoardService } from './board.service';
-import { Task } from './models';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { BoardTasksComponent } from './components/board-tasks/board-tasks.component';
+import { BoardService } from './board.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatIcon } from "@angular/material/icon";
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
-import { TaskCardComponent } from './components/task/shared/task-card/task-card.component';
-import { FilterByStatusPipe } from '../../shared/pipes/filter-by-status.pipe';
-import { NgClass } from '@angular/common';
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { SearchService } from '../../core/services/search.service';
-import { TaskAddComponent } from './components/task/task-add/task-add.component';
-import { TaskEditComponent } from './components/task/task-edit/task-edit.component';
-import { TaskViewComponent } from './components/task/task-view/task-view.component';
-import { Confirmable } from '../../shared/decorators/confirmable.decorator';
-import { UsersService } from '../users/users.service';
-import { AuthService } from '../../core/services/auth.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { BoardAddComponent } from './components/board-add/board-add.component';
 
 @Component({
   selector: 'app-board',
   imports: [
-    MatIconModule,
-    MatSelectModule,
     MatFormFieldModule,
-    TaskCardComponent,
-    FilterByStatusPipe,
-    NgClass,
-    DragDropModule,
-    MatSnackBarModule,
+    MatSelectModule,
+    MatInputModule,
+    BoardTasksComponent,
+    MatIcon,
+    MatButtonModule,
+    MatTooltipModule,
   ],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoardComponent implements OnInit {
-  private taskService = inject(BoardService);
-  protected usersService = inject(UsersService);
-  private searchService = inject(SearchService);
+export class BoardComponent implements OnInit{
+  boardsService = inject(BoardService);
   private dialog = inject(MatDialog);
-  authService = inject(AuthService);
-  // Read directly from the service signal — reflects add/update/delete instantly
-  tasks = this.taskService.tasks;
-  isLoading = this.taskService.isLoading;
 
-  activeStatus = signal<Task['status'] | null>(null);
-  activePriority = signal<Task['priority'] | null>(null);
-  activeAssignee = signal<string | null>(null);
-  snackbar = inject(MatSnackBar);
+  activeBoard = this.boardsService.activeBoard;
+  boards = this.boardsService.boards;
+  isLoading = this.boardsService.isLoading;
 
   ngOnInit(): void {
-    // Trigger initial HTTP load (no-op if already loaded)
-    this.taskService.loadTasks().subscribe();
-    this.usersService.loadUsers(true);
+    this.boardsService.loadBoards().subscribe();
   }
 
-  filteredTasks = computed(() => {
-    const status = this.activeStatus();
-    const priority = this.activePriority();
-    const assignee = this.activeAssignee();
-    const query = this.searchService.searchTerm().toLowerCase().trim();
-    return this.tasks()?.filter((t) => {
-      if (status && t.status !== status) return false;
-      if (priority && t.priority !== priority) return false;
-      if (assignee && t.assignee?._id !== assignee) return false;
-      if (query) {
-        const inTitle = t.title.toLowerCase().includes(query);
-        const inDescription = t.description.toLowerCase().includes(query);
-        if (!inTitle && !inDescription) return false;
-      }
-      return true;
+  onBoardChange(boardId: string): void {
+    const board = this.boards().find((b) => b._id === boardId);
+    if (board) this.boardsService.setActiveBoard(board);
+  }
+
+  openAddBoardDialog(): void {
+    this.dialog.open(BoardAddComponent, { panelClass: 'app-dialog', disableClose: true });
+  }
+
+  updateBoardName(boardId: string | undefined, newName: string): void {
+    if (!boardId) return;
+    if (newName.trim() === this.activeBoard()?.name) return;
+    this.boardsService.updateBoard(boardId, { name: newName.trim() }).subscribe({
+      error: (error) => console.error('Error updating board name:', error),
     });
-  });
-
-  columns: { status: Task['status']; label: string }[] = [
-    { status: 'todo', label: 'TO DO' },
-    { status: 'in_progress', label: 'IN PROGRESS' },
-    { status: 'done', label: 'DONE' },
-  ];
-
-  setFilter(status: Task['status'] | null): void {
-    this.activeStatus.set(status);
-  }
-
-  @Confirmable({ title: 'Delete Task', message: 'Are you sure you want to remove this task?' })
-  handleDelete(taskId: string): void {
-    this.taskService.deleteTask(taskId).subscribe({
-      next: () => {
-        /** Tasks updated in the service signal automatically */
-        this.snackbar.open('Task deleted successfully!', '', 
-          { 
-            duration: 3000 , 
-            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
-          });
-      },
-      error: (err) => {
-        console.error('Error deleting task:', err);
-        this.snackbar.open(err?.error?.message || 'Failed to delete task. Please try again.', '', 
-          { 
-            duration: 3000 , 
-            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
-          });
-      }
-    });
-  }
-
-  openAddDialog(): void {
-    this.dialog.open(TaskAddComponent, { panelClass: 'app-dialog', disableClose: true });
-  }
-
-  openEditDialog(taskId: string): void {
-    this.dialog.open(TaskEditComponent, {
-      panelClass: 'app-dialog',
-      disableClose: true,
-      data: { taskId },
-    });
-  }
-
-  openViewDialog(taskId: string): void {
-    this.dialog.open(TaskViewComponent, {
-      panelClass: 'app-dialog',
-      data: { taskId },
-    });
-  }
-
-  onDrop(event: CdkDragDrop<Task['status']>): void {
-    const task: Task = event.item.data;
-    const targetStatus = event.container.data;
-    const insertBeforeId =
-      this.filteredTasks()?.filter((t) => t.status === targetStatus && t._id !== task._id)[
-        event.currentIndex
-      ]?._id ?? null;
-    this.taskService.dropTask(task._id, targetStatus, insertBeforeId);
   }
 }

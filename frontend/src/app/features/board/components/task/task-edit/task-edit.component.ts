@@ -5,11 +5,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TaskFormComponent } from '../shared/task-form/task-form.component';
-import { BoardService } from '../../../board.service';
 import { Task, TaskFormData } from '../../../models';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TasksService } from '../../../tasks.service';
 
 @Component({
   selector: 'app-task-edit',
@@ -19,7 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./task-edit.component.scss'],
 })
 export class TaskEditComponent implements OnInit {
-  private taskService = inject(BoardService);
+  private taskService = inject(TasksService);
   private snackbar = inject(MatSnackBar);
   private dialogRef = inject(MatDialogRef<TaskEditComponent>);
   private data = inject<{ taskId: string }>(MAT_DIALOG_DATA);
@@ -37,7 +37,7 @@ export class TaskEditComponent implements OnInit {
   }
 
   private loadTask(id: string): void {
-    this.taskService.getTaskById(id, true).subscribe({
+    this.taskService.getTaskById(id).subscribe({
       next: (task) => {
         if (task) {
           this.task.set(task);

@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/user');
+const Board = require('../models/board');
 
 // POST /auth/register — self-registration with password
 router.post('/register', async (req, res, next) => {
@@ -38,8 +39,11 @@ router.post('/register', async (req, res, next) => {
       active: true,
     });
 
+    //  Auto-create a default board for the new user
+    await Board.create({ name: 'My First Board', createdBy: user._id });
+
     const token = jwt.sign(
-      { sub: user._id, email: user.email },
+      { _id: user._id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
@@ -83,7 +87,7 @@ router.post('/login', async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { sub: user._id, email: user.email },
+      { _id: user._id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );

@@ -1,6 +1,5 @@
 /**
  * Team members view displaying user avatars and task assignments.
- * SMART component (loads data via TaskService)
  */
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { UsersService } from './users.service';

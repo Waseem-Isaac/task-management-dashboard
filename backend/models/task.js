@@ -11,6 +11,8 @@ const taskSchema = new mongoose.Schema(
     assignee:    { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null , select: '_id name email' },
     reporter:    { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, select: '_id name email' },
     tags:        { type: [String], default: [] },
+
+    boardId: { type: mongoose.Schema.Types.ObjectId, ref: 'Board', required: true }
   },
   { timestamps: true }
 );

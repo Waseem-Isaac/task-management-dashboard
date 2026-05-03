@@ -2,97 +2,85 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { Task, TaskFormData } from './models';
-import { StatisticsService } from '../statistics/statistics.service';
+import { Board } from './models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoardService {
   private http = inject(HttpClient);
-  private statisticsService = inject(StatisticsService);
-
-  // In-memory store — loaded once from JSON, mutated for add/update/delete, Session-lifetime persistence only
-  private _tasks = signal<Task[]>([]);
-  readonly tasks = this._tasks.asReadonly();
+  private _boards = signal<Board[]>([]);
+  readonly boards = this._boards.asReadonly();
   readonly isLoading = signal(true);
-
-  // Prevent _tasks from being overwritten by the cache interceptor's tap() on repeat calls
   private _loaded = false;
 
-  // httpResource is not used here because _tasks must be mutated (in-memory) after load (add/edit/delete/reorder)
-  loadTasks(): Observable<Task[]> {
-    if (this._loaded) return of(this._tasks());
-    return this.http.get<{ tasks: Task[] }>(`tasks`).pipe(
-      tap((data) => {
-        this._tasks.set(data.tasks);
-        this._loaded = true;
-        this.isLoading.set(false);
-      }),
-      map((data) => data.tasks),
-    );
-  }
-
-  getTaskById(id: string, invalidateCache: boolean = false): Observable<Task | undefined> {
-    return this.http.get<Task>(`tasks/${id}`, { headers: { invalidateCache: invalidateCache.toString() } }).pipe(map((task) => task || undefined));
-  }
-
-  createTask(taskData: TaskFormData): Observable<Task> {
-    return this.http.post<Task>(`tasks`, taskData).pipe(
-      tap((created) => {
-        this._tasks.update((tasks) => [...(tasks ?? []) , created]);
-        this.statisticsService.reload();
-      }),
-    );
-  }
-
-  updateTask(id: string, taskData: TaskFormData): Observable<Task> {
-    return this.http.put<Task>(`tasks/${id}`, taskData).pipe(
-      tap((updated) => {
-        // Reflect the task in the in-memory signal store to reflect changes immediately in the UI
-        this._tasks.update((tasks) => tasks.map((t) => (t._id === id ? updated : t)));
-        this.statisticsService.reload();
-      }),
-    );
-  }
-
-  deleteTask(id: string): Observable<void> {
-    return this.http.delete<void>(`tasks/${id}`).pipe(
-      tap(() => {
-        this._tasks.update((tasks) => tasks?.filter((t) => t._id !== id));
-        this.statisticsService.reload();
-      }),
-    );
+  private _activeBoard = signal<Board | null>(null);
+  readonly activeBoard = this._activeBoard.asReadonly();
+ 
+  setActiveBoard(board: Board | null): void {
+    this._activeBoard.set(board);
   }
 
   /**
-   * Moves a task to a new status column, inserting before `beforeId` in the flat array.
-   * Pass `beforeId = null` to append at the end of the target column.
-   * Uses optimistic update: applies the move instantly, rolls back on backend failure.
+   * 
+ GET     /boards                        → all boards
+POST    /boards                        → create board
+GET     /boards/:boardId               → single board
+PUT     /boards/:boardId               → update board
+DELETE  /boards/:boardId               → delete board
    */
-  dropTask(id: string, targetStatus: Task['status'], insertBeforeId: string | null): void {
-    const previousTasks = this._tasks(); // snapshot for rollback
 
-    // Optimistically apply the move in-memory
-    this._tasks.update((tasks) => {
-      const task = tasks.find((t) => t._id === id);
-      if (!task) return tasks;
+  // Load boards
+  loadBoards(): Observable<Board[]> {
+    if (this._loaded) return of(this.boards());
+    return this.http.get<{ boards: Board[] }>(`boards`).pipe(
+      tap((data) => {
+        this._boards.set(data.boards);
+        this._activeBoard.set(data.boards[0] ?? null);
+        this._loaded = true;
+        this.isLoading.set(false);
+      }),
+      map((data) => data.boards),
+    );
+  }
 
-      const updated = { ...task, status: targetStatus, updatedAt: new Date().toISOString() };
-      const remaining = tasks.filter((t) => t._id !== id);
-      const at = insertBeforeId
-        ? remaining.findIndex((t) => t._id === insertBeforeId)
-        : remaining.length;
+  // Get Board by ID
+  getBoardById(boardId: string): Observable<Board> {
+    return this.http.get<Board>(`boards/${boardId}`).pipe(map((board) => board || undefined));
+  }
 
-      return [...remaining.slice(0, at), updated, ...remaining.slice(at)];
-    });
+  // Create Board
+  createBoard(name: string): Observable<Board> {
+    return this.http.post<Board>(`boards`, { name }).pipe(
+      tap((created) => {
+        this._boards.update((boards) => [...(boards ?? []) , created]);
+        this.setActiveBoard(created);
+      }),
+    );
+  }
 
-    // Persist to backend — roll back on failure
-    this.updateTask(id, { status: targetStatus } as TaskFormData).subscribe({
-      error: () => {
-        console.error('Failed to persist task move — rolling back.');
-        this._tasks.set(previousTasks);
-      },
-    });
+  // Update board 
+  updateBoard(boardId: string, board: Partial<Board>): Observable<Board> {
+    return this.http.put<Board>(`boards/${boardId}`, board).pipe(
+      tap((updated) => {
+        // Update the board in the in-memory signal store to reflect changes immediately in the UI
+        this._boards.update((boards) => boards.map((b) => (b._id === boardId ? updated : b)));
+        if (this.activeBoard()?._id === boardId) {
+          this._activeBoard.set(updated);
+        }
+      }),
+    );
+  }
+
+  // Delete board
+  deleteBoard(boardId: string): Observable<void> {
+    return this.http.delete<void>(`boards/${boardId}`).pipe(
+      tap(() => {
+        this._boards.update((boards) => boards.filter((b) => b._id !== boardId));
+        if (this.activeBoard()?._id === boardId) {
+          this._activeBoard.set(null);
+        }
+      }),
+    );
   }
 }

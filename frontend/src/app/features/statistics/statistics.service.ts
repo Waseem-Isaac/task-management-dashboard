@@ -5,7 +5,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map, timer } from 'rxjs';
 import { Statistic } from './models';
 import { environment } from '../../../environments/environment';
-import { invalidateCache } from '../../core/interceptors/cache.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -53,7 +52,6 @@ export class StatisticsService {
     if (this._resourceError || !this._resource) {
       return;
     }
-    invalidateCache(`${environment.apiUrl}statistics`);
     this._resource.reload();
   }
 }

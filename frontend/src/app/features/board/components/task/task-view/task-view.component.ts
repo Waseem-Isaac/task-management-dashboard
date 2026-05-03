@@ -5,9 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { NgClass, DatePipe } from '@angular/common';
-import { BoardService } from '../../../board.service';
 import { Task } from '../../../models';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TasksService } from '../../../tasks.service';
 
 @Component({
   selector: 'app-task-view',
@@ -25,7 +25,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent implements OnInit {
-  private taskService = inject(BoardService);
+  private taskService = inject(TasksService);
   private dialogRef = inject(MatDialogRef<TaskViewComponent>);
   private data = inject<{ taskId: string }>(MAT_DIALOG_DATA);
   private snackbar = inject(MatSnackBar);
@@ -40,7 +40,7 @@ export class TaskViewComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data?.taskId) {
-      this.taskService.getTaskById(this.data.taskId, true).subscribe({
+      this.taskService.getTaskById(this.data.taskId).subscribe({
         next: (task) => {
           this.task.set(task);
           this.isLoading.set(false);

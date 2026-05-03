@@ -38,7 +38,7 @@ html {
   --mat-form-field-outlined-error-hover-outline-color: var(--color-danger);
   --mat-form-field-outlined-outline-color: var(--color-light-grey);
   --mat-form-field-outlined-hover-outline-color: var(--color-light-grey);
-  --mat-form-field-outlined-focus-outline-color: var(--color-primary);
+  --mat-form-field-outlined-focus-outline-color: var(--color-secondary-hover);
   --mat-form-field-outlined-container-shape: var(--radius-lg);
   --mat-form-field-outlined-input-text-color: var(--color-dark);
   --mat-form-field-outlined-input-placeholder-color: var(--color-neutral);
@@ -48,10 +48,21 @@ html {
   --mat-select-enabled-trigger-text-color: var(--color-dark);
   --mat-option-label-text-size: 0.8rem;
 
+
   .mat-mdc-notch-piece {
     // background-color: var(--color-body-bg);
     background-color: var(--color-primary-contrast);
   }
+
+  .editable-text {
+    &:not(.mat-focused) .mat-mdc-notch-piece {
+      background: none;
+      border: none;
+    }
+
+    --mat-form-field-outlined-input-text-color: var(--color-neutral);
+  }
+
 
   .mat-mdc-form-field-infix {
     z-index: 9999;
@@ -176,11 +187,14 @@ html {
     --mat-dialog-subhead-color: var(--color-dark);
     --mat-dialog-headline-padding: 1rem;
     --mat-icon-button-icon-color: var(--color-neutral);
+
     &::before {
       display: none;
     }
 
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   // -- Scrollable content area (mat-dialog-content) --
