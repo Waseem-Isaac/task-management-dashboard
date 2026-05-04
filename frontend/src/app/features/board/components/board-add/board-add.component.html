@@ -3,13 +3,15 @@
 </div>
 
 <mat-dialog-content>
-  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-100">
-    <mat-label>Board name</mat-label>
-    <input matInput [(ngModel)]="boardName" (keyup.enter)="submit()" cdkFocusInitial />
-  </mat-form-field>
+  <div class="field  d-flex flex-column">
+     <label for="boardName" class="label">Board name</label>
+    <mat-form-field appearance="outline"  class="full-width" subscriptSizing="dynamic">
+      <input matInput id="boardName" [(ngModel)]="boardName" (keyup.enter)="submit()" cdkFocusInitial />
+    </mat-form-field>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-flat-button color="primary" [disabled]="!boardName.trim()" (click)="submit()">Create</button>
+  <button  class="btn-primary" mat-button type="submit"  [disabled]="!boardName.trim()" (click)="submit()">Create</button>
 </mat-dialog-actions>

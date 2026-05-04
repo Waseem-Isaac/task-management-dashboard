@@ -14,29 +14,52 @@ export class BoardService {
   readonly isLoading = signal(true);
   private _loaded = false;
 
-  private _activeBoard = signal<Board | null>(null);
+  private _activeBoard = signal<Board | null>(this._loadActiveBoard());
   readonly activeBoard = this._activeBoard.asReadonly();
- 
+
   setActiveBoard(board: Board | null): void {
     this._activeBoard.set(board);
+    if (board) {
+      localStorage.setItem('active_board', JSON.stringify(board));
+    } else {
+      localStorage.removeItem('active_board');
+    }
   }
 
-  /**
-   * 
- GET     /boards                        → all boards
-POST    /boards                        → create board
-GET     /boards/:boardId               → single board
-PUT     /boards/:boardId               → update board
-DELETE  /boards/:boardId               → delete board
-   */
+  private _loadActiveBoard(): Board | null {
+    try {
+      const raw = localStorage.getItem('active_board');
+      return raw ? (JSON.parse(raw) as Board) : null;
+    } catch {
+      return null;
+    }
+  }
 
+  reset(): void {
+    this._boards.set([]);
+    this._activeBoard.set(null);
+    this._loaded = false;
+    this.isLoading.set(true);
+    localStorage.removeItem('active_board');
+  }
+
+
+  /** 
+    GET     /boards                        → all boards
+    POST    /boards                        → create board
+    GET     /boards/:boardId               → single board
+    PUT     /boards/:boardId               → update board
+    DELETE  /boards/:boardId               → delete board
+  */
   // Load boards
   loadBoards(): Observable<Board[]> {
     if (this._loaded) return of(this.boards());
     return this.http.get<{ boards: Board[] }>(`boards`).pipe(
       tap((data) => {
         this._boards.set(data.boards);
-        this._activeBoard.set(data.boards[0] ?? null);
+        const saved = this._loadActiveBoard();
+        const active = data.boards.find((b) => b._id === saved?._id) ?? data.boards[0] ?? null;
+        this.setActiveBoard(active);
         this._loaded = true;
         this.isLoading.set(false);
       }),
@@ -53,7 +76,7 @@ DELETE  /boards/:boardId               → delete board
   createBoard(name: string): Observable<Board> {
     return this.http.post<Board>(`boards`, { name }).pipe(
       tap((created) => {
-        this._boards.update((boards) => [...(boards ?? []) , created]);
+        this._boards.update((boards) => [...(boards ?? []), created]);
         this.setActiveBoard(created);
       }),
     );

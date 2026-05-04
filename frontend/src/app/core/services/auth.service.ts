@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { BoardService } from '../../features/board/board.service';
 
 export interface AuthUser {
   _id: string;
@@ -38,6 +39,7 @@ export interface SetPasswordRequest {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private boardService = inject(BoardService);
 
   private _currentUser = signal<AuthUser | null>(this._loadUser());
   readonly currentUser = this._currentUser.asReadonly();
@@ -74,6 +76,7 @@ export class AuthService {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
     this._currentUser.set(null);
+    this.boardService.reset();
     this.router.navigate(['/auth/login']);
   }
 
@@ -90,5 +93,19 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+
+  // Update me
+  updateProfile(data: Partial<AuthUser>): Observable<AuthUser> {
+    return this.http.put<AuthUser>('users/me', data).pipe(
+      tap((updated) => {
+        const current = this.currentUser();
+        if (current) {
+          const merged = { ...current, ...updated };
+          localStorage.setItem('auth_user', JSON.stringify(merged));
+          this._currentUser.set(merged);
+        }
+      }),
+    );
   }
 }

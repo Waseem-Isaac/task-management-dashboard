@@ -1,7 +1,7 @@
 <div class="board">
   @if (activeBoard()) {
   <div class="board-header">
-    <div class="board-name">
+    <div class="board-name d-flex align-items-center">
       <!-- Board name & Inline text field to edit the board name into one element -->
        <mat-form-field subscriptSizing="dynamic" appearance="outline" class="board-name-field editable-text" >
         <input matInput [value]="activeBoard()?.name" (blur)="updateBoardName(activeBoard()?._id, $event.target.value)" [disabled]="authService.currentUser()?.role !== 'TEAM_LEAD'" />
@@ -9,13 +9,22 @@
             <mat-icon matPrefix class="edit-icon">edit</mat-icon>
           }
       </mat-form-field>
+
+
+       @if(authService.currentUser()?.role === 'TEAM_LEAD') {
+          <button mat-icon-button class="option-delete-btn" (click)="deleteBoard(activeBoard()?._id, $event)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        }
     </div>
 
     <div class="board-actions d-flex align-items-center">
       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-select">
-        <mat-select [value]="activeBoard()?._id" (selectionChange)="onBoardChange($event.value)" placeholder="Board">
+        <mat-select [value]="activeBoard()?._id" (selectionChange)="onBoardChange($event.value)" placeholder="Board" hideSingleSelectionIndicator="true">
           @for (board of boards(); track board._id) {
-            <mat-option [value]="board._id">{{ board.name }}</mat-option>
+            <mat-option [value]="board._id">
+              <span>{{ board.name }}</span>
+            </mat-option> 
           }
         </mat-select>
       </mat-form-field>
@@ -40,7 +49,9 @@
           <mat-icon>add</mat-icon> Create your first board
         </button>
       } @else {
-        <p>Welcome! No tasks have been assigned to you so far.</p>
+        <p>No tasks have been assigned to you so far. 
+         <br><br> Please check back later or contact your team lead for more information.
+        </p>
       }
     </div>
   }

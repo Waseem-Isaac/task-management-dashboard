@@ -6,7 +6,14 @@
       </div>
     </div>
 
-    <h2 class="user-name">{{ authService.currentUser()?.name }}</h2>
+    <!-- <h2 class="user-name">{{ authService.currentUser()?.name }}</h2> -->
+<div class="user-name">
+      <mat-form-field subscriptSizing="dynamic" appearance="outline" class="profile-name-field editable-text" >
+        <input matInput [value]="authService.currentUser()?.name" (blur)="updateMyName($event.target.value)" />
+            <mat-icon matPrefix class="edit-icon">edit</mat-icon>
+      </mat-form-field>
+
+</div>
 
     <mat-divider />
 

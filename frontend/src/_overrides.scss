@@ -172,6 +172,13 @@ html {
   width: 640px !important;
   max-width: 90vw !important;
 
+  &.sm {
+    width: 300px !important;
+    .mat-mdc-dialog-content {
+      padding: 1rem !important;
+    }
+  }
+
   // -- Overlay panel (the white card itself) --
   .mat-mdc-dialog-container {}
 

@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { BoardAddComponent } from './components/board-add/board-add.component';
 import { AuthService } from '../../core/services/auth.service';
+import { Confirmable } from '../../shared/decorators/confirmable.decorator';
 
 @Component({
   selector: 'app-board',
@@ -49,7 +50,7 @@ export class BoardComponent implements OnInit{
   }
 
   openAddBoardDialog(): void {
-    this.dialog.open(BoardAddComponent, { panelClass: 'app-dialog', disableClose: true });
+  this.dialog.open(BoardAddComponent, { panelClass: ['app-dialog', 'sm'], disableClose: true });
   }
 
   updateBoardName(boardId: string | undefined, newName: string): void {
@@ -57,6 +58,22 @@ export class BoardComponent implements OnInit{
     if (newName.trim() === this.activeBoard()?.name) return;
     this.boardsService.updateBoard(boardId, { name: newName.trim() }).subscribe({
       error: (error) => console.error('Error updating board name:', error),
+    });
+  }
+
+  @Confirmable({ title: 'Delete Board', message: 'Are you sure you want to delete this board? This action cannot be undone and will permanently remove all associated tasks.' })
+  deleteBoard(boardId: string | undefined, event: MouseEvent): void {
+    if (!boardId) return;
+    event.stopPropagation();
+    this.boardsService.deleteBoard(boardId).subscribe({
+      next: () => {
+        // show a success message, then automatically select another board if available
+        const remainingBoards = this.boards().filter((b) => b._id !== boardId);
+        if (remainingBoards.length > 0) {
+          this.boardsService.setActiveBoard(remainingBoards[0]);
+        }
+      },
+      error: (error) => console.error('Error deleting board:', error),
     });
   }
 }
