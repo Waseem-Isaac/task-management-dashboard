@@ -25,8 +25,9 @@ router.get('/', async (req, res) => {
     let boards;
 
     if (req.user.role === 'TEAM_LEAD') {
-      // Team Lead — sees all boards he created
-      boards = await Board.find({ createdBy: req.user._id }).sort({ createdAt: -1 });
+      // Team Lead — sees all boards he created, created by him or in case of he has tasks assigned
+      const boardIds = await Task.distinct('boardId', { assignee: req.user._id });
+      boards = await Board.find({ $or: [{ createdBy: req.user._id }, { _id: { $in: boardIds } }] }).sort({ createdAt: -1 });
 
     } else {
       // Team Member — sees only boards where they have at least one task
