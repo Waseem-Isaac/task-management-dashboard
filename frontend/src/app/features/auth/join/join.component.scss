@@ -66,11 +66,7 @@
     width: 100%;
     // max-width: 720px;
     background: white;
-    border-radius: var(--radius-lg);
-    box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.06),
-      0 8px 32px rgba(0, 0, 0, 0.08),
-      0 24px 64px rgba(37, 99, 235, 0.06);
+    border-radius: var(--radius-xl);
     overflow: hidden;
     border: 1px solid rgba(226, 232, 240, 0.8);
 
@@ -96,7 +92,7 @@
       bottom: 0;
       left: 50%;
       width: 1px;
-      background: linear-gradient(to bottom, transparent, #e2e8f0 20%, #e2e8f0 80%, transparent);
+      background: linear-gradient(to bottom, transparent, var(--color-light-grey) 20%, var(--color-light-grey) 80%, transparent);
     }
 
     .divider-label {
