@@ -2,6 +2,8 @@
 
 A task management app for teams — create boards, manage tasks, and collaborate.
 
+> **Note:** This is a learning project, not intended for enterprise or production use.
+
 **Live:** [waseem-isaac.github.io/boardly](https://waseem-isaac.github.io/boardly/)
 
 ---
@@ -10,7 +12,7 @@ A task management app for teams — create boards, manage tasks, and collaborate
 
 | Layer    | Technology                          | Hosting       |
 |----------|-------------------------------------|---------------|
-| Frontend | Angular, Angular Material, Chart.js | GitHub Pages  |
+| Frontend | Angular                             | GitHub Pages  |
 | Backend  | Node.js, Express                    | Vercel        |
 | Database | MongoDB, Mongoose                   | MongoDB Atlas |
 | Auth     | JWT, bcrypt, Nodemailer, Gmail      | —             |
