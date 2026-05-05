@@ -81,6 +81,19 @@ body {
     background-color: var(--menu-item-color-hover) !important;
     color: var(--color-primary-hover) !important;
   }
+
+  &.error {
+    color: var(--color-danger) !important;
+    opacity: 0.9;
+        width: auto;
+    align-items: center;
+    display: flex;
+    padding: 0;
+    &:hover {
+     color: var(--color-danger) !important;
+     opacity: 1;
+    }
+  }
 }
 
 // Native form controls (non-Material)

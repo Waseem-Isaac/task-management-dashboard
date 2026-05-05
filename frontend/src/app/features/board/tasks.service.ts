@@ -29,7 +29,7 @@ export class TasksService {
   loadTasks(): Observable<Task[]> {
     const currentBoardId = this.boardId;
     if (!currentBoardId) return of([]);  // board not resolved yet — effect will retry once it is
-    if (this._loadedBoardId === currentBoardId) return of(this._tasks());
+    // if (this._loadedBoardId === currentBoardId) return of(this._tasks());
     // Board changed (or first load) — reset and fetch
     this._tasks.set([]);
     this.isLoading.set(true);
