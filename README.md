@@ -12,7 +12,7 @@ A task management app for teams — create boards, manage tasks, and collaborate
 
 | Layer    | Technology                          | Hosting       |
 |----------|-------------------------------------|---------------|
-| Frontend | Angular                             | GitHub Pages  |
+| Frontend | Angular v21                         | GitHub Pages  |
 | Backend  | Node.js, Express                    | Vercel        |
 | Database | MongoDB, Mongoose                   | MongoDB Atlas |
 | Auth     | JWT, bcrypt, Nodemailer, Gmail      | —             |
