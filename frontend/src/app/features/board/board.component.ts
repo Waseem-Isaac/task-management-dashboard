@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BoardAddComponent } from './components/board-add/board-add.component';
 import { AuthService } from '../../core/services/auth.service';
 import { Confirmable } from '../../shared/decorators/confirmable.decorator';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-board',
@@ -26,6 +27,7 @@ import { Confirmable } from '../../shared/decorators/confirmable.decorator';
     MatIcon,
     MatButtonModule,
     MatTooltipModule,
+    MatSnackBarModule
   ],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
@@ -35,7 +37,7 @@ export class BoardComponent implements OnInit{
   boardsService = inject(BoardService);
   authService = inject(AuthService);
   private dialog = inject(MatDialog);
-
+  private snackbar = inject(MatSnackBar);
   activeBoard = this.boardsService.activeBoard;
   boards = this.boardsService.boards;
   isLoading = this.boardsService.isLoading;
@@ -57,7 +59,9 @@ export class BoardComponent implements OnInit{
     if (!boardId) return;
     if (newName.trim() === this.activeBoard()?.name) return;
     this.boardsService.updateBoard(boardId, { name: newName.trim() }).subscribe({
-      error: (error) => console.error('Error updating board name:', error),
+      error: (error) => {
+        this.snackbar.open('Failed to update board name', 'Close', { duration: 3000 });
+      },
     });
   }
 
@@ -73,7 +77,9 @@ export class BoardComponent implements OnInit{
           this.boardsService.setActiveBoard(remainingBoards[0]);
         }
       },
-      error: (error) => console.error('Error deleting board:', error),
+      error: (error) => {
+        this.snackbar.open('Failed to delete board', 'Close', { duration: 3000 });
+      },
     });
   }
 }
