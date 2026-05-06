@@ -1,10 +1,19 @@
   /* ── FOOTER ── */
   footer {
     background: var(--color-dark);
-    padding: 1rem;
+    padding: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    @media screen and (max-width: 400px) {
+      align-items: center;
+      gap: 2rem;
+      justify-content: center;
+    }
   }
 
   .footer-logo {
@@ -12,6 +21,7 @@
     align-items: center;
     gap: 7px;
     text-decoration: none;
+    width: 170px;
   }
 
   .footer-logo-name {
