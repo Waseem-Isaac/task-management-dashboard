@@ -57,12 +57,13 @@ export class LoginComponent {
 
     this.authService.login(email!, password!).subscribe({
       next: () => {
+      this.router.navigate(['/board']);
+
         this.snackbar.open('Login successful!', '', 
           { 
             duration: 3000 , 
             panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
           });
-        this.router.navigate(['/board']);
       },
       error: (err) => {
         this.snackbar.open(err?.error?.message ?? 'Invalid credentials. Please try again.', '',

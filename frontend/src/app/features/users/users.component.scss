@@ -140,6 +140,9 @@
 
 
 // Styling the table following same design pattern we hav
+.table-container {
+  overflow-x: auto;
+}
 .users-table {
   width: 100%;
   border-collapse: separate;

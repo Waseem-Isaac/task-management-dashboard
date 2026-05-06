@@ -24,91 +24,71 @@
     }
   </div>
   } @else {
-  <!-- <div class="users-grid">
-      @for (user of users(); track user._id) {
-        <div class="user-card" [class.inactive]="user.active === false">
-          <div class="user-avatar lg" ><img [src]="user?.avatarUrl" alt=""></div>
-          <div class="user-info">
-            <div class="user-name d-flex align-items-center">
-              {{ user.name }} 
-              @if (user._id === authService.currentUser()?._id) {
-                <span class="me-badge d-flex align-items-center justify-content-center"></span>
-              }
-            </div>
-            <span class="user-email">{{ user.email }}</span>
-          </div>
-
-
-           @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
-             <button class="delete-btn" mat-icon-button (click)="deleteUser(user._id!)">
-              <mat-icon>close</mat-icon>
-            </button>
-          }
-        </div>
-      }
-    </div> -->
   <div class="inactive-hint">
     <mat-icon>info</mat-icon>
     <span>
-      Inactive members are those who have been invited but haven't accepted the invitation yet. They will have limited access until they accept the invite.
+      Inactive members are those who have been invited but haven't accepted the invitation yet. They will have limited
+      access until they accept the invite.
     </span>
   </div>
   <!-- Build a table -->
-  <table class="users-table">
-    <thead>
-      <tr>
-        <th>Member</th>
-        <th>Role</th>
-        <th>Status</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (user of users(); track user._id) {
-      <tr [class.inactive]="user.active === false">
-        <td class="d-flex align-items-center gap-3">
-          <div class="user-avatar lg"><img [src]="user?.avatarUrl" alt=""></div>
-          <div class="user-info">
-            <div class="user-name d-flex align-items-center">
-              {{ user.name }}
-              @if (user._id === authService.currentUser()?._id) {
-              <span class="me-badge d-flex align-items-center justify-content-center"></span>
+  <div class="table-container">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user._id) {
+        <tr [class.inactive]="user.active === false">
+          <td class="d-flex align-items-center gap-3">
+            <div class="user-avatar lg"><img [src]="user?.avatarUrl" alt=""></div>
+            <div class="user-info">
+              <div class="user-name d-flex align-items-center">
+                {{ user.name }}
+                @if (user._id === authService.currentUser()?._id) {
+                <span class="me-badge d-flex align-items-center justify-content-center"></span>
+                }
+              </div>
+              <span class="user-email">{{ user.email }}</span>
+            </div>
+          </td>
+          <td>
+            <!-- Role -->
+            <div class="role-badge" [class.team-lead]="user.role === 'TEAM_LEAD'"
+              [class.member]="user.role === 'MEMBER'">
+              {{ user.role === 'TEAM_LEAD' ? 'Lead' : 'Member' }}
+            </div>
+          </td>
+          <td>
+            <div class="status-column">
+              @if (user.active === false) {
+              <div class="dot inactive"></div>
+              <span class="status-badge inactive">Pending</span>
+              } @else {
+              <div class="dot active"></div>
+              <span class="status-badge active">Active</span>
               }
             </div>
-            <span class="user-email">{{ user.email }}</span>
-          </div>
-        </td>
-        <td>
-          <!-- Role -->
-          <div class="role-badge" [class.team-lead]="user.role === 'TEAM_LEAD'" [class.member]="user.role === 'MEMBER'">
-            {{ user.role === 'TEAM_LEAD' ? 'Team Lead' : 'Team Member' }}
-          </div>
-        </td>
-        <td>
-          <div class="status-column">
-            @if (user.active === false) {
-            <div class="dot inactive"></div>
-            <span class="status-badge inactive">Pending</span>
-            } @else {
-            <div class="dot active"></div>
-            <span class="status-badge active">Active</span>
+
+          </td>
+          <td>
+            @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
+            <button class="delete-btn" mat-icon-button (click)="deleteUser(user._id!)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
             }
-          </div>
+          </td>
 
-        </td>
-        <td>
-          @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
-          <button class="delete-btn" mat-icon-button (click)="deleteUser(user._id!)">
-            <mat-icon>delete_outline</mat-icon>
-          </button>
-          }
-        </td>
-
-      </tr>
-      }
-    </tbody>
-  </table>
-
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
   @if(usersService.meta() && usersService.meta()!.totalPages > 1) {
   <app-pagination [meta]="usersService.meta()" (pageChange)="onPageChange($event)" />
   }
