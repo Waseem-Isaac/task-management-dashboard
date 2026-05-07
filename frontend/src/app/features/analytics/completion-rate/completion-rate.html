@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="completion-rate">
+    <div class="completion-rate-value">{{ completionRateData()?.completionRate || 0 }}%</div>
+    <div class="completion-rate-label">of tasks completed</div>
+  </div>
+  <div>
+    <mat-progress-bar mode="determinate" [value]="completionRateData()?.completionRate || 0"></mat-progress-bar>
+  </div>
+
+  <div>
+    <div class="completion-rate-details">
+      <div class="detail-item">
+        <div class="detail-value">{{ completionRateData()?.doneCount || 0 }}</div>
+        <div class="detail-label">Completed</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-value">{{ completionRateData()?.inProgressCount || 0 }}</div>
+        <div class="detail-label">In Progress</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-value">{{ completionRateData()?.todoCount || 0 }}</div>
+        <div class="detail-label">To Do</div>
+      </div>
+    </div>
+  </div>
+</div>

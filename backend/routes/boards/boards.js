@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Board = require('../../models/board');
 const TaskRouter = require('./tasks');
+const Analytics = require('./analytics');
 const Task = require('../../models/task');
 
 /**
@@ -101,5 +102,8 @@ router.delete('/:boardId', async (req, res) => {
 // Board tasks routes are handled in tasks.js to keep this file focused on board operations
 // Nested routes for tasks under a specific board
 router.use('/:boardId/tasks', TaskRouter); // delegates task routes to tasks.js
+
+// Board analytics routes
+router.use('/:boardId/analytics', Analytics); // delegates analytics routes to analytics.js
 
 module.exports = router;

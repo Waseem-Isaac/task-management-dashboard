@@ -34,7 +34,7 @@ router.get('/', async (req, res, next) => {
       },
       {
         type: 'done',
-        title: 'Completed',
+        title: 'Done',
         value: completed,
         color: '#388E3C',
       },

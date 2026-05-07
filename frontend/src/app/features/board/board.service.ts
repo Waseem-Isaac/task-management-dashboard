@@ -59,7 +59,7 @@ export class BoardService {
         this._boards.set(data.boards);
         const saved = this._loadActiveBoard();
         const active = data.boards.find((b) => b._id === saved?._id) ?? data.boards[0] ?? null;
-        this.setActiveBoard(active);
+        if (active?._id !== this._activeBoard()?._id) this.setActiveBoard(active);
         this._loaded = true;
         this.isLoading.set(false);
       }),

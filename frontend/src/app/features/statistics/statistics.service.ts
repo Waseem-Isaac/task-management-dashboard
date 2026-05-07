@@ -1,5 +1,5 @@
 
-import { computed, Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, timer } from 'rxjs';
@@ -10,17 +10,15 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class StatisticsService {
-  // Use try-catch to handle potential errors during resource initialization
+  private _boardId = signal<string | null>(null);
   private _resource: ReturnType<typeof httpResource<{ statistics: Statistic[] }>> | null = null;
   private _resourceError: any = null;
   private _simulatingLoad = toSignal(timer(1000).pipe(map(() => false)), { initialValue: true });
 
   constructor() {
-    // active_board is saved in localStorage when user opens a board, we can use it to fetch statistics for that board
-    const boardId = localStorage.getItem('active_board') ? JSON.parse(localStorage.getItem('active_board')!)._id : null;
     try {
       this._resource = httpResource<{ statistics: Statistic[] }>(
-        () => `${environment.apiUrl}statistics?boardId=${boardId}`,
+        () => this._boardId() ? `${environment.apiUrl}statistics?boardId=${this._boardId()}` : `${environment.apiUrl}statistics`,
       );
     } catch (err) {
       this._resourceError = err;
@@ -50,10 +48,10 @@ export class StatisticsService {
     return this._resourceError || this._resource?.error;
   });
 
-  reload(): void {
+  reload(boardId: string): void {
     if (this._resourceError || !this._resource) {
       return;
     }
-    this._resource.reload();
+    this._boardId.set(boardId);
   }
 }

@@ -8,32 +8,36 @@ import { StatisticsListComponent } from "../statistics/statistics-list/statistic
 import { TasksBarChart } from "./tasks-bar-chart/tasks-bar-chart";
 import { AnalyticsCardPlaceholder } from './components/analytics-card-placeholder/analytics-card-placeholder';
 import { MatFormField } from '@angular/material/form-field';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { BoardService } from '../board/board.service';
+import { AnalyticsService } from './analytics.service';
+import { CompletionRate } from './completion-rate/completion-rate';
+import { StatisticsService } from '../statistics/statistics.service';
 
 @Component({
   selector: 'app-analytics',
-  imports: [StatisticsListComponent, TasksBarChart , AnalyticsCardPlaceholder, MatFormField, MatSelectModule],
+  imports: [StatisticsListComponent, TasksBarChart , AnalyticsCardPlaceholder, MatFormField, MatSelectModule , CompletionRate],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss',
 })
 export class AnalyticsComponent  {
   taskService = inject(TasksService);
   boardsService = inject(BoardService);
-  activeBoard = this.boardsService.activeBoard;
-  boards = this.boardsService.boards;
+  analyticsService = inject(AnalyticsService);
+  statisticsService = inject(StatisticsService);
 
   constructor() {
     this.boardsService.loadBoards().subscribe();
 
     effect(() => {
-       this.taskService.loadTasks().subscribe();
+      this.analyticsService.getAnalytics(this.boardsService.activeBoard()?._id ?? '').subscribe();
+      this.statisticsService.reload(this.boardsService.activeBoard()?._id ?? '');  // reload statistics for the active board whenever it changes
     });
   }
 
 
   onBoardChange(boardId: string): void {
-    const board = this.boards().find((b) => b._id === boardId);
+    const board = this.boardsService.boards().find((b) => b._id === boardId);
     if (board) this.boardsService.setActiveBoard(board);
   }
 }

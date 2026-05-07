@@ -6,9 +6,9 @@
 
   <div>
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-select">
-      <mat-select [value]="activeBoard()?._id" (selectionChange)="onBoardChange($event.value)" placeholder="Board"
+      <mat-select [value]="boardsService.activeBoard()?._id" (selectionChange)="onBoardChange($event.value)" placeholder="Board"
         hideSingleSelectionIndicator="true">
-        @for (board of boards(); track board._id) {
+        @for (board of boardsService.boards(); track board._id) {
         <mat-option [value]="board._id">
           <span>{{ board.name }}</span>
         </mat-option>
@@ -30,13 +30,13 @@
       <div class="col-hint">Per active board</div>
     </div>
     <!-- Bar Chart will be rendered here -->
-    <app-tasks-bar-chart [tasks]="taskService.tasks()"></app-tasks-bar-chart>
+    <app-tasks-bar-chart [statusChartData]="analyticsService.analytics().statusChartData" [totalTasks]="analyticsService.analytics().totalTasks"></app-tasks-bar-chart>
   </div>
   <div class="completion-rate-container col">
     <div class="col-title">Completion Rate</div>
     <!-- Completion Rate content will be rendered here -->
 
-    <app-analytics-card-placeholder></app-analytics-card-placeholder>
+    <app-completion-rate [completionRateData]="analyticsService.analytics().completionRateData"></app-completion-rate>
 
   </div>
 </div>

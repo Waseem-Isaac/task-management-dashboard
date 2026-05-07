@@ -151,11 +151,11 @@ label {
     background-color: var(--color-danger);
   }
 
-  &.completed {
+  &.done {
     background-color: var(--color-success);
   }
 
-  &.in-progress {
+  &.in_progress {
     background-color: var(--color-info);
   }
 

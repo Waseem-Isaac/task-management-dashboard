@@ -11,51 +11,27 @@ import { AnalyticsCardPlaceholder } from '../components/analytics-card-placehold
   styleUrl: './tasks-bar-chart.scss',
 })
 export class TasksBarChart {
-  // Grouped bar: X-axis = Status, 3 bars per group = Priority (Low / Medium / High)
-
-  tasks = input<any[]>([]);
-
+  statusChartData = input<{labels: string[]; datasets: {label: string, data: number[]}[]} | undefined>();
+  totalTasks = input<number>(0);
+  
   barChartData = computed<ChartData<'bar'>>(() => {
-    const statuses = ['todo', 'in_progress', 'done'] as const;
-    type Priority = 'low' | 'medium' | 'high';
-
-    const count = (status: (typeof statuses)[number], priority: Priority) =>
-      this.tasks()?.filter((t) => t.status === status && t.priority === priority).length;
-
     return {
-      labels: ['To Do', 'In Progress', 'Done'],
+      labels: this.statusChartData()?.labels,
       datasets: [
-        {
-          label: 'Low',
-          data: statuses.map((s) => count(s, 'low')),
-          backgroundColor: 'rgba(56, 142, 60, 0.75)',
-          borderColor: '#388E3C',
+        ...(this.statusChartData()?.datasets ?? []).map(ds => ({
+          label: ds.label,
+          data: ds.data,
+          backgroundColor: ds.label === 'Low' ? 'rgba(56, 142, 60, 0.75)' :
+                            ds.label === 'Medium' ? 'rgba(245, 124, 0, 0.75)' :
+                            ds.label === 'High' ? 'rgba(211, 47, 47, 0.75)' : 'rgba(158,158,158,0.75)',
+          borderColor: ds.label === 'Low' ? '#388E3C' :
+                        ds.label === 'Medium' ? '#F57C00' :
+                        ds.label === 'High' ? '#D32F2F' : '#9E9E9E',
           borderWidth: 1,
           borderRadius: 4,
           barThickness: 32,
           maxBarThickness: 28,
-        },
-        {
-          label: 'Medium',
-          data: statuses.map((s) => count(s, 'medium')),
-          backgroundColor: 'rgba(245, 124, 0, 0.75)',
-          borderColor: '#F57C00',
-          borderWidth: 1,
-          borderRadius: 4,
-          barThickness: 32,
-          maxBarThickness: 28,
-
-        },
-        {
-          label: 'High',
-          data: statuses.map((s) => count(s, 'high')),
-          backgroundColor: 'rgba(211, 47, 47, 0.75)',
-          borderColor: '#D32F2F',
-          borderWidth: 1,
-          borderRadius: 4,
-          barThickness: 32,
-          maxBarThickness: 28,
-        },
+        }))
       ],
     };
   });
@@ -90,9 +66,4 @@ export class TasksBarChart {
   };
 
   readonly barChartType = 'bar' as const;
-
-  
-  get hasChartData(): boolean {
-    return this.barChartData().datasets.some((ds) => ds.data.some((value: any) => value > 0));
-  }
 }

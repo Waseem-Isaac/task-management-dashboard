@@ -18,10 +18,6 @@ export class TasksService {
   readonly tasks = this._tasks.asReadonly();
   readonly isLoading = signal(true);
 
-  // Tracks which board's tasks are currently loaded — null means nothing loaded yet.
-  // Any board change automatically invalidates the cache and triggers a fresh fetch.
-  private _loadedBoardId: string | null = null;
-
   private get boardId(): string {
     return this.boardService.activeBoard()?._id ?? '';
   }
@@ -29,14 +25,12 @@ export class TasksService {
   loadTasks(): Observable<Task[]> {
     const currentBoardId = this.boardId;
     if (!currentBoardId) return of([]);  // board not resolved yet — effect will retry once it is
-    // if (this._loadedBoardId === currentBoardId) return of(this._tasks());
     // Board changed (or first load) — reset and fetch
     this._tasks.set([]);
     this.isLoading.set(true);
     return this.http.get<{ tasks: Task[] }>(`boards/${currentBoardId}/tasks`).pipe(
       tap((data) => {
         this._tasks.set(data.tasks);
-        this._loadedBoardId = currentBoardId;
         this.isLoading.set(false);
       }),
       map((data) => data.tasks),
@@ -53,7 +47,7 @@ export class TasksService {
     return this.http.post<Task>(`boards/${this.boardId}/tasks`, taskData).pipe(
       tap((created) => {
         this._tasks.update((tasks) => [...(tasks ?? []), created]);
-        this.statisticsService.reload();
+        this.statisticsService.reload(this.boardId);
       }),
     );
   }
@@ -62,7 +56,7 @@ export class TasksService {
     return this.http.put<Task>(`boards/${this.boardId}/tasks/${id}`, taskData).pipe(
       tap((updated) => {
         this._tasks.update((tasks) => tasks.map((t) => (t._id === id ? updated : t)));
-        this.statisticsService.reload();
+        this.statisticsService.reload(this.boardId);
       }),
     );
   }
@@ -71,7 +65,7 @@ export class TasksService {
     return this.http.delete<void>(`boards/${this.boardId}/tasks/${id}`).pipe(
       tap(() => {
         this._tasks.update((tasks) => tasks?.filter((t) => t._id !== id));
-        this.statisticsService.reload();
+        this.statisticsService.reload(this.boardId);
       }),
     );
   }
