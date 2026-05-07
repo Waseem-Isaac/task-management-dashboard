@@ -1,6 +1,8 @@
 /** Analytics routes */
 const express = require('express');
 const router = express.Router({ mergeParams: true }); // ← mergeParams to access :boardId from parent route
+const mongoose = require('mongoose');
+const crypto = require('crypto');
 const Task = require('../../models/task');
 
 /**
@@ -109,7 +111,49 @@ router.get('/', async (req, res, next) => {
     const completionRate = totalTasks > 0 ? (doneTasks / totalTasks) * 100 : 0;
     const completionRateData = { doneTasks, inProgressTasks, todoTasks, overdueTasks, completionRate };
 
-    res.json({ totalTasks, statusChartData, completionRateData });
+
+    // 3. Priority Breakdown: DoughnutChart data : group tasks by priority field and count
+    const priorityBreakdown = await Task.aggregate([
+      { $match: { boardId: new mongoose.Types.ObjectId(boardId) } },
+      { $group: { _id: '$priority', count: { $sum: 1 } } }
+    ]);
+
+    const priorityBreakdownChartData = {
+      labels: ['Low', 'Medium', 'High'],
+      datasets: [
+        {
+          label: 'Tasks',
+          data: ['low', 'medium', 'high'].map(priority => {
+            const item = priorityBreakdown.find(p => p._id === priority);
+            return item ? item.count : 0;
+          })
+        }
+      ]
+    };
+
+    // 4. Tasks per Member: group tasks by assignee, show who has the most load
+    // This would require a lookup to the User collection to get names and avatars
+    const tasksPerMemberAggregationData = await Task.aggregate([
+      { $match: { boardId: new mongoose.Types.ObjectId(boardId) } },
+      { $group: { _id: '$assignee', taskCount: { $sum: 1 } } },
+      { $lookup: { from: 'users', localField: '_id', foreignField: '_id', as: 'assigneeInfo' } },
+      { $unwind: '$assigneeInfo' },
+      { $project: { _id: 0, name: '$assigneeInfo.name', email: '$assigneeInfo.email', taskCount: 1 } },
+      { $sort: { taskCount: -1 } }
+    ]);
+
+    const tasksPerMember = tasksPerMemberAggregationData.map(m => {
+      const hash = crypto.createHash('md5').update(m.email.trim()).digest('hex');
+      const bgColor = hash.slice(0, 6);
+      return {
+        name: m.name,
+        email: m.email,
+        taskCount: m.taskCount,
+        avatarUrl: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(m.name)}&backgroundColor=${bgColor}&color=fff&size=200&scale=60`
+      };
+    });
+
+    res.json({ totalTasks, statusChartData, completionRateData, priorityBreakdownChartData, tasksPerMember });
   } catch (err) {
     next(err);
   }

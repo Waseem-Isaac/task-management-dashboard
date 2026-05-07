@@ -13,10 +13,12 @@ import { BoardService } from '../board/board.service';
 import { AnalyticsService } from './analytics.service';
 import { CompletionRate } from './completion-rate/completion-rate';
 import { StatisticsService } from '../statistics/statistics.service';
+import { TasksDoughnutChart } from './tasks-doughnut-chart/tasks-doughnut-chart';
+import { TasksPerMember } from "./tasks-per-member/tasks-per-member";
 
 @Component({
   selector: 'app-analytics',
-  imports: [StatisticsListComponent, TasksBarChart , AnalyticsCardPlaceholder, MatFormField, MatSelectModule , CompletionRate],
+  imports: [StatisticsListComponent, TasksBarChart, AnalyticsCardPlaceholder, MatFormField, MatSelectModule, CompletionRate, TasksDoughnutChart, TasksPerMember],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss',
 })

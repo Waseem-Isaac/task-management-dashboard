@@ -10,7 +10,7 @@ export interface Analytics {
   statusChartData: { labels: string[]; datasets: {label: string, data: number[]}[] };
   completionRateData: { completionRate:number, doneCount: number, todoCount: number, inProgressCount: number, overdueCount: number };
   priorityBreakdownChartData: { labels: string[]; datasets: {label: string, data: number[]}[] };
-  tasksPerMember: { name: string; taskCount: number }[];
+  tasksPerMember: { name: string; email: string; avatarUrl: string; taskCount: number }[];
   activity: { /**Todo */ };
 } 
 

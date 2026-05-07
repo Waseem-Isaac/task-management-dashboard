@@ -1,1 +1,9 @@
-<p>tasks-doughnut-chart works!</p>
+@if(totalTasks() > 0) {
+<div class="doughnutChart-container">
+  <canvas baseChart [data]="doughnutChartData()" [options]="doughnutChartOptions" [type]="doughnutChartType" 
+ [plugins]="plugins"
+></canvas>
+</div>
+}@else {
+  <app-analytics-card-placeholder></app-analytics-card-placeholder>
+}

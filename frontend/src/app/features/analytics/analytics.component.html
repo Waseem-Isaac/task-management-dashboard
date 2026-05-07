@@ -1,10 +1,7 @@
 <div class="header d-flex justify-content-between align-items-center mb-5">
-  <div>
-    <!-- <h2 class="title">Analytics Dashboard</h2> -->
-    <p class="subtitle">Gain insights into your project performance and team productivity</p>
-  </div>
+    <p class="hint">Gain insights into your project performance and team productivity</p>
 
-  <div>
+    @if (boardsService.activeBoard()) {
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-select">
       <mat-select [value]="boardsService.activeBoard()?._id" (selectionChange)="onBoardChange($event.value)" placeholder="Board"
         hideSingleSelectionIndicator="true">
@@ -15,7 +12,7 @@
         }
       </mat-select>
     </mat-form-field>
-  </div>
+  }
 </div>
 
 <app-statistics-list></app-statistics-list>
@@ -33,28 +30,40 @@
     <app-tasks-bar-chart [statusChartData]="analyticsService.analytics().statusChartData" [totalTasks]="analyticsService.analytics().totalTasks"></app-tasks-bar-chart>
   </div>
   <div class="completion-rate-container col">
-    <div class="col-title">Completion Rate</div>
-    <!-- Completion Rate content will be rendered here -->
-
+    <div class="col-header d-flex justify-content-between align-items-center">
+      <div class="col-title">Completion Rate</div>
+      <div class="col-hint">Per active board</div>
+    </div>
     <app-completion-rate [completionRateData]="analyticsService.analytics().completionRateData"></app-completion-rate>
 
   </div>
 </div>
 
 <!-- This row will include 3 columns: a Doughnut chart for priority Breakdown (tasks by priority), a section for Tasks per member, and a section for Recent Activity -->
-<div class="row">
+<div class="row three-cols">
   <div class="doughnut-chart-container col">
-    <div class="col-title">Priority Breakdown</div>
-    <!-- Doughnut Chart will be rendered here -->
-    <app-analytics-card-placeholder></app-analytics-card-placeholder>
+    <div class="col-header d-flex justify-content-between align-items-center">
+      <div class="col-title">Priority Breakdown</div>
+      <div class="col-hint">Per active board</div>
+    </div>
+
+    <app-tasks-doughnut-chart [priorityBreakdownChartData]="analyticsService.analytics().priorityBreakdownChartData" [totalTasks]="analyticsService.analytics().totalTasks"></app-tasks-doughnut-chart>
   </div>
   <div class="tasks-per-member-container col">
-    <div class="col-title">Tasks per Member</div>
-    <!-- Tasks per member content will be rendered here -->
-    <app-analytics-card-placeholder></app-analytics-card-placeholder>
+
+    <div class="col-header d-flex justify-content-between align-items-center">
+      <div class="col-title">Tasks per Member</div>
+      <div class="col-hint">Per active board</div>
+    </div>
+    <app-tasks-per-member [members]="analyticsService.analytics().tasksPerMember" [totalTasks]="analyticsService.analytics().totalTasks"></app-tasks-per-member>
   </div>
   <div class="recent-activity-container col">
-    <div class="col-title">Recent Activity</div>
+    <div class="col-header d-flex justify-content-between align-items-center">
+    <div class="col-title">Recent Activity <div style="color: var(--color-neutral); margin-bottom: 0;">Stay tuned</div></div>
+      <div class="col-hint">Per active board</div>
+    </div>
+       
+
     <!-- Recent Activity content will be rendered here -->
     <app-analytics-card-placeholder></app-analytics-card-placeholder>
   </div>

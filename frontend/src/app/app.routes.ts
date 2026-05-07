@@ -23,7 +23,7 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('./features/analytics/analytics.component').then((m) => m.AnalyticsComponent),
-        data: { title: 'Analytics' },
+        data: { title: 'Analytics Dashboard' },
       },
     ],
   },

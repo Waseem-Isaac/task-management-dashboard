@@ -3,7 +3,7 @@
  * SMART component (as it injects LayoutService for responsive behavior)
  */
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,6 +22,7 @@ export class SidenavComponent {
   protected layout = inject(LayoutService);
   private dialog = inject(MatDialog);
   authService = inject(AuthService);
+  router = inject(Router);
 
   navItems = [
     { label: 'Board', route: '/board', matIcon: 'dashboard' },
@@ -31,6 +32,13 @@ export class SidenavComponent {
   ];
 
   openAddBoardDialog(): void {
-    this.dialog.open(BoardAddComponent, { panelClass: ['app-dialog', 'sm'], disableClose: true });
+    const dialogRef = this.dialog.open(BoardAddComponent, { panelClass: ['app-dialog', 'sm'], disableClose: true });
+
+      dialogRef.afterClosed().subscribe((res) => {
+        console.log('Add Board dialog closed');
+        if(res) {
+          this.router.navigate(['/board']);
+        };
+      });
   }
 }

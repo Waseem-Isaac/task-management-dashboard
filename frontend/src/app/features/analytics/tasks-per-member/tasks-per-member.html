@@ -1,1 +1,16 @@
-<p>tasks-per-member works!</p>
+<div class="member-list">
+  @for(m of members(); track m.email) {
+  <div class="member-row">
+    <div class="user-avatar lg"><img
+        [src]="m.avatarUrl"
+        alt="{{ m.name }}"></div>
+
+    <div class="member-info">
+      <div class="member-name">{{ m.name }}</div>
+      <mat-progress-bar mode="determinate" [value]="getMemberLoadPercentage(m.taskCount)"></mat-progress-bar>
+    </div>
+    <div class="member-count">{{ m.taskCount }}</div>
+  </div>
+  }
+
+</div>

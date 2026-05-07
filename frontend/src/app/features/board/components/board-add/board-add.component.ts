@@ -23,6 +23,6 @@ export class BoardAddComponent {
   submit(): void {
     const name = this.boardName.trim();
     if (!name) return;
-    this.boardService.createBoard(name).subscribe(() => this.dialogRef.close());
+    this.boardService.createBoard(name).subscribe(() => this.dialogRef.close(true));
   }
 }
