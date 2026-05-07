@@ -17,6 +17,7 @@ A task management app for teams — create boards, manage tasks, and collaborate
 | Database | MongoDB, Mongoose                   | MongoDB Atlas |
 | Auth     | JWT, bcrypt, Nodemailer, Gmail      | —             |
 
+> A complete CI/CD workflow is applied for both frontend and backend projects.
 > All services used are completely free.
 
 ---
