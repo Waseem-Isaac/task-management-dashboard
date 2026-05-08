@@ -34,7 +34,7 @@
       <div class="col-title">Completion Rate</div>
       <div class="col-hint">Per active board</div>
     </div>
-    <app-completion-rate [completionRateData]="analyticsService.analytics().completionRateData"></app-completion-rate>
+    <app-completion-rate [completionRateData]="analyticsService.analytics().completionRateData"  [totalTasks]="analyticsService.analytics().totalTasks"></app-completion-rate>
 
   </div>
 </div>

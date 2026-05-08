@@ -50,7 +50,7 @@
         height: 14px;
       }
     }
-  } 
+  }
 
   .inactive-badge {
     position: absolute;
@@ -135,99 +135,194 @@
       }
     }
   }
-}
 
+  .users-page {
+    .skeleton-table {
+      border: 1px solid var(--color-light-grey);
+      border-radius: var(--radius-lg);
+      background: var(--color-primary-contrast);
 
+      .skeleton-row {
 
-// Styling the table following same design pattern we hav
-.table-container {
-  overflow-x: auto;
-}
-.users-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid var(--color-light-grey);
-  border-radius: var(--radius-lg);
+        padding: 0;
+        border-bottom: 1px solid var(--color-light-grey);
 
-  tbody {
-  }
+        &:last-child {
+          border-bottom: none;
+        }
 
-  tbody td {
-    background: var(--color-primary-contrast);
-    border-top: 1px solid var(--color-light-grey);
-  }
+        display: flex;
+        gap: 0.6rem;
+        justify-content: space-between;
+        height: 4rem;
+        align-items: center;
 
-  th,
-  td {
-    padding: 0.75rem 1.25rem;
-    text-align: left;
-    font-size: 0.8rem;
-    color: var(--color-dark);
-  }
+        .skeleton-cell {
+          margin: 1rem 2rem;
+          &:first-child {
+              flex: .6;
+          }
+          &.member {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1rem;
+            
 
-  th {
-    padding: 0.6rem 1.25rem;
-    font-weight: 600;
-    background: var(--color-body-bg);
-    color: var(--color-neutral);
-  }
+            .user-info {
+              display: flex;
+              flex-direction: column;
+              gap: 0.25rem;
+            }
+          }
 
-  thead tr:first-child th:first-child { border-radius: var(--radius-lg) 0 0 0; }
-  thead tr:first-child th:last-child  { border-radius: 0 var(--radius-lg) 0 0; }
-  tbody tr:last-child  td:first-child { border-radius: 0 0 0 var(--radius-lg); }
-  tbody tr:last-child  td:last-child  { border-radius: 0 0 var(--radius-lg) 0; }
+          .skeleton-cell-item {
+            height: 0.75rem;
+            background: var(--color-light-grey);
+            border-radius: var(--radius-md);
+            width: 92px;
 
-  tr {
-    &.inactive {
-      opacity: 0.75;
+            &.skeleton-avatar {
+              width: 40px;
+              height: 40px;
+              background: var(--color-light-grey);
+              border-radius: 50% !important;
+            }
 
-      .user-avatar {
-        filter: grayscale(1);
+            &.skeleton-actions {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+            }
+
+            &.skeleton-email {
+              width: 120px;
+            }
+          }
+        }
+
+        &:first-child {
+          border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        &:last-child {
+          border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        &.head {
+          height: 2.5rem;
+          .skeleton-actions { visibility: hidden;}
+        }
+
       }
 
-      .user-name {
+    }
+
+    // Styling the table following same design pattern we hav
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .users-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--color-light-grey);
+      border-radius: var(--radius-lg);
+
+      tbody {}
+
+      tbody td {
+        background: var(--color-primary-contrast);
+        border-top: 1px solid var(--color-light-grey);
+      }
+
+      th,
+      td {
+        padding: 0.75rem 1.25rem;
+        text-align: left;
+        font-size: 0.8rem;
+        color: var(--color-dark);
+      }
+
+      th {
+        padding: 0.6rem 1.25rem;
+        font-weight: 600;
+        background: var(--color-body-bg);
         color: var(--color-neutral);
       }
+
+      thead tr:first-child th:first-child {
+        border-radius: var(--radius-lg) 0 0 0;
+      }
+
+      thead tr:first-child th:last-child {
+        border-radius: 0 var(--radius-lg) 0 0;
+      }
+
+      tbody tr:last-child td:first-child {
+        border-radius: 0 0 0 var(--radius-lg);
+      }
+
+      tbody tr:last-child td:last-child {
+        border-radius: 0 0 var(--radius-lg) 0;
+      }
+
+      tr {
+        &.inactive {
+          opacity: 0.75;
+
+          .user-avatar {
+            filter: grayscale(1);
+          }
+
+          .user-name {
+            color: var(--color-neutral);
+          }
+        }
+      }
+
+      .status-column {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .status-badge {
+          font-size: 0.8rem;
+          font-weight: 500;
+
+          &.active {
+            color: var(--color-success);
+          }
+
+          &.inactive {
+            color: var(--color-warning);
+          }
+        }
+      }
+
+      .delete-btn {
+        color: var(--color-danger);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: var(--color-body-bg);
+        border: 1px solid var(--color-light-grey);
+
+
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+          overflow: visible;
+        }
+      }
+
     }
+
   }
-
-  .status-column {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    .status-badge {
-      font-size: 0.8rem;
-      font-weight: 500;
-      &.active {
-        color: var(--color-success);
-      }
-      &.inactive {
-        color: var(--color-warning);
-      }
-    }
-  }
-
-     .delete-btn {
-      color: var(--color-danger);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: var(--color-body-bg);
-      border: 1px solid var(--color-light-grey);
-
-      
-
-      mat-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
-        overflow: visible;
-      }
-    }
-
 }

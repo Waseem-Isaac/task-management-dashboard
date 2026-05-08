@@ -18,11 +18,55 @@
   </div>
 
   @if (usersService.isLoading()) {
-  <div class="users-grid">
-    @for (n of [1, 2, 3, 4, 5, 6]; track n) {
-    <div class="user-card skeleton"></div>
+  <!-- A skeleton placeholder for loading users table below -->
+  <div class="skeleton-table ">
+    <div class="skeleton-row head">
+      <div class="skeleton-cell">
+        <div class="skeleton-cell-item skeleton"></div>
+      </div>
+
+      <div class="skeleton-cell">
+        <div class="skeleton-cell-item skeleton"></div>
+      </div>
+
+      <div class="skeleton-cell">
+        <div class="skeleton-cell-item skeleton"></div>
+      </div>
+
+      <div class="skeleton-cell">
+        <div class="skeleton-cell-item skeleton-actions skeleton"></div>
+      </div>
+    </div>
+    @for(i of [1, 2, 3, 4, 5]; track i) {
+
+    <div class="skeleton-row">
+      <div class="skeleton-cell member">
+        <div class="skeleton-cell-item skeleton-avatar skeleton"></div>
+        <div class="user-info">
+          <div class="skeleton-cell-item skeleton-name skeleton"></div>
+          <div class="skeleton-cell-item skeleton-email skeleton"></div>
+        </div>
+      </div>
+
+      <!-- <div class="skeleton-"> -->
+        <div class="skeleton-cell">
+          <div class="skeleton-cell-item skeleton-role skeleton"></div>
+        </div>
+      <!-- </div> -->
+      <!-- <div class=""> -->
+        <div class="skeleton-cell">
+          <div class="skeleton-cell-item skeleton-role skeleton"></div>
+        </div>
+      <!-- </div> -->
+      <!-- <div class="skeleton-"> -->
+        <div class="skeleton-cell">
+          <div class="skeleton-cell-item skeleton-actions skeleton"></div>
+        </div>
+      <!-- </div> -->
+    </div>
     }
   </div>
+
   } @else {
   <div class="inactive-hint">
     <mat-icon>info</mat-icon>

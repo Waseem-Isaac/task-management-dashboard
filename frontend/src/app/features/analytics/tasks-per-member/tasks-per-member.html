@@ -1,3 +1,4 @@
+@if(totalTasks() === 0) {
 <div class="member-list">
   @for(m of members(); track m.email) {
   <div class="member-row">
@@ -14,3 +15,7 @@
   }
 
 </div>
+}
+@else {
+  <app-analytics-card-placeholder></app-analytics-card-placeholder>
+}
