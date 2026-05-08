@@ -41,11 +41,12 @@
 
     </div>
   </div>
-  }
-
-  @if (activeBoard()) {
   <app-board-tasks />
-  } @else if (!isLoading()) {
+}@else if(isLoading()) {
+  <div class="skeleton-loading">
+    <mat-icon class="loading-icon">dashboard</mat-icon>
+  </div>
+} @else {
   <div class="empty-state">
     <mat-icon class="empty-state-icon">dashboard</mat-icon>
     <h2>No boards yet</h2>

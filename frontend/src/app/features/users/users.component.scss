@@ -137,6 +137,12 @@
   }
 
   .users-page {
+    .inactive-hint-skeleton {
+      margin-bottom: 1rem;
+      height: 2.5rem;
+      background: var(--color-primary-light);
+      border-radius: var(--radius-lg);
+    }
     .skeleton-table {
       border: 1px solid var(--color-light-grey);
       border-radius: var(--radius-lg);
@@ -248,7 +254,7 @@
       th {
         padding: 0.6rem 1.25rem;
         font-weight: 600;
-        background: var(--color-body-bg);
+        background: var(--color-primary-contrast);
         color: var(--color-neutral);
       }
 
