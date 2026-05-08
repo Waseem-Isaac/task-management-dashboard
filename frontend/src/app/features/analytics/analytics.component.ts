@@ -12,7 +12,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { BoardService } from '../board/board.service';
 import { AnalyticsService } from './analytics.service';
 import { CompletionRate } from './completion-rate/completion-rate';
-import { StatisticsService } from '../statistics/statistics.service';
 import { TasksDoughnutChart } from './tasks-doughnut-chart/tasks-doughnut-chart';
 import { TasksPerMember } from "./tasks-per-member/tasks-per-member";
 
@@ -26,14 +25,12 @@ export class AnalyticsComponent  {
   taskService = inject(TasksService);
   boardsService = inject(BoardService);
   analyticsService = inject(AnalyticsService);
-  statisticsService = inject(StatisticsService);
 
   constructor() {
     this.boardsService.loadBoards().subscribe();
 
     effect(() => {
       this.analyticsService.getAnalytics(this.boardsService.activeBoard()?._id ?? '').subscribe();
-      this.statisticsService.reload(this.boardsService.activeBoard()?._id ?? '');  // reload statistics for the active board whenever it changes
     });
   }
 

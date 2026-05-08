@@ -1,4 +1,4 @@
-@if (statisticsService.isLoading()) {
+@if (isLoading()) {
   <div class="statistics-grid">
     @for (n of [1, 2, 3, 4]; track n) {
       <div class="skeleton-stat-card">
@@ -10,7 +10,7 @@
   </div>
 } @else {
   <div class="statistics-grid">
-    @for (stat of statisticsService.statistics(); track stat.type) {
+    @for (stat of statistics(); track stat.type) {
       <app-statistic-card [statistic]="stat" />
     }
   </div>

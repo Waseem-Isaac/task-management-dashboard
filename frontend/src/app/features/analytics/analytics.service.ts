@@ -11,6 +11,7 @@ export interface Analytics {
   completionRateData: { completionRate:number, doneCount: number, todoCount: number, inProgressCount: number, overdueCount: number };
   priorityBreakdownChartData: { labels: string[]; datasets: {label: string, data: number[]}[] };
   tasksPerMember: { name: string; email: string; avatarUrl: string; taskCount: number }[];
+  statistics: { type: string; title: string; value: number; changeSinceYesterday: number }[];
   activity: { /**Todo */ };
 } 
 

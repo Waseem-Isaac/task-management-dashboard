@@ -3,7 +3,6 @@ import { inject, Injectable, signal } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Task, TaskFormData } from './models';
-import { StatisticsService } from '../statistics/statistics.service';
 import { BoardService } from './board.service';
 
 @Injectable({
@@ -11,7 +10,6 @@ import { BoardService } from './board.service';
 })
 export class TasksService {
   private http = inject(HttpClient);
-  private statisticsService = inject(StatisticsService);
   private boardService = inject(BoardService);
 
   private _tasks = signal<Task[]>([]);
@@ -47,7 +45,6 @@ export class TasksService {
     return this.http.post<Task>(`boards/${this.boardId}/tasks`, taskData).pipe(
       tap((created) => {
         this._tasks.update((tasks) => [...(tasks ?? []), created]);
-        this.statisticsService.reload(this.boardId);
       }),
     );
   }
@@ -56,7 +53,6 @@ export class TasksService {
     return this.http.put<Task>(`boards/${this.boardId}/tasks/${id}`, taskData).pipe(
       tap((updated) => {
         this._tasks.update((tasks) => tasks.map((t) => (t._id === id ? updated : t)));
-        this.statisticsService.reload(this.boardId);
       }),
     );
   }
@@ -65,7 +61,6 @@ export class TasksService {
     return this.http.delete<void>(`boards/${this.boardId}/tasks/${id}`).pipe(
       tap(() => {
         this._tasks.update((tasks) => tasks?.filter((t) => t._id !== id));
-        this.statisticsService.reload(this.boardId);
       }),
     );
   }

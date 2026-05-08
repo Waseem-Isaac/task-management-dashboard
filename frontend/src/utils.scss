@@ -161,3 +161,15 @@
   animation: skeleton-shimmer 1.4s infinite linear !important;
   border-radius: 4px !important;
 }
+
+.positive {
+  color: var(--color-success) !important;
+}
+
+.negative {
+  color: var(--color-danger) !important;
+}
+
+.neutral {
+  color: var(--color-neutral) !important;
+}

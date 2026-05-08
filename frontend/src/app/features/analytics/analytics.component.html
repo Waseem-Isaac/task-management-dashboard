@@ -15,7 +15,7 @@
   }
 </div>
 
-<app-statistics-list></app-statistics-list>
+<app-statistics-list [statistics]="analyticsService.analytics().statistics" [isLoading]="analyticsService.isLoading()"></app-statistics-list>
 
 <div class="divider"></div>
 

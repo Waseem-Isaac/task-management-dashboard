@@ -5,10 +5,11 @@
 import { Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { Statistic } from '../../models';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-statistic-card',
-  imports: [MatCardModule],
+  imports: [MatCardModule , MatIcon],
   templateUrl: './statistic-card.component.html',
   styleUrl: './statistic-card.component.scss',
 })

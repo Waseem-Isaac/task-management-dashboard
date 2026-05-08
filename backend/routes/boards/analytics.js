@@ -52,6 +52,14 @@ const Task = require('../../models/task');
   *     ]
   *   }
   * 
+  * 5. Statistics, statistics response will be like :
+  *   {
+  *   {type: 'total', title: 'Total Tasks', value: 100, changeSinceToday: +10},
+  *   {type: 'done', title: 'Done Tasks', value: 60, changeSinceToday: +5},
+  *   {type: 'in_progress', title: 'In Progress Tasks', value: 30, changeSinceToday: -2},
+  *   {type: 'overdue', title: 'Overdue Tasks', value: 5, changeSinceToday: +1},
+  * }
+  * 
   * 5. Activity Feed: separate endpoint, GET /boards/:boardId/analytics/activity
   *    - return recent activity logs (task created, updated, completed) with timestamps and user info. This would require a new Activity model to log actions as they happen.
   *   object to be returned :
@@ -69,6 +77,7 @@ const Task = require('../../models/task');
   *   completionRate: { ... },
   *   priorityBreakdownChartData: { ... },
   *   tasksPerMember: { ... },
+  *   statistics: { ... },
   *   activity: { ... }
   * }
  * 
@@ -153,7 +162,22 @@ router.get('/', async (req, res, next) => {
       };
     });
 
-    res.json({ totalTasks, statusChartData, completionRateData, priorityBreakdownChartData, tasksPerMember });
+    // 5. Statistics with change since yesterday
+    // startOfToday is used as the cutoff: tasks created before today = tasks that existed yesterday
+    // Note: status-based yesterday counts reflect tasks created before today with their *current* status,
+    // not their historical status. Accurate per-status deltas require an activity/history log.
+    const startOfToday = new Date(now);
+    startOfToday.setHours(0, 0, 0, 0);
+    const totalTasksYesterday = await Task.countDocuments({ boardId, createdAt: { $lt: startOfToday } });
+
+    const statisticsWithChange = [
+      { type: 'total', title: 'Total Tasks', value: totalTasks, changeSinceYesterday: totalTasks - totalTasksYesterday },
+      { type: 'done', title: 'Done', value: doneTasks, changeSinceYesterday: null },
+      { type: 'in_progress', title: 'In Progress', value: inProgressTasks, changeSinceYesterday: null },
+      { type: 'overdue', title: 'Overdue', value: overdueTasks, changeSinceYesterday: null },
+    ];
+
+    res.json({ totalTasks, statusChartData, completionRateData, priorityBreakdownChartData, tasksPerMember, statistics: statisticsWithChange });
   } catch (err) {
     next(err);
   }

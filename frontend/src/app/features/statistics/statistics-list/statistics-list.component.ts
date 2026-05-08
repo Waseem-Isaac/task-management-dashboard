@@ -2,9 +2,9 @@
  * Statistics overview displaying key metrics cards.
  * SMART component (fetches statistics via service)
  */
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { StatisticCardComponent } from '../components/statistic-card/statistic-card.component';
-import { StatisticsService } from '../statistics.service';
+import { Statistic } from '../models';
 
 @Component({
   selector: 'app-statistics-list',
@@ -13,5 +13,6 @@ import { StatisticsService } from '../statistics.service';
   styleUrl: './statistics-list.component.scss',
 })
 export class StatisticsListComponent {
-  protected statisticsService = inject(StatisticsService);
+  statistics = input<Statistic[]>();
+  isLoading = input<boolean>(false);
 }
