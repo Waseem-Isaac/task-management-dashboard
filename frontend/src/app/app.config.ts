@@ -7,8 +7,8 @@ import { routes } from './app.routes';
 import { baseUrlInterceptor } from './core/interceptors/base-url.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
-import { OVERLAY_DEFAULT_CONFIG } from '@angular/cdk/overlay';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
+import { provideQuillConfig } from 'ngx-quill/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +25,16 @@ export const appConfig: ApplicationConfig = {
         intl.nextMonthLabel = '';
         return intl;
       }
-    }
+    },
+    provideQuillConfig({
+      modules: {
+        // syntax: true,
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link']
+        ]
+      }
+    })
   ],
 };

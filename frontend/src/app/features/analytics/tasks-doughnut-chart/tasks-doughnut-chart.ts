@@ -52,14 +52,14 @@ export class TasksDoughnutChart {
           label: ds.label,
           data: ds.data,
           backgroundColor: (this.priorityBreakdownChartData()?.labels ?? []).map(label =>
-            label === 'Low' ? 'rgba(56, 142, 60, 0.75)' :
-            label === 'Medium' ? 'rgba(245, 124, 0, 0.75)' :
-            label === 'High' ? 'rgba(211, 47, 47, 0.75)' : 'rgba(158,158,158,0.75)'
+            label === 'Low' ? '#065f46' :
+            label === 'Medium' ? '#e3783e' :
+            label === 'High' ? '#991b1b' : '#9e9e9e'
           ),
           borderColor: (this.priorityBreakdownChartData()?.labels ?? []).map(label =>
-            label === 'Low' ? '#388E3C' :
-            label === 'Medium' ? '#F57C00' :
-            label === 'High' ? '#D32F2F' : '#9E9E9E'
+            label === 'Low' ? '#065f46' :
+            label === 'Medium' ? '#e3783e' :
+            label === 'High' ? '#991b1b' : '#9E9E9E'
           ),
           borderWidth: 1,
         }))

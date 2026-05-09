@@ -7,10 +7,7 @@
 
 <mat-dialog-content>
   @if (isLoading()) {
-    <div class="loading-state">
-      <div class="spinner"></div>
-      <p>Loading task…</p>
-    </div>
+    <app-loading-spinner />
   } @else if (task(); as t) {
     <div class="task-view" [ngClass]="{ overdue: isOverdue(t) }">
 
@@ -29,12 +26,12 @@
       <h2 class="task-title">{{ t.title }}</h2>
 
       <!-- Description -->
-      <p class="task-description">{{ t.description }}</p>
+      <p class="task-description" [innerHTML]="t.description"></p>
 
       <mat-divider />
 
       <!-- Details grid -->
-      <div class="details-grid">
+      <div class="details-grid mb-5">
 
         <div class="detail-item">
           <span class="detail-label">

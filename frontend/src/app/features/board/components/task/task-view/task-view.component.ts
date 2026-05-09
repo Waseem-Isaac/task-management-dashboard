@@ -8,6 +8,7 @@ import { NgClass, DatePipe } from '@angular/common';
 import { Task } from '../../../models';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TasksService } from '../../../tasks.service';
+import { LoadingSpinner } from '../../../../../shared/components/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-task-view',
@@ -19,7 +20,8 @@ import { TasksService } from '../../../tasks.service';
     MatChipsModule,
     NgClass,
     DatePipe,
-    MatSnackBarModule
+    MatSnackBarModule,
+    LoadingSpinner
   ],
   templateUrl: './task-view.component.html',
   styleUrl: './task-view.component.scss',

@@ -98,6 +98,9 @@
   line-height: 1.6;
   margin: 0;
   white-space: pre-wrap;
+  overflow-y: auto;
+    word-break: break-word;
+    word-wrap: break-word;
 }
 
 // ── Details grid ─────────────────────────────────────────────────────────────

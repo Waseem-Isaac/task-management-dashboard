@@ -222,3 +222,31 @@ html {
     padding: 1rem 2rem !important;
   }
 }
+
+// Quill Editor overrides
+.ql-container.ql-snow {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-color: var(--color-light-grey) !important;
+}
+
+.ql-toolbar.ql-snow {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-color: var(--color-light-grey) !important;
+}
+
+.ql-container.ql-snow:focus-within {
+  border-color: var(--color-primary-light);
+    border-width: 2px;
+}
+
+/* Also sync toolbar border on focus */
+.ql-container.ql-snow:focus-within ~ .ql-toolbar,
+.ql-toolbar.ql-snow:has(+ .ql-container:focus-within) {
+  border-color: var(--color-primary-light);
+  border-width: 2px;
+}
+
+quill-editor.ng-invalid.ng-touched .ql-container.ql-snow,
+quill-editor.ng-invalid.ng-touched .ql-toolbar.ql-snow {
+  border-color: var(--color-danger) !important;
+}

@@ -12,6 +12,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Task, TaskFormData } from '../../../../models';
 import { UsersService } from '../../../../../users/users.service';
 import { AuthService } from '../../../../../../core/services/auth.service';
+import { QuillModule } from 'ngx-quill';
+import { quillRequiredValidator } from '../../../../../../shared/validators/quill-required.validator';
 
 @Component({
   selector: 'app-task-form',
@@ -23,6 +25,7 @@ import { AuthService } from '../../../../../../core/services/auth.service';
     MatSelectModule,
     MatButtonModule,
     MatDatepickerModule,
+    QuillModule
   ],
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss'],
@@ -60,7 +63,7 @@ export class TaskFormComponent implements OnInit {
   private initForm(): void {
     this.taskForm = this.fb.group({
       title: [this.task?.title || '', [Validators.required, Validators.minLength(3)]],
-      description: [this.task?.description || '', [Validators.required]],
+      description: [this.task?.description || '', [quillRequiredValidator]],
       status: [this.task?.status || 'todo', [Validators.required]],
       priority: [this.task?.priority, [Validators.required]],
       dueDate: [

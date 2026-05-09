@@ -28,7 +28,7 @@
   <h5 class="card-title">{{ task().title }}</h5>
 
   <!-- 3. Description -->
-  <p class="card-description">{{ task().description }}</p>
+  <p class="card-description" >{{ task().description | stripHtml }}</p>
 
   <!-- 4. Due date -->
   <span class="due-date-badge">{{ task().dueDate | date }}</span>

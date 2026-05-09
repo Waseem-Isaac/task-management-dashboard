@@ -2,7 +2,7 @@
  * Board shell — renders the board header and delegates task management to BoardTasksComponent.
  * SMART component (manages board-level state: active board selection)
  */
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, viewChild, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BoardTasksComponent } from './components/board-tasks/board-tasks.component';
@@ -46,22 +46,15 @@ export class BoardComponent implements OnInit {
   boards = this.boardsService.boards;
   isLoading = this.boardsService.isLoading;
   boardNameFieldEnabled = false;
-  @ViewChild('mirror') mirror!: ElementRef;
-  @ViewChild('nameInput') nameInput!: ElementRef;
+  mirror = viewChild<ElementRef>('mirror');
+  nameInput = viewChild<ElementRef>('nameInput');
 
   constructor() {
-    effect(() => {
-      const name = this.activeBoard()?.name;
-      setTimeout(() => this.adjustNameInputWidth(name), 0);
-    });
+    effect(() => this.adjustNameInputWidth(this.activeBoard()?.name));
   }
 
   ngOnInit(): void {
     this.boardsService.loadBoards().subscribe();
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => this.adjustNameInputWidth(), 0);
   }
 
   onBoardChange(boardId: string): void {
@@ -94,13 +87,10 @@ export class BoardComponent implements OnInit {
     event.stopPropagation();
     this.boardsService.deleteBoard(boardId).subscribe({
       next: () => {
-        // show a success message, then automatically select another board if available
         const remainingBoards = this.boards().filter((b) => b._id !== boardId);
-        if (remainingBoards.length > 0) {
-          this.boardsService.setActiveBoard(remainingBoards[0]);
-        }
+        if (remainingBoards.length > 0) this.boardsService.setActiveBoard(remainingBoards[0]);
       },
-      error: (error) => {
+      error: () => {
         this.snackbar.open('Failed to delete board', 'Close', {
           duration: 3000,
           panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
@@ -109,15 +99,11 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  // Dynamically adjust the width of the board name input to fit its content 
   adjustNameInputWidth(value?: string): void {
-    const inputValue = value !== undefined
-      ? value  // ← read live from event
-      : this.nameInput.nativeElement.value;       // ← fallback for initial call
-
-    this.mirror.nativeElement.textContent = inputValue || ' '; // ← push to mirror manually
-
-    const mirrorWidth = this.mirror.nativeElement.offsetWidth;
-    this.nameInput.nativeElement.style.width = `${Math.max(80, mirrorWidth + 24)}px`;
+    const mirror = this.mirror();
+    const nameInput = this.nameInput();
+    if (!mirror || !nameInput) return;
+    mirror.nativeElement.textContent = (value ?? nameInput.nativeElement.value) || ' ';
+    nameInput.nativeElement.style.width = `${Math.max(80, mirror.nativeElement.offsetWidth + 24)}px`;
   }
 }

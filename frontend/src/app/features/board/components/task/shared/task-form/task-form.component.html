@@ -11,10 +11,15 @@
   <!-- Description -->
   <div class="field d-flex flex-column">
     <label for="description" class="label">Description</label>
-    <mat-form-field appearance="outline" class="full-width">
-      <textarea matInput formControlName="description" placeholder="Enter task description" rows="4"></textarea>
-      <mat-error>{{ getFieldError('description') }}</mat-error>
-    </mat-form-field>
+     <quill-editor
+        formControlName="description"
+        [required]="true">
+      </quill-editor>
+
+       @if (taskForm.get('description')?.invalid && taskForm.get('description')?.touched) {
+        <span class="mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-error mt-1">Description is required</span>
+      }
+
   </div>
 
   <!-- Status and Priority -->

@@ -1,5 +1,8 @@
 <div class="board">
-  @if (activeBoard()) {
+  @if(isLoading()) {
+  <app-loading-spinner></app-loading-spinner>
+  }
+  @else if(activeBoard()) {
   <div class="board-header">
     <div class="board-title d-flex align-items-center">
       <!-- Board name & Inline text field to edit the board name into one element -->
@@ -53,13 +56,9 @@
       </button>
 
       }
-
-
     </div>
   </div>
   <app-board-tasks />
-  }@else if(isLoading()) {
-  <app-loading-spinner></app-loading-spinner>
   } @else {
   <div class="empty-state">
     <mat-icon class="empty-state-icon">dashboard</mat-icon>
