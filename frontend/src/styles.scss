@@ -85,13 +85,14 @@ body {
   &.error {
     color: var(--color-danger) !important;
     opacity: 0.9;
-        width: auto;
+    width: auto;
     align-items: center;
     display: flex;
     padding: 0;
+
     &:hover {
-     color: var(--color-danger) !important;
-     opacity: 1;
+      color: var(--color-danger) !important;
+      opacity: 1;
     }
   }
 }
@@ -169,7 +170,7 @@ label {
 }
 
 .me-badge::before {
-    content: "Me";
+  content: "Me";
 
   background-color: var(--color-primary);
   color: var(--color-primary-contrast);
@@ -185,10 +186,12 @@ label {
   font-size: 0.7rem;
   font-weight: 500;
   border-radius: var(--radius-lg);
+
   &.team-lead {
     background-color: var(--color-info-light);
     color: var(--color-info);
   }
+
   &.member {
     background-color: var(--color-body-bg);
     color: var(--color-neutral);
@@ -248,9 +251,51 @@ label {
   --mat-icon-button-icon-color: var(--color-neutral);
 }
 
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  height: 70vh;
+  text-align: center;
+  color: var(--color-neutral);
+
+  .empty-state-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    opacity: 0.3;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.6;
+    max-width: 340px;
+  }
+}
+
+.link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
 .divider {
-  height: 1px;
-  border-top: 1px solid var(--color-light-grey);
+  // height: 1px;
+  // border-top: 1px solid var(--color-light-grey);
   margin: 1.5rem 0;
 }
 

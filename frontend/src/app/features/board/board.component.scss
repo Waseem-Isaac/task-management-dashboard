@@ -9,23 +9,24 @@
       .board-title {
         font-weight: 700;
         color: var(--color-neutral);
-        
+
         .board-name-field {
           font-size: 1rem;
           font-weight: 700;
           color: var(--color-neutral);
         }
 
-         .edit-icon{
-            font-size: 1.2rem;
-            width: 1.2rem;
-            height: 1.2rem;
-            color: var(--color-neutral);
-          }
+        .edit-icon {
+          font-size: 1.2rem;
+          width: 1.2rem;
+          height: 1.2rem;
+          color: var(--color-neutral);
+        }
       }
 
       @media screen and (max-width: 992px) {
         justify-content: space-between;
+
         .board-name {
           position: static;
           transform: none;
@@ -33,7 +34,9 @@
       }
 
       .board-actions {
-        .mat-mdc-select-panel { padding: 0;}
+        .mat-mdc-select-panel {
+          padding: 0;
+        }
       }
 
       @media screen and (max-width: 585px) {
@@ -45,22 +48,25 @@
 
         .board-title {
           width: 100%;
+
           .board-name-field {
             width: 100%;
           }
         }
+
         .board-actions {
           width: 100%;
-           .filter-select {
+
+          .filter-select {
             width: 100%;
           }
         }
-       
+
       }
 
-        @media screen and (max-width: 450px) {
-          padding: 0;
-        }
+      @media screen and (max-width: 450px) {
+        padding: 0;
+      }
     }
   }
 }
@@ -77,53 +83,4 @@
   &:hover .option-delete-btn {
     opacity: 1;
   }
-    }
-
-    .empty-state, .skeleton-loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      height: 70vh;
-      text-align: center;
-      color: var(--color-neutral);
-
-      .empty-state-icon, .loading-icon {
-        font-size: 4rem;
-        width: 4rem;
-        height: 4rem;
-        opacity: 0.3;
-      }
-
-      h2 {
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: 700;
-      }
-
-      p {
-        margin: 0;
-        opacity: 0.6;
-        max-width: 340px;
-      }
-
-      // Animate loading icon - rotate
-      .loading-icon {
-        animation: rotate 2s linear infinite;
-      }
-
-      @keyframes rotate {
-        0% { transform: rotate(0deg); }
-        10% { transform: rotate(90deg); }
-
-        30% { transform: rotate(90deg); }
-        40% { transform: rotate(180deg); }
-
-        60% { transform: rotate(180deg); }
-        70% { transform: rotate(270deg); }
-
-        90% { transform: rotate(270deg); }
-        100% {transform: rotate(360deg); }      
-      }
-    }
+}

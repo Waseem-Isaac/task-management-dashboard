@@ -40,8 +40,8 @@ A **Team Lead** creates a board and invites members to collaborate. Each board c
 | Create a board | ✅ | ❌ |
 | See a board | ✅ All boards | ✅ Only boards with their tasks |
 | Create a task | ✅ | ✅ |
-| Edit a task | ✅ Any task | ✅ Own tasks only |
-| Assign a task | ✅ Any task | ✅ Own tasks only |
-| Remove a task | ✅ Any task | ✅ Own tasks only |
+| Edit a task | ✅ Any task | ✅ Only tasks on their board |
+| Assign a task | ✅ Any task | ✅ Only tasks on their board |
+| Remove a task | ✅ Any task | ✅ Only tasks on their board |
 | Move task across columns | ✅ | ✅ |
 | Add/remove team members | ✅ | ❌ |

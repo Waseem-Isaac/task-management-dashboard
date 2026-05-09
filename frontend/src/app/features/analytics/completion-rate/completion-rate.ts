@@ -8,6 +8,6 @@ import { AnalyticsCardPlaceholder } from "../components/analytics-card-placehold
   styleUrl: './completion-rate.scss',
 })
 export class CompletionRate {
-  completionRateData = input<{ completionRate:number, doneCount: number, todoCount: number, inProgressCount: number, overdueCount: number }>();
+  completionRateData = input<{ completionRate:number, doneTasks: number, todoTasks: number, inProgressTasks: number }>();
   totalTasks = input<number>(0);
 }

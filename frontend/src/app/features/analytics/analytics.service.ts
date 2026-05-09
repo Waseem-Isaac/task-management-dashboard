@@ -2,18 +2,18 @@
 
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { finalize, Observable, of, tap } from 'rxjs';
 
 export interface Analytics {
   totalTasks: number;
 
-  statusChartData: { labels: string[]; datasets: {label: string, data: number[]}[] };
-  completionRateData: { completionRate:number, doneCount: number, todoCount: number, inProgressCount: number, overdueCount: number };
-  priorityBreakdownChartData: { labels: string[]; datasets: {label: string, data: number[]}[] };
+  statusChartData: { labels: string[]; datasets: { label: string, data: number[] }[] };
+  completionRateData: { completionRate: number, doneTasks: number, todoTasks: number, inProgressTasks: number };
+  priorityBreakdownChartData: { labels: string[]; datasets: { label: string, data: number[] }[] };
   tasksPerMember: { name: string; email: string; avatarUrl: string; taskCount: number }[];
   statistics: { type: string; title: string; value: number; changeSinceYesterday: number }[];
   activity: { /**Todo */ };
-} 
+}
 
 @Injectable({ providedIn: 'root' })
 
@@ -26,11 +26,17 @@ export class AnalyticsService {
   // Example method to fetch analytics data
   getAnalytics(boardId: string): Observable<Analytics> {
     this._analytics.set({} as Analytics);
+
     this.isLoading.set(true);
+    if (!boardId) {
+      this.isLoading.set(false);
+      return of({} as Analytics);
+    }
+
     return this.httpClient.get<Analytics>(`boards/${boardId}/analytics`).pipe(
+      finalize(() => this.isLoading.set(false)),
       tap((data) => {
         this._analytics.set(data);
-        this.isLoading.set(false);
       }),
     );
   }

@@ -14,10 +14,18 @@ import { AnalyticsService } from './analytics.service';
 import { CompletionRate } from './completion-rate/completion-rate';
 import { TasksDoughnutChart } from './tasks-doughnut-chart/tasks-doughnut-chart';
 import { TasksPerMember } from "./tasks-per-member/tasks-per-member";
+import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-analytics',
-  imports: [StatisticsListComponent, TasksBarChart, AnalyticsCardPlaceholder, MatFormField, MatSelectModule, CompletionRate, TasksDoughnutChart, TasksPerMember],
+  imports: [
+    StatisticsListComponent, TasksBarChart, 
+    AnalyticsCardPlaceholder, MatFormField, 
+    MatSelectModule, CompletionRate, 
+    TasksDoughnutChart, TasksPerMember, 
+    LoadingSpinner, MatIcon, RouterLink],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss',
 })

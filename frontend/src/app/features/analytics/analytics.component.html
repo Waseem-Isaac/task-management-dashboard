@@ -1,3 +1,24 @@
+
+@if(analyticsService.isLoading()) {
+  <app-loading-spinner></app-loading-spinner>
+} 
+@else if (boardsService.activeBoard() === null) {
+ 
+
+   <div class="empty-state">
+    <mat-icon class="empty-state-icon">dashboard</mat-icon>
+    <h2>No data yet</h2>
+ 
+    <p>Analytics will be available once a board is created.
+      <br><br> 
+        go to the <a routerLink="/board" class="link">Boards</a>.
+    </p>
+    
+  </div>
+
+
+}
+@else {
 <div class="header d-flex justify-content-between align-items-center mb-5">
     <p class="hint">Gain insights into your project performance and team productivity</p>
 
@@ -15,7 +36,7 @@
   }
 </div>
 
-<app-statistics-list [statistics]="analyticsService.analytics().statistics" [isLoading]="analyticsService.isLoading()"></app-statistics-list>
+<app-statistics-list [statistics]="analyticsService.analytics().statistics"></app-statistics-list>
 
 <div class="divider"></div>
 
@@ -68,3 +89,4 @@
     <app-analytics-card-placeholder></app-analytics-card-placeholder>
   </div>
 </div>
+}

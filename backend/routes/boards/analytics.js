@@ -117,7 +117,7 @@ router.get('/', async (req, res, next) => {
     const inProgressTasks = await Task.countDocuments({ boardId, status: 'in_progress' });
     const todoTasks = await Task.countDocuments({ boardId, status: 'todo' });
     const overdueTasks = await Task.countDocuments({ boardId, dueDate: { $lt: todayStr }, status: { $ne: 'done' } });
-    const completionRate = totalTasks > 0 ? (doneTasks / totalTasks) * 100 : 0;
+    const completionRate = totalTasks > 0 ? Number(((doneTasks / totalTasks) * 100).toFixed(1)) : 0;
     const completionRateData = { doneTasks, inProgressTasks, todoTasks, overdueTasks, completionRate };
 
 

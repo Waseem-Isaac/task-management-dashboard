@@ -90,6 +90,7 @@ export class BoardService {
         this._boards.update((boards) => boards.map((b) => (b._id === boardId ? updated : b)));
         if (this.activeBoard()?._id === boardId) {
           this._activeBoard.set(updated);
+          localStorage.setItem('active_board', JSON.stringify(updated));
         }
       }),
     );

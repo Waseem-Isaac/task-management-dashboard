@@ -1,4 +1,4 @@
-@if(totalTasks() === 0) {
+@if(totalTasks() > 0) {
 <div class="member-list">
   @for(m of members(); track m.email) {
   <div class="member-row">

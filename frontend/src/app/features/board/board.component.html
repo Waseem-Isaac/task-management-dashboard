@@ -2,9 +2,6 @@
   @if (activeBoard()) {
   <div class="board-header">
     <div class="board-title d-flex align-items-center">
-
-
-
       <!-- Board name & Inline text field to edit the board name into one element -->
       <mat-form-field subscriptSizing="dynamic" appearance="outline" class="board-name-field editable-text">
         <input matInput [value]="activeBoard()?.name" (blur)="updateBoardName(activeBoard()?._id, $event.target.value, $event.target)"
@@ -43,9 +40,7 @@
   </div>
   <app-board-tasks />
 }@else if(isLoading()) {
-  <div class="skeleton-loading">
-    <mat-icon class="loading-icon">dashboard</mat-icon>
-  </div>
+  <app-loading-spinner></app-loading-spinner>
 } @else {
   <div class="empty-state">
     <mat-icon class="empty-state-icon">dashboard</mat-icon>

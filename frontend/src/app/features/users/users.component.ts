@@ -12,10 +12,11 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
+import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-users',
-  imports: [MatIcon, MatIconButton, FormsModule, MatSnackBarModule, PaginationComponent],
+  imports: [MatIcon, MatIconButton, FormsModule, MatSnackBarModule, PaginationComponent, LoadingSpinner],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })

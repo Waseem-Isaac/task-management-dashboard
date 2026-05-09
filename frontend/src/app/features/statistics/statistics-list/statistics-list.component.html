@@ -1,17 +1,21 @@
-@if (isLoading()) {
-  <div class="statistics-grid">
-    @for (n of [1, 2, 3, 4]; track n) {
-      <div class="skeleton-stat-card">
-        <div class="skeleton skeleton-icon-row"></div>
-        <div class="skeleton skeleton-value"></div>
-        <div class="skeleton skeleton-label"></div>
-      </div>
-    }
+@if (!!isLoading()) {
+<div class="statistics-grid">
+  @for (n of [1, 2, 3, 4]; track n) {
+  <div class="skeleton-stat-card">
+    <div class="skeleton skeleton-icon-row"></div>
+    <div class="skeleton skeleton-value"></div>
+    <div class="skeleton skeleton-label"></div>
   </div>
-} @else {
-  <div class="statistics-grid">
-    @for (stat of statistics(); track stat.type) {
-      <app-statistic-card [statistic]="stat" />
-    }
-  </div>
+  }
+</div>
+} @else if(statistics() && statistics().length > 0) {
+<div class="statistics-grid">
+  @for (stat of statistics(); track stat.type) {
+  <app-statistic-card [statistic]="stat" />
+  }
+</div>
+}@else {
+<div class="empty-state-card">
+  <app-analytics-card-placeholder></app-analytics-card-placeholder>
+</div>
 }

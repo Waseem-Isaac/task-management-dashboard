@@ -16,6 +16,7 @@ import { BoardAddComponent } from './components/board-add/board-add.component';
 import { AuthService } from '../../core/services/auth.service';
 import { Confirmable } from '../../shared/decorators/confirmable.decorator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { LoadingSpinner } from "../../shared/components/loading-spinner/loading-spinner";
 
 @Component({
   selector: 'app-board',
@@ -27,8 +28,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatIcon,
     MatButtonModule,
     MatTooltipModule,
-    MatSnackBarModule
-  ],
+    MatSnackBarModule,
+    LoadingSpinner
+],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

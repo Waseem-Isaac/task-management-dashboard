@@ -11,16 +11,16 @@
   <div>
     <div class="completion-rate-details">
       <div class="detail-item">
-        <div class="detail-value">{{ completionRateData()?.doneCount || 0 }}</div>
+        <div class="detail-value">{{ completionRateData()?.doneTasks || 0 }}</div>
         <div class="detail-label">Completed</div>
       </div>
       <div class="detail-item">
-        <div class="detail-value">{{ completionRateData()?.inProgressCount || 0 }}</div>
+        <div class="detail-value">{{ completionRateData()?.inProgressTasks || 0 }}</div>
         <div class="detail-label">In Progress</div>
       </div>
 
       <div class="detail-item">
-        <div class="detail-value">{{ completionRateData()?.todoCount || 0 }}</div>
+        <div class="detail-value">{{ completionRateData()?.todoTasks || 0 }}</div>
         <div class="detail-label">To Do</div>
       </div>
     </div>

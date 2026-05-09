@@ -118,13 +118,13 @@ html {
     active-indicator-color: var(--color-primary),
     track-color: var(--color-light-grey),
     track-shape: var(--radius-md),
-    track-height: 0.8rem,
-    active-indicator-height: 0.8rem,
+    track-height: 0.7rem,
+    active-indicator-height: 0.7rem,
   ));
 }
 
 .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-md) !important;
 }
 
 // ─── Angular Material — component overrides ──────────────────────────────────
