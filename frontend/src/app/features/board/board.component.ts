@@ -2,7 +2,7 @@
  * Board shell — renders the board header and delegates task management to BoardTasksComponent.
  * SMART component (manages board-level state: active board selection)
  */
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, viewChild, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BoardTasksComponent } from './components/board-tasks/board-tasks.component';
@@ -17,6 +17,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Confirmable } from '../../shared/decorators/confirmable.decorator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoadingSpinner } from "../../shared/components/loading-spinner/loading-spinner";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-board',
@@ -29,13 +30,14 @@ import { LoadingSpinner } from "../../shared/components/loading-spinner/loading-
     MatButtonModule,
     MatTooltipModule,
     MatSnackBarModule,
-    LoadingSpinner
-],
+    LoadingSpinner,
+    FormsModule
+  ],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoardComponent implements OnInit{
+export class BoardComponent implements OnInit {
   boardsService = inject(BoardService);
   authService = inject(AuthService);
   private dialog = inject(MatDialog);
@@ -43,9 +45,23 @@ export class BoardComponent implements OnInit{
   activeBoard = this.boardsService.activeBoard;
   boards = this.boardsService.boards;
   isLoading = this.boardsService.isLoading;
+  boardNameFieldEnabled = false;
+  @ViewChild('mirror') mirror!: ElementRef;
+  @ViewChild('nameInput') nameInput!: ElementRef;
+
+  constructor() {
+    effect(() => {
+      const name = this.activeBoard()?.name;
+      setTimeout(() => this.adjustNameInputWidth(name), 0);
+    });
+  }
 
   ngOnInit(): void {
     this.boardsService.loadBoards().subscribe();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => this.adjustNameInputWidth(), 0);
   }
 
   onBoardChange(boardId: string): void {
@@ -54,7 +70,7 @@ export class BoardComponent implements OnInit{
   }
 
   openAddBoardDialog(): void {
-  this.dialog.open(BoardAddComponent, { panelClass: ['app-dialog', 'sm'], disableClose: true });
+    this.dialog.open(BoardAddComponent, { panelClass: ['app-dialog', 'sm'], disableClose: true });
   }
 
   updateBoardName(boardId: string | undefined, newName: string, inputEl: HTMLInputElement): void {
@@ -63,10 +79,10 @@ export class BoardComponent implements OnInit{
     if (newName.trim() === oldName) return;
     this.boardsService.updateBoard(boardId, { name: newName.trim() }).subscribe({
       error: () => {
-        this.snackbar.open('Failed to update board name', 'Close', { 
-            duration: 3000 , 
-            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
-          });
+        this.snackbar.open('Failed to update board name', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
         inputEl.value = oldName || '';
       },
     });
@@ -85,11 +101,23 @@ export class BoardComponent implements OnInit{
         }
       },
       error: (error) => {
-        this.snackbar.open('Failed to delete board', 'Close', { 
-            duration: 3000 , 
-            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
-          });
+        this.snackbar.open('Failed to delete board', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
       },
     });
+  }
+
+  // Dynamically adjust the width of the board name input to fit its content 
+  adjustNameInputWidth(value?: string): void {
+    const inputValue = value !== undefined
+      ? value  // ← read live from event
+      : this.nameInput.nativeElement.value;       // ← fallback for initial call
+
+    this.mirror.nativeElement.textContent = inputValue || ' '; // ← push to mirror manually
+
+    const mirrorWidth = this.mirror.nativeElement.offsetWidth;
+    this.nameInput.nativeElement.style.width = `${Math.max(80, mirrorWidth + 24)}px`;
   }
 }

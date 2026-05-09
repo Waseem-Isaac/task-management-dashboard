@@ -107,4 +107,12 @@ export class BoardService {
       }),
     );
   }
+
+  // a function to indicate whether the board has been created by the current user
+  isBoardCreatedByCurrentUser(board: Board | null): boolean {
+    if (!board || !board.createdBy) return false;
+    const currentUser = JSON.parse(localStorage.getItem('auth_user') || '{}');
+    
+    return board.createdBy === currentUser._id;
+  }
 }

@@ -42,11 +42,11 @@
     border-top: 0.3rem solid var(--color-danger);
   }
 
-  &.in-progress {
+  &.in_progress {
     border-top: 0.3rem solid var(--color-info);
   }
 
-  &.completed {
+  &.done {
     border-top: 0.3rem solid var(--color-success);
   }
 }

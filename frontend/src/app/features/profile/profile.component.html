@@ -9,11 +9,21 @@
     <!-- <h2 class="user-name">{{ authService.currentUser()?.name }}</h2> -->
 <div class="user-name">
       <mat-form-field subscriptSizing="dynamic" appearance="outline" class="profile-name-field editable-text" >
-        <input matInput [value]="authService.currentUser()?.name" (blur)="updateMyName($event.target.value)" />
-            <mat-icon matPrefix class="edit-icon">edit</mat-icon>
-      </mat-form-field>
+        <input matInput [value]="authService.currentUser()?.name" (blur)="updateMyName($event.target.value); nameEditable = false" [disabled]="!nameEditable" />
+            <!-- <mat-icon matPrefix class="edit-icon">edit</mat-icon> -->
+             
 
-</div>
+              
+      </mat-form-field>
+      
+      <button (click)="nameEditable = !nameEditable" class="edit-btn btn-primary-icon">
+          @if(nameEditable) {
+          <img width="16px" height="16px" src="/icons/edit-filled.svg" alt="Edit">
+          }@else {
+          <img width="16px" height="16px" src="/icons/edit.svg" alt="Edit">
+          }
+        </button>
+</div> 
 
     <mat-divider />
 

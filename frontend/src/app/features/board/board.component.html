@@ -4,12 +4,31 @@
     <div class="board-title d-flex align-items-center">
       <!-- Board name & Inline text field to edit the board name into one element -->
       <mat-form-field subscriptSizing="dynamic" appearance="outline" class="board-name-field editable-text">
-        <input matInput [value]="activeBoard()?.name" (blur)="updateBoardName(activeBoard()?._id, $event.target.value, $event.target)"
-          [disabled]="authService.currentUser()?.role !== 'TEAM_LEAD'" />
-        @if(authService.currentUser()?.role === 'TEAM_LEAD') {
-        <mat-icon matPrefix class="edit-icon">edit</mat-icon>
-        }
+        <input matInput [value]="activeBoard()?.name"
+          (blur)="updateBoardName(activeBoard()?._id, $event.target.value, $event.target); boardNameFieldEnabled = false"
+          [disabled]="authService.currentUser()?.role !== 'TEAM_LEAD'" (input)="adjustNameInputWidth($event.target.value)" #nameInput
+          [disabled]="!boardNameFieldEnabled" />
       </mat-form-field>
+
+      <!-- Fake Mirror element by the Boardname to dynamically adjust input width -->
+      <span #mirror class="input-mirror"></span>
+
+      @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
+        <span class="mine-badge" >
+          <mat-icon class="icon-size-0-8">star</mat-icon>
+          Mine
+        </span>
+
+      
+        <button (click)="boardNameFieldEnabled = !boardNameFieldEnabled" class="edit-btn btn-primary-icon">
+          @if(boardNameFieldEnabled) {
+          <img width="16px" height="16px" src="/icons/edit-filled.svg" alt="Edit">
+          }@else {
+          <img width="16px" height="16px" src="/icons/edit.svg" alt="Edit">
+          }
+        </button>
+      }
+
     </div>
 
     <div class="board-actions d-flex align-items-center">
@@ -23,7 +42,7 @@
           }
         </mat-select>
       </mat-form-field>
-      @if(authService.currentUser()?.role === 'TEAM_LEAD') {
+      @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
       <button mat-icon-button (click)="openAddBoardDialog()" class="btn-primary-icon add-board-btn">
         <mat-icon>add_circle</mat-icon>
       </button>
@@ -39,9 +58,9 @@
     </div>
   </div>
   <app-board-tasks />
-}@else if(isLoading()) {
+  }@else if(isLoading()) {
   <app-loading-spinner></app-loading-spinner>
-} @else {
+  } @else {
   <div class="empty-state">
     <mat-icon class="empty-state-icon">dashboard</mat-icon>
     <h2>No boards yet</h2>

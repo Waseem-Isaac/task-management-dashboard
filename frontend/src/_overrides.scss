@@ -55,13 +55,13 @@ html {
   }
 
   .editable-text {
-    &:not(.mat-focused) .mat-mdc-notch-piece {
-      background: none;
-      border: none;
+    &.mat-form-field-disabled .mat-mdc-notch-piece {
+      background-color: transparent !important;
+      border: none !important;
     }
 
     --mat-form-field-outlined-input-text-color: var(--color-neutral);
-  }
+}
 
 
   .mat-mdc-form-field-infix {

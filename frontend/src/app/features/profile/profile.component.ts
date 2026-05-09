@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 export class ProfileComponent {
   authService = inject(AuthService);
   copied = false;
-
+  nameEditable = false;
   copyId(): void {
     const id = this.authService.currentUser()?._id;
     if (!id) return;
