@@ -74,7 +74,7 @@
           <td>
             @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
             <button class="delete-btn" mat-icon-button (click)="deleteUser(user._id!)">
-              <mat-icon>delete_outline</mat-icon>
+               <img src="icons/remove.svg" class="icon-size-1" alt="">
             </button>
             }
           </td>

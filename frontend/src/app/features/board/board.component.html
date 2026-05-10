@@ -46,13 +46,13 @@
         </mat-select>
       </mat-form-field>
       @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
-      <button mat-icon-button (click)="openAddBoardDialog()" class="btn-primary-icon add-board-btn">
-        <mat-icon>add_circle</mat-icon>
+      <button  (click)="openAddBoardDialog()" class="btn-primary-icon add-board-btn icon-width-2">
+         <img src="icons/add.svg" class="icon-size-1" alt="">
       </button>
 
-      <button mat-icon-button class="delete-btn btn-primary-icon error justify-content-center"
+      <button  class="delete-btn btn-primary-icon justify-content-center icon-width-2"
         (click)="deleteBoard(activeBoard()?._id, $event)">
-        <mat-icon class="delete-icon">delete_circle</mat-icon>
+         <img src="icons/remove-minus.svg" class="icon-size-1" alt="">
       </button>
 
       }

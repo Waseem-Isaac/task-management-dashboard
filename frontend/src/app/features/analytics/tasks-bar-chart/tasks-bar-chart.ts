@@ -13,7 +13,7 @@ import { AnalyticsCardPlaceholder } from '../components/analytics-card-placehold
 export class TasksBarChart {
   statusChartData = input<{labels: string[]; datasets: {label: string, data: number[]}[]} | undefined>();
   totalTasks = input<number>(0);
-  
+
   barChartData = computed<ChartData<'bar'>>(() => {
     return {
       labels: this.statusChartData()?.labels,
@@ -39,14 +39,14 @@ export class TasksBarChart {
   barChartOptions: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: true,
+    aspectRatio: 1.5,
     plugins: {
       legend: { position: 'bottom', labels: { color: '#424242', font: { size: 11 }, boxWidth: 12, boxHeight: 12, padding: 20 } },
       title: {
         display: true,
         align: 'start',
         font: { size: 15, weight: 'bold' },
-        color: '#212121',
-        padding: { bottom: 64 },
+        color: '#212121'
       },
       tooltip: {
         callbacks: {
