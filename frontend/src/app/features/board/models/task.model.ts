@@ -29,7 +29,7 @@ export interface TaskFormData {
   status: TaskStatus;
   priority: TaskPriority;
   dueDate: string;
-  assignee: string;
-  reporter: string;
-  tags: string[];
+  assignee: string | undefined;
+  reporter: string | undefined;
+  tags?: string[] | null;
 }

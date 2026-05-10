@@ -19,7 +19,6 @@ import { StripHtmlPipe } from '../../../../../../shared/pipes/strip-html.pipe';
 })
 export class TaskCardComponent {
   deleteRequested = output<string>();
-  editRequested = output<string>();
   viewRequested = output<string>();
   task = input.required<Task>();
   usersService = inject(UsersService);

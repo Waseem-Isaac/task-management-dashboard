@@ -12,10 +12,6 @@
         <mat-icon>more_horiz</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="editRequested.emit(task()._id)">
-          <mat-icon>edit</mat-icon>
-          Edit
-        </button>
         <button mat-menu-item (click)="deleteRequested.emit(task()._id)">
           <mat-icon>delete_outline</mat-icon>
           Delete

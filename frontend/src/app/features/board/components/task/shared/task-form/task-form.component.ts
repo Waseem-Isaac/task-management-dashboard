@@ -14,6 +14,7 @@ import { UsersService } from '../../../../../users/users.service';
 import { AuthService } from '../../../../../../core/services/auth.service';
 import { QuillModule } from 'ngx-quill';
 import { quillRequiredValidator } from '../../../../../../shared/validators/quill-required.validator';
+import { toLocalDateString } from '../../../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-task-form',
@@ -83,10 +84,9 @@ export class TaskFormComponent implements OnInit {
   onSubmit(): void {
     if (this.taskForm.valid) {
       const formValue = { ...this.taskForm.value };
-      // Convert Date object back to ISO date string (YYYY-MM-DD)
+      // Convert Date object back to local YYYY-MM-DD string
       if (formValue.dueDate instanceof Date) {
-        const d = formValue.dueDate;
-        formValue.dueDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        formValue.dueDate = toLocalDateString(formValue.dueDate);
       }
 
       this.formSubmit.emit({ ...formValue });

@@ -83,7 +83,7 @@
         }
       } @else {
         @for (task of filteredTasks() | filterByStatus: col.status; track task._id) {
-        <app-task-card cdkDrag [cdkDragData]="task" [task]="task" (editRequested)="openEditDialog($event)"
+      <app-task-card cdkDrag [cdkDragData]="task" [task]="task"
           (deleteRequested)="handleDelete($event)" (viewRequested)="openViewDialog($event)">
 
           <div class="task-drag-handle" cdkDragHandle (click)="$event.stopPropagation()">

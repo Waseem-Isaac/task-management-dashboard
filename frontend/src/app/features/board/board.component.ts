@@ -2,7 +2,7 @@
  * Board shell — renders the board header and delegates task management to BoardTasksComponent.
  * SMART component (manages board-level state: active board selection)
  */
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit, viewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BoardTasksComponent } from './components/board-tasks/board-tasks.component';
@@ -18,6 +18,7 @@ import { Confirmable } from '../../shared/decorators/confirmable.decorator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoadingSpinner } from "../../shared/components/loading-spinner/loading-spinner";
 import { FormsModule } from "@angular/forms";
+import { AutoWidthDirective } from '../../shared/directives/auto-width.directive';
 
 @Component({
   selector: 'app-board',
@@ -31,7 +32,8 @@ import { FormsModule } from "@angular/forms";
     MatTooltipModule,
     MatSnackBarModule,
     LoadingSpinner,
-    FormsModule
+    FormsModule,
+    AutoWidthDirective
   ],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
@@ -46,11 +48,10 @@ export class BoardComponent implements OnInit {
   boards = this.boardsService.boards;
   isLoading = this.boardsService.isLoading;
   boardNameFieldEnabled = false;
-  mirror = viewChild<ElementRef>('mirror');
-  nameInput = viewChild<ElementRef>('nameInput');
+  nameInput = viewChild(AutoWidthDirective);
 
   constructor() {
-    effect(() => this.adjustNameInputWidth(this.activeBoard()?.name));
+    effect(() => this.nameInput()?.adjust(this.activeBoard()?.name));
   }
 
   ngOnInit(): void {
@@ -99,11 +100,5 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  adjustNameInputWidth(value?: string): void {
-    const mirror = this.mirror();
-    const nameInput = this.nameInput();
-    if (!mirror || !nameInput) return;
-    mirror.nativeElement.textContent = (value ?? nameInput.nativeElement.value) || ' ';
-    nameInput.nativeElement.style.width = `${Math.max(80, mirror.nativeElement.offsetWidth + 24)}px`;
-  }
+
 }

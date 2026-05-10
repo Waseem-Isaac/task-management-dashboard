@@ -21,7 +21,6 @@ import { NgClass } from '@angular/common';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { SearchService } from '../../../../core/services/search.service';
 import { TaskAddComponent } from '../task/task-add/task-add.component';
-import { TaskEditComponent } from '../task/task-edit/task-edit.component';
 import { TaskViewComponent } from '../task/task-view/task-view.component';
 import { Confirmable } from '../../../../shared/decorators/confirmable.decorator';
 import { UsersService } from '../../../users/users.service';
@@ -123,18 +122,10 @@ export class BoardTasksComponent {
     this.dialog.open(TaskAddComponent, { panelClass: 'app-dialog', disableClose: true });
   }
 
-  openEditDialog(taskId: string): void {
-    this.dialog.open(TaskEditComponent, {
-      panelClass: 'app-dialog',
-      disableClose: true,
-      data: { taskId },
-    });
-  }
-
   openViewDialog(taskId: string): void {
     this.dialog.open(TaskViewComponent, {
       panelClass: 'app-dialog',
-      data: { taskId },
+      data: { taskId, users: this.usersService.users() },
     });
   }
 

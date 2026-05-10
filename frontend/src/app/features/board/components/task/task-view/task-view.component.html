@@ -7,88 +7,189 @@
 
 <mat-dialog-content>
   @if (isLoading()) {
-    <app-loading-spinner />
+  <app-loading-spinner />
   } @else if (task(); as t) {
-    <div class="task-view" [ngClass]="{ overdue: isOverdue(t) }">
+  <div class="task-view" [ngClass]="{ overdue: isOverdue(t) }">
 
-      <!-- Header row: priority + status -->
-      <div class="meta-row">
+    <!-- Header row: priority + status -->
+    <div class="meta-row">
+
+      <!-- Priority field -->
+      <div class="field d-flex align-items-center">
+        <span #priorityFieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="priorityMenu"
+          style="width:0;height:0;overflow:hidden;"></span>
+
         <span class="priority-badge priority-{{ t.priority }}">{{ t.priority }}</span>
-        <span class="status-badge status-{{ t.status }}">{{ statusLabels[t.status] }}</span>
-        @if (isOverdue(t)) {
-          <span class="overdue-badge">
-            <mat-icon>schedule</mat-icon> Overdue
-          </span>
-        }
+
+        <button (click)="priorityFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
+          <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
+        </button>
+
+        <mat-menu #priorityMenu="matMenu">
+          @for(s of priorityOptions; track s) {
+          <button mat-menu-item (click)="updatePriority(t, s.value)">{{ s.label }}</button>
+          }
+        </mat-menu>
       </div>
 
-      <!-- Title -->
-      <h2 class="task-title">{{ t.title }}</h2>
+      <!-- Status field -->
+      <div class="field d-flex align-items-center">
+        <span #statusFieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="statusMenu"
+          style="width:0;height:0;overflow:hidden;"></span>
 
-      <!-- Description -->
-      <p class="task-description" [innerHTML]="t.description"></p>
+        <span class="status-badge status-{{ t.status }}">{{ statusLabels[t.status] }}</span>
 
-      <mat-divider />
+        <button (click)="statusFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
+          <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
+        </button>
 
-      <!-- Details grid -->
-      <div class="details-grid mb-5">
+        <mat-menu #statusMenu="matMenu">
+          @for(s of statusOptions; track s) {
+          <button mat-menu-item (click)="updateStatus(t, s.value)">{{ s.label }}</button>
+          }
+        </mat-menu>
+      </div>
+      @if (isOverdue(t)) {
+      <span class="overdue-badge">
+        <mat-icon>schedule</mat-icon> Overdue
+      </span>
+      }
+    </div>
 
-        <div class="detail-item">
-          <span class="detail-label">
-            <mat-icon>calendar_today</mat-icon> Due Date
-          </span>
+    <!-- Title -->
+    <div class="field d-flex align-items-center gap-3">
+      <mat-form-field [class.p-0]="!isEditingTitle()" appearance="outline" class="task-title editable-text full-width"
+        subscriptSizing="dynamic">
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" #titleFieldInput [value]="t.title"
+          (blur)="commitTitle(t, titleFieldInput)"
+          (keydown.enter)="$event.preventDefault(); titleFieldInput.blur()"
+          [disabled]="!isEditingTitle()" class="task-title-input"></textarea>
+      </mat-form-field>
+
+      <button (click)="isEditingTitle.set(!isEditingTitle())" class="z-index-9999 edit-btn btn-primary-icon">
+        <img class="icon-size-1" src="icons/edit.svg" alt="Edit">
+      </button>
+    </div>
+
+    <!-- Description -->
+    <div class="field d-flex align-items-center gap-3 mb-4">
+      <!-- <p class="task-description" [innerHTML]="t.description"></p> -->
+
+      <quill-editor
+        class="editable-text full-width task-description-input"
+        [class.disabled]="!isEditingDescription()"
+        [ngModel]="t?.description"
+        
+        #editor
+        (onBlur)="commitDescription(t, editor.quillEditor.root.innerHTML)"        
+        
+        [readOnly]="!isEditingDescription()"
+        >
+      </quill-editor>
+
+
+      <button (click)="isEditingDescription.set(!isEditingDescription())" class="z-index-9999 edit-btn btn-primary-icon">
+        <img class="icon-size-1" src="icons/edit.svg" alt="Edit">
+      </button>
+    </div>
+    <mat-divider />
+
+    <!-- Details grid -->
+    <div class="details-grid mb-5">
+      <!-- Due Date field -->
+      <div class="detail-item">
+        <span class="detail-label">
+          <mat-icon>calendar_today</mat-icon> Due Date
+        </span>
+
+        <!-- Due date datepicker trigger here -->
+        <!-- <span style="width:0;height:0;overflow:hidden;"></span> -->
+
+        <div class="field d-flex align-items-center gap-1">
           <span class="detail-value" [class.overdue-text]="isOverdue(t)">
             {{ t.dueDate + 'T00:00:00' | date: 'mediumDate' }}
           </span>
-        </div>
 
-        <div class="detail-item">
-          <span class="detail-label">
-            <mat-icon>schedule</mat-icon> Created
-          </span>
-          <span class="detail-value">{{ t.createdAt | date: 'mediumDate' }}</span>
-        </div>
+          <!-- Hidden anchor input — calendar opens from here, value display is above -->
+          <input [matDatepicker]="dueDatePicker" [min]="today"
+                 (dateChange)="updateDueDate(t, $event.value)"
+                 style="width:0;height:0;opacity:0;position:absolute;pointer-events:none;" />
+          <mat-datepicker #dueDatePicker />
 
-        <div class="detail-item">
-          <span class="detail-label">
-            <mat-icon>person_outline</mat-icon> Assignee
-          </span>
-          <span class="detail-value user-cell">
-            @if (t.assignee?.avatarUrl) {
-              <div class="user-avatar sm"><img [src]="t.assignee!.avatarUrl" alt="" /></div>
-            }
-            <span>{{ t.assignee?.name || 'Unassigned' }}</span>
-          </span>
+          <button (click)="dueDatePicker.open()" class="z-index-9999 edit-btn btn-primary-icon">
+            <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
+          </button>
         </div>
-
-        <div class="detail-item">
-          <span class="detail-label">
-            <mat-icon>manage_accounts</mat-icon> Reporter
-          </span>
-          <span class="detail-value user-cell">
-            @if (t.reporter?.avatarUrl) {
-              <div class="user-avatar sm"><img [src]="t.reporter!.avatarUrl" alt="" /></div>
-            }
-            <span>{{ t.reporter?.name || '—' }}</span>
-          </span>
-        </div>
-
       </div>
 
-      <!-- Tags -->
-      @if (t.tags?.length) {
-        <div class="tags-section">
-          <span class="detail-label">
-            <mat-icon>label_outline</mat-icon> Tags
+      <div class="detail-item">
+        <span class="detail-label">
+          <mat-icon>schedule</mat-icon> Created
+        </span>
+        <span class="detail-value">{{ t.createdAt | date: 'mediumDate' }}</span>
+      </div>
+
+      <!-- Assignee field -->
+      <div class="detail-item">
+        <span class="detail-label">
+          <mat-icon>person_outline</mat-icon> Assignee
+        </span>
+
+        <span #assigneeFieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="assigneeMenu"
+          style="width:0;height:0;overflow:hidden;"></span>
+
+        <div class="field d-flex align-items-center gap-1">
+          <span class="detail-value user-cell">
+            <div class="user-avatar sm"><img [src]="t.assignee!.avatarUrl" alt="" /></div>
+            <span>{{ t.assignee?.name || 'Unassigned' }}</span>
           </span>
-          <div class="tags-row">
-            @for (tag of t.tags; track tag) {
-              <span class="tag">{{ tag }}</span>
+
+          <button (click)="assigneeFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
+            <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
+          </button>
+
+          <mat-menu #assigneeMenu="matMenu">
+            @for(s of data.users; track s) {
+            <button mat-menu-item (click)="updateAssignee(t, s)">
+              <div class="d-flex align-items-center gap-2">
+                <div class="user-avatar sm"><img [src]="s.avatarUrl" alt="" /></div>
+                <span>{{ s.name }}</span>
+              </div>
+            </button>
             }
-          </div>
+          </mat-menu>
         </div>
-      }
+      </div>
+
+      <!-- Reporter field -->
+      <div class="detail-item">
+        <span class="detail-label">
+          <mat-icon>manage_accounts</mat-icon> Reporter
+        </span>
+        <span class="detail-value user-cell">
+          @if (t.reporter?.avatarUrl) {
+          <div class="user-avatar sm"><img [src]="t.reporter!.avatarUrl" alt="" /></div>
+          }
+          <span>{{ t.reporter?.name || '—' }}</span>
+        </span>
+      </div>
 
     </div>
+
+    <!-- Tags -->
+    @if (t.tags?.length) {
+    <div class="tags-section">
+      <span class="detail-label">
+        <mat-icon>label_outline</mat-icon> Tags
+      </span>
+      <div class="tags-row">
+        @for (tag of t.tags; track tag) {
+        <span class="tag">{{ tag }}</span>
+        }
+      </div>
+    </div>
+    }
+
+  </div>
   }
 </mat-dialog-content>

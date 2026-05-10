@@ -7,14 +7,11 @@
     <div class="board-title d-flex align-items-center">
       <!-- Board name & Inline text field to edit the board name into one element -->
       <mat-form-field subscriptSizing="dynamic" appearance="outline" class="board-name-field editable-text">
-        <input matInput [value]="activeBoard()?.name"
+        <input matInput appAutoWidth [value]="activeBoard()?.name"
           (blur)="updateBoardName(activeBoard()?._id, $event.target.value, $event.target); boardNameFieldEnabled = false"
-          [disabled]="authService.currentUser()?.role !== 'TEAM_LEAD'" (input)="adjustNameInputWidth($event.target.value)" #nameInput
+          [disabled]="authService.currentUser()?.role !== 'TEAM_LEAD'"
           [disabled]="!boardNameFieldEnabled" />
       </mat-form-field>
-
-      <!-- Fake Mirror element by the Boardname to dynamically adjust input width -->
-      <span #mirror class="input-mirror"></span>
 
       @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
         <span class="mine-badge" >

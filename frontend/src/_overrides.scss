@@ -60,8 +60,8 @@ html {
       border: none !important;
     }
 
-    --mat-form-field-outlined-input-text-color: var(--color-neutral);
-}
+    // --mat-form-field-outlined-input-text-color: var(--color-neutral);
+  }
 
 
   .mat-mdc-form-field-infix {
@@ -114,13 +114,12 @@ html {
     border-radius: var(--radius-md);
   }
 
-  @include mat.progress-bar-overrides((
-    active-indicator-color: var(--color-primary),
-    track-color: var(--color-light-grey),
-    track-shape: var(--radius-md),
-    track-height: 0.7rem,
-    active-indicator-height: 0.7rem,
-  ));
+  @include mat.progress-bar-overrides((active-indicator-color: var(--color-primary),
+      track-color: var(--color-light-grey),
+      track-shape: var(--radius-md),
+      track-height: 0.7rem,
+      active-indicator-height: 0.7rem,
+    ));
 }
 
 .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
@@ -181,11 +180,12 @@ html {
 // Applied via panelClass: 'app-dialog' on MatDialog.open()
 
 .app-dialog {
-  width: 640px !important;
+  width: 750px !important;
   max-width: 90vw !important;
 
   &.sm {
     width: 300px !important;
+
     .mat-mdc-dialog-content {
       padding: 1rem !important;
     }
@@ -236,11 +236,11 @@ html {
 
 .ql-container.ql-snow:focus-within {
   border-color: var(--color-primary-light);
-    border-width: 2px;
+  border-width: 2px;
 }
 
 /* Also sync toolbar border on focus */
-.ql-container.ql-snow:focus-within ~ .ql-toolbar,
+.ql-container.ql-snow:focus-within~.ql-toolbar,
 .ql-toolbar.ql-snow:has(+ .ql-container:focus-within) {
   border-color: var(--color-primary-light);
   border-width: 2px;
@@ -249,4 +249,27 @@ html {
 quill-editor.ng-invalid.ng-touched .ql-container.ql-snow,
 quill-editor.ng-invalid.ng-touched .ql-toolbar.ql-snow {
   border-color: var(--color-danger) !important;
+}
+
+// Quill Editor Inline-edit styles, no borders, no toolbars, ...
+.editable-text.disabled {
+  width: 100%;
+
+  .ql-toolbar {
+    display: none !important;
+  }
+
+  .ql-container.ql-disabled {
+    border: none !important;
+    box-shadow: none !important;
+
+    .ql-editor {
+      padding: 0 !important;
+      font-size: .875rem;
+      color: var(--color-neutral);
+      line-height: 2;
+    }
+  }
+
+
 }

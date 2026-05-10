@@ -105,6 +105,9 @@
 }
 
 // paddings
+.p-0 {
+  padding: 0 !important;
+}
 .p-1 {
   padding: 0.25rem !important;
 }
@@ -180,14 +183,24 @@
  height: 1rem !important;
 }
 
-.icon-width-2 {
+.icon-size-2 {
  font-size: 2rem !important;
  width: 2rem !important;
- width: 2rem !important;
+ height: 2rem !important;
 }
 
 .icon-size-0-8 {
  font-size: 0.8rem !important;
  width: 0.8rem !important;
  height: 0.8rem !important;
+}
+
+.icon-size-0-7 {
+ font-size: 0.7rem !important;
+ width: 0.7rem !important;
+ height: 0.7rem !important;
+}
+
+.z-index-9999 {
+  z-index: 9999 !important;
 }
