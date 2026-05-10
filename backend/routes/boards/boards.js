@@ -4,7 +4,7 @@ const router = express.Router();
 const Board = require('../../models/board');
 const TaskRouter = require('./tasks');
 const Analytics = require('./analytics');
-const Task = require('../../models/task');
+const Task = require('../../models/task').Task;
 
 /**
  * Routes for boards:

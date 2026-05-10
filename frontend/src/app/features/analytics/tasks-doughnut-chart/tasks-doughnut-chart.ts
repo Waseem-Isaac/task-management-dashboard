@@ -2,6 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { AnalyticsCardPlaceholder } from '../components/analytics-card-placeholder/analytics-card-placeholder';
 import { BaseChartDirective } from 'ng2-charts';
+import { AnalyticsChartData } from '../analytics.model';
 
 export const doughnutCenterPlugin = {
   id: 'doughnutCenter',
@@ -38,13 +39,11 @@ export const doughnutCenterPlugin = {
   styleUrl: './tasks-doughnut-chart.scss',
 })
 export class TasksDoughnutChart {
-  priorityBreakdownChartData = input<{ labels: string[]; datasets: {label: string, data: number[]}[] }>();
+  priorityBreakdownChartData = input<AnalyticsChartData | undefined>();
   totalTasks = input<number>(0);
   plugins = [doughnutCenterPlugin];
 
-  // doughnutChartData = c
   doughnutChartData = computed<ChartData<'doughnut'>>(() => {
-    console.log('Computing doughnut chart data with input:', this.priorityBreakdownChartData()?.datasets[0]);
     return {
       labels: this.priorityBreakdownChartData()?.labels,
       datasets: [

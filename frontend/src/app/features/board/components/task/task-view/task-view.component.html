@@ -19,7 +19,7 @@
         <span #priorityFieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="priorityMenu"
           style="width:0;height:0;overflow:hidden;"></span>
 
-        <span class="priority-badge priority-{{ t.priority }}">{{ t.priority }}</span>
+        <span class="priority-badge priority-{{ t.priority }}">{{ TASK_PRIORITY_LABELS[t.priority] }}</span>
 
         <button (click)="priorityFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
           <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
@@ -37,7 +37,7 @@
         <span #statusFieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="statusMenu"
           style="width:0;height:0;overflow:hidden;"></span>
 
-        <span class="status-badge status-{{ t.status }}">{{ statusLabels[t.status] }}</span>
+        <span class="status-badge status-{{ t.status }}">{{ TASK_STATUS_LABELS[t.status] }}</span>
 
         <button (click)="statusFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
           <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
@@ -140,20 +140,22 @@
 
         <div class="field d-flex align-items-center gap-1">
           <span class="detail-value user-cell">
+            @if (t.assignee?.avatarUrl) {
             <div class="user-avatar sm"><img [src]="t.assignee!.avatarUrl" alt="" /></div>
+            }
             <span>{{ t.assignee?.name || 'Unassigned' }}</span>
           </span>
 
-          <button (click)="assigneeFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
+          <button (click)="loadAssignees(); assigneeFieldMenuTrigger.openMenu(); " class="z-index-9999 edit-btn btn-primary-icon">
             <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
           </button>
 
           <mat-menu #assigneeMenu="matMenu">
-            @for(s of data.users; track s) {
+            @for(s of usersService.users(); track s) {
             <button mat-menu-item (click)="updateAssignee(t, s)">
               <div class="d-flex align-items-center gap-2">
-                <div class="user-avatar sm"><img [src]="s.avatarUrl" alt="" /></div>
-                <span>{{ s.name }}</span>
+                <div class="user-avatar sm"><img [src]="s?.avatarUrl" alt="" /></div>
+                <span>{{ s?.name }}</span>
               </div>
             </button>
             }

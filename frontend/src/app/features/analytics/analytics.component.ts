@@ -17,15 +17,17 @@ import { TasksPerMember } from "./tasks-per-member/tasks-per-member";
 import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { ActivityLog } from './activity-log/activity-log';
 
 @Component({
   selector: 'app-analytics',
   imports: [
     StatisticsListComponent, TasksBarChart, 
-    AnalyticsCardPlaceholder, MatFormField, 
-    MatSelectModule, CompletionRate, 
-    TasksDoughnutChart, TasksPerMember, 
-    LoadingSpinner, MatIcon, RouterLink],
+    MatFormField, MatSelectModule, 
+    CompletionRate, TasksDoughnutChart, 
+    TasksPerMember, LoadingSpinner, 
+    MatIcon, RouterLink, ActivityLog
+  ],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss',
 })
@@ -39,6 +41,7 @@ export class AnalyticsComponent  {
 
     effect(() => {
       this.analyticsService.getAnalytics(this.boardsService.activeBoard()?._id ?? '').subscribe();
+      this.analyticsService.getHistoryLog(this.boardsService.activeBoard()?._id ?? '').subscribe();
     });
   }
 
@@ -46,5 +49,11 @@ export class AnalyticsComponent  {
   onBoardChange(boardId: string): void {
     const board = this.boardsService.boards().find((b) => b._id === boardId);
     if (board) this.boardsService.setActiveBoard(board);
+  }
+  
+  onTaskUpdated(): void {
+    // Reload analytics and history log when a task is updated
+    this.analyticsService.getAnalytics(this.boardsService.activeBoard()?._id ?? '').subscribe();
+    this.analyticsService.getHistoryLog(this.boardsService.activeBoard()?._id ?? '').subscribe();
   }
 }

@@ -64,6 +64,11 @@
     background: var(--color-inactive);
     color: var(--color-neutral);
   }
+
+  &.status-in_progress {
+    background: var(--color-info-light);
+    color: var(--color-info);
+  }
 }
 
 .overdue-badge {

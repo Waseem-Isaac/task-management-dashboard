@@ -78,13 +78,10 @@
   </div>
   <div class="recent-activity-container col">
     <div class="col-header d-flex justify-content-between align-items-center">
-    <div class="col-title">Recent Activity <div style="color: var(--color-neutral); margin-bottom: 0; font-size: 0.6rem;">(Not implemented yet)</div></div>
+    <div class="col-title">Recent Activity</div>
       <div class="col-hint">Per active board</div>
     </div>
-       
-
-    <!-- Recent Activity content will be rendered here -->
-    <app-analytics-card-placeholder></app-analytics-card-placeholder>
+     <app-activity-log [historyLog]="analyticsService.historyLog()" [totalTasks]="analyticsService.analytics().totalTasks" (taskUpdated)="onTaskUpdated()"></app-activity-log>
   </div>
 </div>
 }

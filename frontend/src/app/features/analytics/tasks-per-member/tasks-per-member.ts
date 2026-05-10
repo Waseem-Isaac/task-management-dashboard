@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 import { MatProgressBar } from "@angular/material/progress-bar";
 import { AnalyticsCardPlaceholder } from '../components/analytics-card-placeholder/analytics-card-placeholder';
+import { AnalyticsMember } from '../analytics.model';
 
 @Component({
   selector: 'app-tasks-per-member',
@@ -9,7 +10,7 @@ import { AnalyticsCardPlaceholder } from '../components/analytics-card-placehold
   styleUrl: './tasks-per-member.scss',
 })
 export class TasksPerMember {
-  members = input<{ name: string, email: string, avatarUrl: string, taskCount: number }[]>([]);
+  members = input<AnalyticsMember[]>([]);
   totalTasks = input<number>(0);
 
   getMemberLoadPercentage(memberTaskCount: number): number {

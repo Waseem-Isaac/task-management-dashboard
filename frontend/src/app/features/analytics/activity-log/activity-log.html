@@ -1,0 +1,28 @@
+@if(totalTasks() > 0 && historyLog().length > 0) {
+<div class="activity-log-list">
+  @for(activity of historyLog(); track activity.timestamp) {
+  <div class="activity">
+    <div class="d-flex align-items-start gap-2">
+      <div class="user-avatar lg"><img [src]="activity.user.avatarUrl" alt="" /></div>
+      <div class="activity-content">
+        <strong class="user-name">{{ activity.user.name }}</strong>
+        <span class="activity-message">
+          @if(activity.type === 'status_change') {
+          changed status from <span class="changed-value">"{{ TASK_STATUS_LABELS[activity.oldValue] }}"</span> to <span class="changed-value">"{{ TASK_STATUS_LABELS[activity.newValue] }}"</span>
+          }@else if(activity.type === 'priority_change') {
+          changed priority from <span class="changed-value">"{{ TASK_PRIORITY_LABELS[activity.oldValue] }}"</span> to <span class="changed-value">"{{ TASK_PRIORITY_LABELS[activity.newValue] }}"</span>
+          }@else if(activity.type === 'assignee_change') {
+          changed assignee from <span class="changed-value">"{{ activity.oldValue }}"</span> to <span class="changed-value">"{{ activity.newValue }}"</span>
+          }
+          on <button (click)="openViewTaskDialog(activity.task._id)" class="link task-reference">{{ activity.task.referenceId }}</button>
+        </span>
+        <div><span class="timestamp">{{ activity.timestamp | timeAgo }}</span></div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+}
+@else {
+<app-analytics-card-placeholder></app-analytics-card-placeholder>
+}

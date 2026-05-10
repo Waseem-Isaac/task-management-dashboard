@@ -125,7 +125,8 @@ export class BoardTasksComponent {
   openViewDialog(taskId: string): void {
     this.dialog.open(TaskViewComponent, {
       panelClass: 'app-dialog',
-      data: { taskId, users: this.usersService.users() },
+      data: { taskId },
+      disableClose: true,
     });
   }
 

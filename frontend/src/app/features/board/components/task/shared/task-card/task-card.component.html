@@ -6,23 +6,9 @@
       <span class="priority-badge priority-{{ task().priority }}">{{ task().priority }}</span>
     </div>
 
-    <!-- use mat-menu for actions, menu item will be the 3 veritcal dots -->
-    <!-- <div class="actions">
-      <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn" (click)="$event.stopPropagation()">
-        <mat-icon>more_horiz</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="deleteRequested.emit(task()._id)">
-          <mat-icon>delete_outline</mat-icon>
-          Delete
-        </button>
-      </mat-menu>
-    </div> -->
-
     <div class="actions d-flex align-items-center">
       <button class="btn" (click)="deleteRequested.emit(task()._id); $event.stopPropagation()">
-        <!-- <mat-icon class="icon-size-1">delete_outline</mat-icon> -->
-        <img class="icon-size-1" src="icons/remove-minus-neutral.svg" alt="Delete">
+        <img class="icon-size-1" src="icons/remove-minus.svg" alt="Delete">
       </button>
     </div>
   </div>

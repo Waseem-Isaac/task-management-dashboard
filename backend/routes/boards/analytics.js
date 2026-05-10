@@ -3,7 +3,8 @@ const express = require('express');
 const router = express.Router({ mergeParams: true }); // ← mergeParams to access :boardId from parent route
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const Task = require('../../models/task');
+const Task = require('../../models/task').Task;
+const TaskHistory = require('../../models/task').TaskHistory;
 
 /**
  * All analytics except Activity are just aggregations on your existing Task data — no new model, just a dedicated route
@@ -70,6 +71,16 @@ const Task = require('../../models/task');
   *    { type: 'completed', taskId: '125', user: { name: 'Charlie', avatar: 'charlie.jpg' }, timestamp: '2024-01-03T12:00:00Z' }
   *   ]
   *  }
+  * 
+  * 6. History Log: separate endpoint, GET /boards/:boardId/analytics/history
+  *   - return a timeline of all changes to tasks (status changes, priority changes , assignee changes) with timestamps and user info. This also requires an Activity model to log changes.
+  *   object to be returned :
+  * { 
+  * history: [
+  *  { type: 'status_change', taskId: '123', oldValue: 'todo', newValue: 'in_progress', user: { name: 'Alice', avatar: 'alice.jpg' }, timestamp: '2024-01-01T12:00:00Z' },
+  *  { type: 'priority_change', taskId: '124', oldValue: 'medium', newValue: 'high', user: { name: 'Bob', avatar: 'bob.jpg' }, timestamp: '2024-01-02T12:00:00Z' },
+  *  { type: 'assignee_change', taskId: '125', oldValue: 'Charlie', newValue: 'Dave', user: { name: 'Charlie', avatar: 'charlie.jpg' }, timestamp: '2024-01-03T12:00:00Z' }
+  *  ]
   * 
   * So total response object will be like : 
   * {
@@ -163,18 +174,40 @@ router.get('/', async (req, res, next) => {
     });
 
     // 5. Statistics with change since yesterday
-    // startOfToday is used as the cutoff: tasks created before today = tasks that existed yesterday
-    // Note: status-based yesterday counts reflect tasks created before today with their *current* status,
-    // not their historical status. Accurate per-status deltas require an activity/history log.
     const startOfToday = new Date(now);
     startOfToday.setHours(0, 0, 0, 0);
+    const yesterdayStr = new Date(now.getTime() - 86400000).toISOString().split('T')[0];
+
     const totalTasksYesterday = await Task.countDocuments({ boardId, createdAt: { $lt: startOfToday } });
+
+    // Use TaskHistory to derive accurate per-status deltas for today
+    const boardTaskIds = await Task.distinct('_id', { boardId });
+    const todayStatusChanges = await TaskHistory.find({
+      taskId: { $in: boardTaskIds },
+      type: 'status_change',
+      createdAt: { $gte: startOfToday }
+    });
+
+    const doneChange = todayStatusChanges.reduce((acc, e) => {
+      if (e.newValue === 'done') acc++;
+      if (e.oldValue === 'done') acc--;
+      return acc;
+    }, 0);
+
+    const inProgressChange = todayStatusChanges.reduce((acc, e) => {
+      if (e.newValue === 'in_progress') acc++;
+      if (e.oldValue === 'in_progress') acc--;
+      return acc;
+    }, 0);
+
+    // Overdue yesterday: tasks with dueDate before yesterday's date and not done
+    const overdueTasksYesterday = await Task.countDocuments({ boardId, dueDate: { $lt: yesterdayStr }, status: { $ne: 'done' } });
 
     const statisticsWithChange = [
       { type: 'total', title: 'Total Tasks', value: totalTasks, changeSinceYesterday: totalTasks - totalTasksYesterday },
-      { type: 'done', title: 'Done', value: doneTasks, changeSinceYesterday: null },
-      { type: 'in_progress', title: 'In Progress', value: inProgressTasks, changeSinceYesterday: null },
-      { type: 'overdue', title: 'Overdue', value: overdueTasks, changeSinceYesterday: null },
+      { type: 'done', title: 'Done', value: doneTasks, changeSinceYesterday: doneChange },
+      { type: 'in_progress', title: 'In Progress', value: inProgressTasks, changeSinceYesterday: inProgressChange },
+      { type: 'overdue', title: 'Overdue', value: overdueTasks, changeSinceYesterday: overdueTasks - overdueTasksYesterday },
     ];
 
     res.json({ totalTasks, statusChartData, completionRateData, priorityBreakdownChartData, tasksPerMember, statistics: statisticsWithChange });
@@ -182,5 +215,41 @@ router.get('/', async (req, res, next) => {
     next(err);
   }
 });
+
+// History log, separate endpoint GET /boards/:boardId/analytics/history
+router.get('/history', async (req, res, next) => {
+  try {
+    const boardId = req.params.boardId;
+
+    const taskIds = await Task.distinct('_id', { boardId });
+
+    const rawHistory = await TaskHistory.find({ taskId: { $in: taskIds } })
+      .populate({ path: 'user', select: 'name email' })
+      .populate({ path: 'taskId', select: 'referenceId title' })
+      .sort({ createdAt: -1 })
+      .limit(100);
+
+    const history = rawHistory.map(entry => {
+      const hash = crypto.createHash('md5').update(entry.user.email.trim()).digest('hex');
+      return {
+        type: entry.type,
+        task: { _id: entry.taskId._id, referenceId: entry.taskId.referenceId, title: entry.taskId.title },
+        oldValue: entry.oldValue,
+        newValue: entry.newValue,
+        user: {
+          name: entry.user.name,
+          email: entry.user.email,
+          avatarUrl: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(entry.user.name)}&backgroundColor=${hash.slice(0, 6)}&color=fff&size=200&scale=60`
+        },
+        timestamp: entry.createdAt
+      };
+    });
+
+    res.json(history);
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 module.exports = router;

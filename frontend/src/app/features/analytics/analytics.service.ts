@@ -3,18 +3,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { finalize, Observable, of, tap } from 'rxjs';
-
-export interface Analytics {
-  totalTasks: number;
-
-  statusChartData: { labels: string[]; datasets: { label: string, data: number[] }[] };
-  completionRateData: { completionRate: number, doneTasks: number, todoTasks: number, inProgressTasks: number };
-  priorityBreakdownChartData: { labels: string[]; datasets: { label: string, data: number[] }[] };
-  tasksPerMember: { name: string; email: string; avatarUrl: string; taskCount: number }[];
-  statistics: { type: string; title: string; value: number; changeSinceYesterday: number }[];
-  activity: { /**Todo */ };
-}
-
+import { Analytics } from './analytics.model';
 @Injectable({ providedIn: 'root' })
 
 export class AnalyticsService {
@@ -22,6 +11,10 @@ export class AnalyticsService {
   private _analytics = signal<Analytics>({} as Analytics);
   readonly analytics = this._analytics.asReadonly();
   readonly isLoading = signal(true);
+
+  private _historyLog = signal<any[]>([]);
+  readonly historyLog = this._historyLog.asReadonly();
+  readonly isHistoryLogLoading = signal(true);
 
   // Example method to fetch analytics data
   getAnalytics(boardId: string): Observable<Analytics> {
@@ -37,6 +30,26 @@ export class AnalyticsService {
       finalize(() => this.isLoading.set(false)),
       tap((data) => {
         this._analytics.set(data);
+      }),
+    );
+  }
+
+  /**
+   *  taskId: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
+      type: { type: String, required: true, enum: ['status_change', 'priority_change', 'assignee_change'] },
+      oldValue: { type: String, required: true },
+      newValue: { type: String, required: true },
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+   */
+  getHistoryLog(boardId: string): Observable<any> {
+    if (!boardId) {
+      return of([]);
+    }
+    this.isHistoryLogLoading.set(true);
+    return this.httpClient.get<any>(`boards/${boardId}/analytics/history`).pipe(
+      finalize(() => this.isHistoryLogLoading.set(false)),
+      tap((data) => {
+        this._historyLog.set(data);
       }),
     );
   }

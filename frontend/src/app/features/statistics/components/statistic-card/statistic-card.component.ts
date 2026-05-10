@@ -4,8 +4,8 @@
  */
 import { Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { Statistic } from '../../models';
 import { MatIcon } from '@angular/material/icon';
+import { AnalyticsStatistic } from '../../../analytics/analytics.model';
 
 @Component({
   selector: 'app-statistic-card',
@@ -14,5 +14,5 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './statistic-card.component.scss',
 })
 export class StatisticCardComponent {
-  statistic = input.required<Statistic>();
+  statistic = input.required<AnalyticsStatistic>();
 }

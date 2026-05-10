@@ -9,18 +9,17 @@ import { Task, TaskPriority, TaskStatus } from '../../../models';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TasksService } from '../../../tasks.service';
 import { LoadingSpinner } from '../../../../../shared/components/loading-spinner/loading-spinner';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { quillRequiredValidator } from '../../../../../shared/validators/quill-required.validator';
-import { AuthService, AuthUser } from '../../../../../core/services/auth.service';
+import { FormsModule } from '@angular/forms';
+import { AuthUser } from '../../../../../core/services/auth.service';
 import { UsersService } from '../../../../users/users.service';
-import { MatCalendar, MatDatepickerModule } from "@angular/material/datepicker";
-import { MatFormField, MatFormFieldModule } from "@angular/material/form-field";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 import { QuillModule } from 'ngx-quill';
 import { MatInputModule } from '@angular/material/input';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { toLocalDateString } from '../../../../../shared/utils/date.utils';
+import { TASK_PRIORITY_LABELS, TASK_STATUS_LABELS } from '../../../constants/task.constants';
 
 @Component({
   selector: 'app-task-view',
@@ -34,8 +33,6 @@ import { toLocalDateString } from '../../../../../shared/utils/date.utils';
     DatePipe,
     MatSnackBarModule,
     LoadingSpinner,
-    ReactiveFormsModule,
-    MatFormFieldModule,
     MatInputModule,
     TextFieldModule,
     MatSelectModule,
@@ -50,20 +47,17 @@ import { toLocalDateString } from '../../../../../shared/utils/date.utils';
 })
 export class TaskViewComponent implements OnInit {
   private taskService = inject(TasksService);
+  usersService = inject(UsersService);
   private dialogRef = inject(MatDialogRef<TaskViewComponent>);
   data = inject<{ taskId: string, users: AuthUser[] }>(MAT_DIALOG_DATA);
   private snackbar = inject(MatSnackBar);
   task = signal<Task | undefined>(undefined);
   isLoading = signal(true);
-
-  statusLabels: Record<string, string> = {
-    todo: 'To Do',
-    in_progress: 'In Progress',
-    done: 'Done',
-  };
-
+  TASK_STATUS_LABELS = TASK_STATUS_LABELS;
+  TASK_PRIORITY_LABELS = TASK_PRIORITY_LABELS;
   today = new Date();
-  taskForm!: FormGroup;
+  updateOccured: boolean = false;
+
   statusOptions = [
     { value: 'todo' as TaskStatus, label: 'To Do' },
     { value: 'in_progress' as TaskStatus, label: 'In Progress' },
@@ -105,7 +99,8 @@ export class TaskViewComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close();
+    // pass a flag only in case of task update so that parent component can decide whether to reload data or not. this is to optimize the case where user just wants to view the details without making any changes, in which case we don't need to trigger a reload in the parent component.
+    this.dialogRef.close(this.updateOccured);
   }
 
   /**
@@ -117,6 +112,7 @@ export class TaskViewComponent implements OnInit {
     this.taskService.updateTask(task._id, payload).subscribe({
       next: (updated) => {
         this.task.set(updated);
+        this.updateOccured = true;
         this.snackbar.open(successMsg, 'Close', { duration: 3000, panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top' });
       },
       error: () => {
@@ -159,6 +155,13 @@ export class TaskViewComponent implements OnInit {
     this.patchTask(task, { description: value }, 'Description updated successfully', 'Failed to update description');
   }
 
+
+  // Assignee update related logic
+  loadAssignees(): void {
+    if(this.usersService.users().length) return;
+    
+    return this.usersService.loadUsers(true);
+  }
 
   updateAssignee(task: Task, newAssignee: AuthUser): void {
     this.patchTask(task, { assignee: newAssignee._id }, 'Assignee updated successfully', 'Failed to update assignee');

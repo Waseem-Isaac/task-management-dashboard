@@ -12,7 +12,7 @@
           <span class="change-value positive"> {{'+' + statistic().changeSinceYesterday + ' Since yesterday'  }}</span>
         } @else {
           <!-- <mat-icon class="change-icon neutral"></mat-icon> -->
-          <span class="change-value neutral"> {{ '+' + statistic().changeSinceYesterday + ' Since yesterday' }}</span>
+          <span class="change-value neutral"> {{  statistic().changeSinceYesterday + ' Since yesterday' }}</span>
         }
       }@else {
         <i style="font-size: 0.6rem; color: var(--color-neutral)">(Not implemented yet)</i>

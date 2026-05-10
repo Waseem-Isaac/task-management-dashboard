@@ -3,6 +3,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
 import { JsonPipe } from '@angular/common';
 import { AnalyticsCardPlaceholder } from '../components/analytics-card-placeholder/analytics-card-placeholder';
+import { AnalyticsChartData } from '../analytics.model';
 
 @Component({
   selector: 'app-tasks-bar-chart',
@@ -11,7 +12,7 @@ import { AnalyticsCardPlaceholder } from '../components/analytics-card-placehold
   styleUrl: './tasks-bar-chart.scss',
 })
 export class TasksBarChart {
-  statusChartData = input<{labels: string[]; datasets: {label: string, data: number[]}[]} | undefined>();
+  statusChartData = input<AnalyticsChartData | undefined>();
   totalTasks = input<number>(0);
 
   barChartData = computed<ChartData<'bar'>>(() => {

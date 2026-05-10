@@ -286,7 +286,10 @@ label {
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
-
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   &:hover {
     text-decoration: underline;
   }
@@ -305,8 +308,8 @@ label {
 
 /* Style scrollbar for WebKit browsers */
 *::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -319,6 +322,6 @@ label {
 }
 
 *::moz-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }

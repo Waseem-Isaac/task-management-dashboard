@@ -30,6 +30,16 @@ taskSchema.pre('validate', async function () {
   }
 });
 
-const Task = mongoose.model('Task', taskSchema);
+const taskHistorySchema = new mongoose.Schema({
+  taskId: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
+  // For now we only track status, priority, and assignee changes
+  type: { type: String, required: true, enum: ['status_change', 'priority_change', 'assignee_change'] },
+  oldValue: { type: String, required: true },
+  newValue: { type: String, required: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+}, { timestamps: true });
 
-module.exports = Task;
+const Task = mongoose.model('Task', taskSchema);
+const TaskHistory = mongoose.model('TaskHistory', taskHistorySchema);
+
+module.exports = { Task, TaskHistory };
