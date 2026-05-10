@@ -111,53 +111,29 @@ export class TaskViewComponent implements OnInit {
   /**
    * Inline field update handlers - these are called directly from the template whenever a field is updated, and they immediately send an update request to the server with the new value. This allows for a more seamless editing experience without needing a separate "Edit" mode or "Save" button. Each handler creates an updated task object with the modified field and sends it to the server, then updates the local task signal with the response. Error handling is included to show a snackbar message if the update fails.
    */
-  // priority field
-  updatePriority(task: Task, newPriority: TaskPriority): void {
-    const updatedTask = { ...task, assignee: task.assignee?._id, reporter: task.reporter?._id, priority: newPriority };
-    this.taskService.updateTask(task._id, updatedTask).subscribe({
+  // Single helper to update the task.
+  private patchTask(task: Task, patch: Record<string, unknown>, successMsg: string, errorMsg: string): void {
+    const payload = { ...task, assignee: task.assignee?._id, reporter: task.reporter?._id, ...patch };
+    this.taskService.updateTask(task._id, payload).subscribe({
       next: (updated) => {
         this.task.set(updated);
-        this.snackbar.open('Priority updated successfully', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'],
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.snackbar.open(successMsg, 'Close', { duration: 3000, panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top' });
       },
       error: () => {
-        this.snackbar.open('Failed to update priority', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.snackbar.open(errorMsg, 'Close', { duration: 3000, panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top' });
       },
     });
   }
 
-  // status field
-  updateStatus(task: Task, newStatus: TaskStatus): void {
-    const updatedTask = { ...task, assignee: task.assignee?._id, reporter: task.reporter?._id, status: newStatus };
-    this.taskService.updateTask(task._id, updatedTask).subscribe({
-      next: (updated) => {
-        this.task.set(updated);
-        this.snackbar.open('Status updated successfully', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
-        });
-      },
-      error: () => {
-        this.snackbar.open('Failed to update status', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-      },
-    });
+  updatePriority(task: Task, value: TaskPriority): void {
+    this.patchTask(task, { priority: value }, 'Priority updated successfully', 'Failed to update priority');
   }
 
-  // Name text field
+  updateStatus(task: Task, value: TaskStatus): void {
+    this.patchTask(task, { status: value }, 'Status updated successfully', 'Failed to update status');
+  }
+
+  /** Title field update related logic */
   isEditingTitle = signal(false);
   commitTitle(task: Task, inputEl: HTMLTextAreaElement): void {
     this.isEditingTitle.set(false);
@@ -165,34 +141,12 @@ export class TaskViewComponent implements OnInit {
   }
 
   updateTitle(task: Task, newTitle: string): void {
-    if (newTitle.trim() === task.title) {
-      this.isEditingTitle.set(false);
-      return;
-    }
-
-    if(!this.validateField('title', newTitle)) return;
-
-    const updatedTask = { ...task, assignee: task.assignee?._id, reporter: task.reporter?._id, title: newTitle };
-    this.taskService.updateTask(task._id, updatedTask).subscribe({
-      next: (updated) => {
-        this.task.set(updated);
-        this.snackbar.open('Title updated successfully', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
-        });
-      },
-      error: () => {
-        this.snackbar.open('Failed to update title', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-      },
-    });
+    if (newTitle.trim() === task.title) { this.isEditingTitle.set(false); return; }
+    if (!this.validateField('title', newTitle)) return;
+    this.patchTask(task, { title: newTitle }, 'Title updated successfully', 'Failed to update title');
   }
 
-  // Description rich text field
+  /** Description field update related logic */
   isEditingDescription = signal(false);
   commitDescription(task: Task, newDescription: any): void {
     this.isEditingDescription.set(false);
@@ -201,75 +155,22 @@ export class TaskViewComponent implements OnInit {
     this.updateDescription(task, newDescription);
   }
 
-  updateDescription(task: Task, newDescription: string): void {
-    const updatedTask = { ...task, assignee: task.assignee?._id, reporter: task.reporter?._id, description: newDescription };
-    this.taskService.updateTask(task._id, updatedTask).subscribe({
-      next: (updated) => {
-        this.task.set(updated);
-        this.snackbar.open('Description updated successfully', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
-        });
-      },
-      error: () => {
-        this.snackbar.open('Failed to update description', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-      },
-    });
+  updateDescription(task: Task, value: string): void {
+    this.patchTask(task, { description: value }, 'Description updated successfully', 'Failed to update description');
   }
 
 
-  // Assignee field
   updateAssignee(task: Task, newAssignee: AuthUser): void {
-    const updatedTask = { ...task, assignee: newAssignee._id, reporter: task.reporter?._id };
-    this.taskService.updateTask(task._id, updatedTask).subscribe({
-      next: (updated) => {
-        this.task.set(updated);
-        this.snackbar.open('Assignee updated successfully', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
-        });
-      },
-      error: () => {
-        this.snackbar.open('Failed to update assignee', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-      },
-    });
+    this.patchTask(task, { assignee: newAssignee._id }, 'Assignee updated successfully', 'Failed to update assignee');
   }
 
-  // Due date field
   updateDueDate(task: Task, newDueDate: Date): void {
-    const updatedTask = { ...task, assignee: task.assignee?._id, reporter: task.reporter?._id, dueDate: toLocalDateString(newDueDate) };
-    this.taskService.updateTask(task._id, updatedTask).subscribe({
-      next: (updated) => {
-        this.task.set(updated);
-        this.snackbar.open('Due date updated successfully', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
-        });
-      },
-      error: () => {
-        this.snackbar.open('Failed to update due date', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-      },
-    });
+    this.patchTask(task, { dueDate: toLocalDateString(newDueDate) }, 'Due date updated successfully', 'Failed to update due date');
   }
 
-  // Handle field validations to prevent update in case of invalid data (e.g. empty title, past due date, etc.) - this is called from the template before attempting to update a field, and it checks the new value against validation rules. If the value is invalid, it shows a snackbar message and does not proceed with the update. This ensures that only valid data is sent to the server and provides immediate feedback to the user about what needs to be corrected.
+  // Handle field validations to prevent update in case of invalid data 
   validateField(fieldName: string, value: any): boolean {
-    // only title and description should be validated.
+    // only title and description should be validated. other field can't have an invalid entery as they are must-choice from dropdowns and datepicker.
     /**
      * for title: required, min length 3
      * for description: required, min length 10 (after stripping HTML tags) as in quillRequiredValidator  from '../../../../../../shared/validators/quill-required.validator'
@@ -311,7 +212,6 @@ export class TaskViewComponent implements OnInit {
         return false;
       }
     }
-
     return true;
   }
     
