@@ -137,6 +137,7 @@
   }
 
   .users-page {
+
     // Styling the table following same design pattern we hav
     .table-container {
       overflow-x: auto;
@@ -228,9 +229,15 @@
         width: 2rem;
         height: 2rem;
         border-radius: 50%;
-        background: var(--color-body-bg);
-        border: 1px solid var(--color-light-grey);
+        transition: background-color 0.2s ease-in;
 
+        &:hover {
+          background-color: var(--color-danger-light);
+
+          img {
+            filter: invert(33%) sepia(100%) saturate(6487%) hue-rotate(15deg) brightness(68%) contrast(87%);
+          }
+        }
 
 
         mat-icon {

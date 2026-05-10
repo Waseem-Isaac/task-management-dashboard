@@ -55,11 +55,25 @@
   }
 
   // Action buttons (edit / delete)
-  .card-header .actions .menu-btn {
-    color: var(--color-neutral);
+  .card-header .actions .btn {
+    color: var(--color-light);
     background: transparent;
     border: none;
-    font-size: 0.5rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+
+    &:hover {
+      background-color: var(--color-danger-light);
+
+      img {
+        filter: invert(33%) sepia(100%) saturate(6487%) hue-rotate(15deg) brightness(68%) contrast(87%);
+      }
+    }
   }
 
   // Title
