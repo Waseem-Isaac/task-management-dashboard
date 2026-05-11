@@ -33,7 +33,7 @@
         <mat-select [value]="activeAssignee()" (selectionChange)="activeAssignee.set($event.value)"
           placeholder="Assignee">
           <mat-option [value]="null">All Assignees</mat-option>
-          @for (assignee of usersService.users(); track assignee._id) {
+          @for (assignee of teamService.teamMembers(); track assignee._id) {
           <mat-option [value]="assignee._id">
             <div class="d-flex align-items-center gap-2">
               <div class="user-avatar">

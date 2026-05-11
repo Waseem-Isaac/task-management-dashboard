@@ -10,11 +10,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Task, TaskFormData } from '../../../../models';
-import { UsersService } from '../../../../../users/users.service';
 import { AuthService } from '../../../../../../core/services/auth.service';
 import { QuillModule } from 'ngx-quill';
 import { quillRequiredValidator } from '../../../../../../shared/validators/quill-required.validator';
 import { toLocalDateString } from '../../../../../../shared/utils/date.utils';
+import { TeamService } from '../../../../../team/team.service';
 
 @Component({
   selector: 'app-task-form',
@@ -40,7 +40,7 @@ export class TaskFormComponent implements OnInit {
   today = new Date();
   taskForm!: FormGroup;
   fb = inject(FormBuilder);
-  usersService = inject(UsersService);
+  teamService = inject(TeamService);
 
   statusOptions = [
     { value: 'todo', label: 'To Do' },
@@ -58,7 +58,7 @@ export class TaskFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.usersService.loadUsers(true);
+    this.teamService.loadTeamMembers(true);
   }
 
   private initForm(): void {

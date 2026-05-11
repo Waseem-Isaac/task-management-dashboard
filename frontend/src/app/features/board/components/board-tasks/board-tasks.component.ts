@@ -23,10 +23,10 @@ import { SearchService } from '../../../../core/services/search.service';
 import { TaskAddComponent } from '../task/task-add/task-add.component';
 import { TaskViewComponent } from '../task/task-view/task-view.component';
 import { Confirmable } from '../../../../shared/decorators/confirmable.decorator';
-import { UsersService } from '../../../users/users.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TasksService } from '../../tasks.service';
+import { TeamService } from '../../../team/team.service';
 
 @Component({
   selector: 'app-board-tasks',
@@ -46,7 +46,7 @@ import { TasksService } from '../../tasks.service';
 })
 export class BoardTasksComponent {
   private taskService = inject(TasksService);
-  protected usersService = inject(UsersService);
+  protected teamService = inject(TeamService);
   private searchService = inject(SearchService);
   private dialog = inject(MatDialog);
   authService = inject(AuthService);
@@ -64,7 +64,7 @@ export class BoardTasksComponent {
     effect(() => {
       this.taskService.loadTasks().subscribe();
     });
-    this.usersService.loadUsers(true);
+    this.teamService.loadTeamMembers(true);
   }
 
   filteredTasks = computed(() => {

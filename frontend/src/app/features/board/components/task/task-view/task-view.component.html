@@ -151,7 +151,7 @@
           </button>
 
           <mat-menu #assigneeMenu="matMenu">
-            @for(s of usersService.users(); track s) {
+            @for(s of teamService.teamMembers(); track s._id) {
             <button mat-menu-item (click)="updateAssignee(t, s)">
               <div class="d-flex align-items-center gap-2">
                 <div class="user-avatar sm"><img [src]="s?.avatarUrl" alt="" /></div>

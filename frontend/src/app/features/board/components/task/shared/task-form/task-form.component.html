@@ -66,7 +66,7 @@
     <label for="assignee" class="label">Assignee</label>
     <mat-form-field appearance="outline" class="full-width">
       <mat-select formControlName="assignee" placeholder="Assignee">
-        @for (user of usersService.users(); track user._id) {
+        @for (user of teamService.teamMembers(); track user._id) {
         <mat-option [value]="user._id">
           <div class="d-flex align-items-center gap-2">
             <div class="user-avatar">
