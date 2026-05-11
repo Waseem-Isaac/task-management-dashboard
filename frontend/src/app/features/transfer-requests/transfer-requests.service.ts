@@ -36,7 +36,40 @@ export class TransferRequestsService {
       tap((created) => {
         this._transferRequests.update((requests) => [...requests, created]);
       })
-    )
+    );
+  }
+
+  // Approve Transfer Request
+  approveTransferRequest(requestId: string): Observable<TransferRequest> {
+    return this.http.put<TransferRequest>(`transfer-requests/${requestId}/approve`, {}).pipe(
+      tap((updated) => {
+        this._transferRequests.update((requests) =>
+          requests.map((r) => (r._id === requestId ? updated : r))
+        );
+      })
+    );
+  }
+  
+  // Reject Transfer Request
+  rejectTransferRequest(requestId: string): Observable<TransferRequest> {
+    return this.http.put<TransferRequest>(`transfer-requests/${requestId}/reject`, {}).pipe(
+      tap((updated) => {
+        this._transferRequests.update((requests) =>
+          requests.map((r) => (r._id === requestId ? updated : r))
+        );
+      })
+    );
+  }
+
+  // Delete/Cancel Transfer Request
+  deleteTransferRequest(requestId: string): Observable<void> {
+    return this.http.delete<void>(`transfer-requests/${requestId}`).pipe(
+      tap(() => {
+        this._transferRequests.update((requests) =>
+          requests.filter((r) => r._id !== requestId)
+        );
+      })
+    );
   }
 
   isItMe(userId: string): boolean {

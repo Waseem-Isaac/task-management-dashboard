@@ -31,6 +31,7 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: 600;
 
   &:enabled:hover {
     background-color: var(--color-primary-hover) !important;
@@ -45,11 +46,14 @@ body {
 
   &.danger {
     background-color: var(--color-danger) !important;
+    opacity: 0.9;
     color: var(--color-primary-contrast) !important;
     box-shadow: 0 4px 18px rgba(227, 120, 62, 0.38);
+    transition: opacity 0.3s ease;
 
     &:enabled:hover {
       background-color: var(--color-danger) !important;
+      opacity: 1;
     }
   }
 }
@@ -516,7 +520,7 @@ label {
       color: var(--color-primary-contrast) !important;
     }
 
-    &:hover:not(.active) {
+    &:enabled:hover:not(.active) {
       background: var(--menu-item-color-hover) !important;
       color: var(--color-primary) !important;
     }

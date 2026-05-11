@@ -13,6 +13,8 @@ import { TransferRequestsService } from './transfer-requests.service';
 import { TransferRequest } from './transfer-requests.model';
 import { TRANSFER_REQUEST_STATUS_LABELS } from './transfer-request.const';
 import { MatTooltip } from "@angular/material/tooltip";
+import { Confirmable } from '../../shared/decorators/confirmable.decorator';
+import { TransferRequestAddComponent } from './transfer-request-add/transfer-request-add.component';
 
 @Component({
   selector: 'app-transfer-requests',
@@ -44,18 +46,72 @@ export class TransferRequestsComponent implements OnInit {
   }
 
   openAddTransferRequest(): void {
-    console.log('on add transfer request');
+    this.dialog.open(TransferRequestAddComponent, { panelClass: 'app-dialog', disableClose: true });
   }
 
+  @Confirmable({
+    title: 'Approve Transfer Request',
+    message: 'Are you sure you want to approve this transfer request? This will move the member under your management.',
+  })
   approveRequest(requestId: string): void {
-    console.log('approve', requestId);
+    this.transferRequestsService.approveTransferRequest(requestId).subscribe({
+      next: (res) => {
+        this.snackbar.open('Transfer request approved! This member is now under your management.', '', {
+          duration: 3000,
+          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
+      },
+      error: (error) => {
+        console.error('Error approving transfer request:', error);
+        this.snackbar.open(error?.error?.message || 'Failed to approve transfer request. Please try again.', '', {
+          duration: 3000,
+          panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
+      },
+    });
   }
 
+  @Confirmable({
+    title: 'Reject Transfer Request',
+    message: 'Are you sure you want to reject this transfer request?',
+  })
   rejectRequest(requestId: string): void {
-    console.log('reject', requestId);
+    this.transferRequestsService.rejectTransferRequest(requestId).subscribe({
+      next: (res) => {
+        this.snackbar.open('Transfer request rejected. The requester has been notified.', '', {
+          duration: 3000,
+          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
+      },
+      error: (error) => {
+        console.error('Error rejecting transfer request:', error);
+        this.snackbar.open(error?.error?.message || 'Failed to reject transfer request. Please try again.', '', {
+          duration: 3000,
+          panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
+      },
+    });
   }
 
+  @Confirmable({
+    title: 'Cancel Transfer Request',
+    message: 'Are you sure you want to cancel this transfer request?',
+  })
   cancelRequest(requestId: string): void {
-    console.log('cancel', requestId);
+    this.transferRequestsService.deleteTransferRequest(requestId).subscribe({
+      next: () => {
+        this.snackbar.open('Transfer request cancelled.', '', {
+          duration: 3000,
+          panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
+      },
+      error: (error) => {
+        console.error('Error cancelling transfer request:', error);
+        this.snackbar.open(error?.error?.message || 'Failed to cancel transfer request. Please try again.', '', {
+          duration: 3000,
+          panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
+        });
+      },
+    });
   }
 }

@@ -1,0 +1,20 @@
+// Styles for UserAddComponent dialog — layout only, design TBD
+.user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 800px;
+  background-color: var(--color-primary-contrast);
+  border-radius: var(--radius-md);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0rem;
+}

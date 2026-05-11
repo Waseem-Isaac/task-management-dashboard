@@ -4,6 +4,7 @@ const router = express.Router();
 const crypto = require('crypto');
 const User = require('../models/user');
 const { sendInvitationEmail } = require('../config/mailer');
+const TransferRequest = require('../models/transfer-request');
 
 // GET all users (optionally filter by ?active=true)
 // Pagination: ?page=1&limit=20
@@ -42,13 +43,20 @@ router.get('/', async (req, res, next) => {
 // Get current user team members
 router.get('/me/team', async (req, res, next) => {
    try {
-    // users who are either:
-    // 2. managed by the current user
-    // 3. managed by the same person who manages the current user (siblings)
+    let filter = {};
 
-      const filter = req.user.role === 'TEAM_LEAD'
-        ? { $or: [{ _id: req.user._id } ,{ managedBy: req.user._id }] }
-        : { $or: [{ managedBy: req.user.managedBy }, { _id: req.user.managedBy }] };
+    if(req.user.role === 'TEAM_LEAD') {
+      /** get users who are either myself or my team members */
+      filter = { $or: [{ _id: req.user._id} ,{ managedBy: req.user._id  }] };
+    }else {
+      /** get users who are either my siblings, my lead, or myself */
+      // but handle the case when the user has no lead (managedBy is null) - then just return myself
+      if (!req.user.managedBy) {
+        filter = { _id: req.user._id };
+      } else {
+        filter = { $or: [{ managedBy: req.user.managedBy }, { _id: req.user.managedBy }, { _id: req.user._id }] };
+      }
+    }
 
       
     if (req.query.active === 'true') filter.active = true;
@@ -135,10 +143,23 @@ router.get('/:id', async (req, res, next) => {
 // DELETE a specific user by ID
 router.delete('/:id', async (req, res, next) => {
   try {
+    
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+
+    // cascade — remove all transfer requests involving this user
+    await TransferRequest.deleteMany({
+      $or: [
+        { member:   req.params.id },
+        { fromLead: req.params.id },
+        { toLead:   req.params.id },
+      ]
+    });
+    // also set managedBy to null for any users managed by the deleted user
+    await User.updateMany({ managedBy: req.params.id }, { $set: { managedBy: null } });
+
     res.status(204).end();
   } catch (err) {
     next(err);

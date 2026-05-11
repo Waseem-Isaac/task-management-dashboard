@@ -14,10 +14,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
 import { TransferRequestsService } from '../transfer-requests/transfer-requests.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { User } from '../../shared/models/user.model';
+import { TransferRequest } from '../transfer-requests/transfer-requests.model';
 
 @Component({
   selector: 'app-users',
-  imports: [MatIcon, MatIconButton, FormsModule, MatSnackBarModule, PaginationComponent, LoadingSpinner],
+  imports: [MatIcon, MatIconButton, FormsModule, MatSnackBarModule, PaginationComponent, LoadingSpinner, MatTooltip],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -29,7 +32,6 @@ export class UsersComponent implements OnInit {
   authService = inject(AuthService);
   protected currentPage = signal(1);
   protected readonly limit = 10;
-  users = this.usersService.users;
   private transferRequestsService = inject(TransferRequestsService);
 
   private matchesSearch(name: string): boolean {
@@ -57,17 +59,17 @@ export class UsersComponent implements OnInit {
   deleteUser(id: string): void {
     this.usersService.deleteUser(id).subscribe({
       next: () => {
-        this.snackbar.open('User deleted successfully!', '', 
-          { 
-            duration: 3000 , 
-            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+        this.snackbar.open('User deleted successfully!', '',
+          {
+            duration: 3000,
+            panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
           });
       },
       error: (err) => {
-        this.snackbar.open(err?.error?.message || 'Failed to delete user. Please try again.', '', 
-          { 
-            duration: 3000 , 
-            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+        this.snackbar.open(err?.error?.message || 'Failed to delete user. Please try again.', '',
+          {
+            duration: 3000,
+            panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
           });
       },
     });
@@ -78,20 +80,44 @@ export class UsersComponent implements OnInit {
     title: 'Request Transfer',
     message: 'Are you sure you want to request that this member be transferred to be under your management ?',
   })
-  requestTransfer(memberId: string): void {
-    this.transferRequestsService.addTransferRequest(memberId).subscribe({
-      next: () => {
-        this.snackbar.open('Transfer request sent successfully!', '', 
-          { 
-            duration: 3000 , 
-            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
-          });
+  requestTransfer(member: User): void {
+    this.transferRequestsService.addTransferRequest(member._id).subscribe({
+      next: (res: any) => {
+        let msg = ''
+
+        if (res?.managedBy) {
+          this.usersService.updateUserTransferStatus(member._id, {
+            _id: res.managedBy._id!,
+            name: res.managedBy.name!,
+            avatarUrl: res.managedBy.avatarUrl,
+            email: res.managedBy.email
+          }, "NONE");
+          
+          this.snackbar.open('Transfer request approved! This member is now under your management.', '',
+            {
+              duration: 3000,
+              panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
+            });
+        } else {
+          // Optionally, you could add the pending request to a list of outgoing requests here
+          this.snackbar.open('Transfer request sent successfully! Waiting for approval.', '',
+            {
+              duration: 3000,
+              panelClass: ['snackbar-success'], horizontalPosition: 'center', verticalPosition: 'top'
+            });
+
+            // Update the user's transfer status to PENDING_TRANSFER
+            this.usersService.updateUserTransferStatus(member._id, member.managedBy, "PENDING_TRANSFER");
+        }
+
+
+
       },
       error: (err) => {
-        this.snackbar.open(err?.error?.message || 'Failed to send transfer request. Please try again.', '', 
-          { 
-            duration: 3000 , 
-            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+        this.snackbar.open(err?.error?.message || 'Failed to send transfer request. Please try again.', '',
+          {
+            duration: 3000,
+            panelClass: ['snackbar-error'], horizontalPosition: 'center', verticalPosition: 'top'
           });
       },
     });

@@ -11,6 +11,7 @@ export interface User {
     avatarUrl?: string;
     email?: string;
   };
+  transferStatus: 'PENDING_TRANSFER' | 'NONE';
 }
 
 export interface UserFormData {

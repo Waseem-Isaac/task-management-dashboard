@@ -46,6 +46,12 @@ export class UsersService {
       .pipe(tap(() => this._users.update((u) => u.filter((user) => user._id !== id))));
   }
 
+  updateUserTransferStatus(userId: string, managedBy: User['managedBy'], transferStatus: User['transferStatus']): void {
+    this._users.update((users) =>
+      users.map((u) => (u._id === userId ? { ...u, managedBy, transferStatus } : u))
+    );
+  }
+
   getAvatarInitials(name?: string): string {
     if (!name) return '?';
     return name

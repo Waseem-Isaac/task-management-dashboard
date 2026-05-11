@@ -41,7 +41,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (user of users(); track user._id) {
+        @for (user of usersService.users(); track user._id) {
         <tr [class.inactive]="user.active === false">
           <td class="d-flex align-items-center gap-3">
             <div class="user-avatar lg"><img [src]="user?.avatarUrl" alt=""></div>
@@ -75,7 +75,10 @@
 
           </td>
           <td >
-            @if(user?.role === 'MEMBER'){
+            @if(user?.transferStatus === 'PENDING_TRANSFER'){
+               <span class="status-badge inactive">Pending Transfer</span>
+            }
+            @else if(user?.role === 'MEMBER' && user?.managedBy && user.transferStatus !== 'PENDING_TRANSFER') {
               <div class="d-flex align-items-center gap-3">
               <div class="user-avatar md"><img [src]="user?.managedBy?.avatarUrl" alt=""></div>
               <div class="user-info md">
@@ -94,9 +97,9 @@
            <td>
               @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
                 <!-- Ask for team member to be transferred to my management -->
-                @if(user.role === 'MEMBER' && user.managedBy?._id !== authService.currentUser()?._id)
+                @if(user.role === 'MEMBER' && user.managedBy?._id !== authService.currentUser()?._id && user.transferStatus !== 'PENDING_TRANSFER')
                   {
-                    <button class="action-btn neutral" mat-icon-button (click)="requestTransfer(user._id!)">
+                    <button class="action-btn neutral" mat-icon-button (click)="requestTransfer(user)" [matTooltip]="'Request Transfer'">
                       <!-- <img class="icon-size-1" src="icons/transfer-request.svg" alt=""> -->
                       <mat-icon class="icon-size-1">person_add</mat-icon>
                     </button>

@@ -7,24 +7,25 @@
     </div>
 
     <!-- <h2 class="user-name">{{ authService.currentUser()?.name }}</h2> -->
-<div class="user-name">
-      <mat-form-field subscriptSizing="dynamic" appearance="outline" class="profile-name-field editable-text" >
-        <input matInput [value]="authService.currentUser()?.name" (blur)="updateMyName($event.target.value); nameEditable = false" [disabled]="!nameEditable" />             
+    <div class="user-name">
+      <mat-form-field subscriptSizing="dynamic" appearance="outline" class="profile-name-field editable-text">
+        <input matInput [value]="authService.currentUser()?.name"
+          (blur)="updateMyName($event.target.value); nameEditable = false" [disabled]="!nameEditable" />
       </mat-form-field>
-      
+
       <button (click)="nameEditable = !nameEditable" class="edit-btn btn-primary-icon">
-          @if(nameEditable) {
-          <img width="16px" height="16px" src="icons/edit-filled.svg" alt="Edit">
-          }@else {
-          <img width="16px" height="16px" src="icons/edit.svg" alt="Edit">
-          }
-        </button>
-</div> 
+        @if(nameEditable) {
+        <img width="16px" height="16px" src="icons/edit-filled.svg" alt="Edit">
+        }@else {
+        <img width="16px" height="16px" src="icons/edit.svg" alt="Edit">
+        }
+      </button>
+    </div>
 
     <mat-divider />
 
     <div class="info-section">
-       <!-- Id -->
+      <!-- Id -->
       <div class="info-row">
         <mat-icon>fingerprint</mat-icon>
         <span class="user-id">{{ authService.currentUser()?._id }}</span>
@@ -43,14 +44,27 @@
         <span>{{ authService.currentUser()?.role === 'TEAM_LEAD' ? 'Team Lead' : 'Team Member' }}</span>
       </div>
       <!-- Managed By -->
+       @if(authService.currentUser()?.role === 'MEMBER' && authService.currentUser()?.managedBy) {
       <div class="info-row">
         <mat-icon>supervisor_account</mat-icon>
-        <span> <strong>Reports to: </strong> {{ authService.currentUser()?.managedBy?.name || '-' }}</span>
-      </div>
+        <span> <strong>Reports to </strong> {{ authService.currentUser()?.managedBy?.name || '-' }}</span>
+    </div>
+      }
       <!-- Status -->
       <div class="info-row">
         <mat-icon>check_circle_outline</mat-icon>
         <span>{{ authService.currentUser()?.active ? 'Active' : 'Inactive' }}</span>
       </div>
+    </div>
+
+    <mat-divider />
+
+    <div class="actions">
+      <button class="btn-primary danger delete-account-btn" (click)="deleteAccount()">
+        <span class="d-flex align-items-center justify-content-center">
+            <mat-icon class="">warning</mat-icon>
+            Delete Account
+        </span>
+      </button>
+      </div>
   </div>
-</div>

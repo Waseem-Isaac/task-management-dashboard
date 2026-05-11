@@ -13,10 +13,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
 import { TeamService } from './team.service';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-team',
-  imports: [MatIcon, MatIconButton, FormsModule, MatSnackBarModule, PaginationComponent, LoadingSpinner],
+  imports: [MatIcon, MatIconButton, FormsModule, MatSnackBarModule, PaginationComponent, LoadingSpinner, MatTooltip],
   templateUrl: './team.component.html',
   styleUrl: './team.component.scss',
 })

@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   invitationToken:        { type: String, select: false },   // stored as SHA-256 hash
   role:                   { type: String, enum: ['TEAM_LEAD', 'MEMBER'], required: true },
   managedBy:              { type: mongoose.Schema.Types.ObjectId, ref: 'User', select: '_id name email avatarUrl'}, // for MEMBER role
+  transferStatus:        { type: String, enum: ['NONE', 'PENDING_TRANSFER'], default: 'NONE' }, // for MEMBER role
 }, { 
   timestamps: true,
   toJSON:   { virtuals: true },  // avatar auto-included in res.json()
