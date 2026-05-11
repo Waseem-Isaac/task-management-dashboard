@@ -11,14 +11,9 @@
   .task-card {
     position: relative;
     cursor: pointer;
-
-    // background: var(--color-body-bg);
     background: radial-gradient(ellipse at center top, var(--color-primary-active-rgba) 0%, transparent 100%);
-    // border: 1px solid var(--color-light-grey);
     box-shadow: 0 4px 18px var(--color-light-grey);
-          border: 1px solid var(--color-light-grey);
-
-    width: 90%;
+    border: 1px solid var(--color-light-grey);
     border-radius: 8px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -29,10 +24,8 @@
     }
 
     &:hover:not(.overdue) {
-      // border-color: var(--color-primary-light);
-       box-shadow: 0 4px 8px rgba(227, 120, 62, .3);
-    transition: box-shadow .15s, transform .15s;;
-      // border: 1px solid var(--color-light-grey);
+      box-shadow: 0 4px 8px rgba(227, 120, 62, .3);
+      transition: box-shadow .15s, transform .15s;;
     }
   }
 
@@ -86,8 +79,9 @@
   .card-title {
     font-size: 0.85rem;
     font-weight: bold;
-    margin: 0.7rem 0 1rem;    
+    margin: 0.7rem 0 2rem;    
     color: var(--color-dark);
+    width: 90%;
 
     display: -webkit-box;
     -webkit-line-clamp: 1;
