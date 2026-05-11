@@ -26,7 +26,7 @@ async function sendInvitationEmail(to, token) {
     text: `You have been invited to ${APP_NAME}. Set your password here: ${link}`,
     html: `
       <div style="background:#fff;padding:32px 0;text-align:center;font-family:sans-serif; margin: 2rem auto; width:420px; border:1px solid #ede5d8">
-        <img src="${LOGO_URL}" alt="${APP_NAME} Logo" style="height:50px;margin-bottom:12px;" />
+        <img src="${LOGO_URL}" alt="${APP_NAME} Logo" style="height:50px;margin-bottom:24px;" />
         <h2 style="color:${MAIN_COLOR};margin:0 0 16px 0;">Welcome to ${APP_NAME}</h2>
         <p style="color:#222;font-size:16px;margin:0 0 24px 0;">You have been invited to join <b>${APP_NAME}</b>.</p>
         <a href="${link}" style="display:inline-block;padding:12px 32px;background:${MAIN_COLOR};color:#fff;text-decoration:none;border-radius:4px;font-weight:bold;font-size:16px;">Set Your Password</a>
