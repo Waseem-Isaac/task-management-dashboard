@@ -9,6 +9,7 @@ const connectDB = require('./config/db');
 const usersRouter = require('./routes/users');
 const boardRouter = require('./routes/boards/boards');
 const authRouter  = require('./routes/auth');
+const transferRequestRouter = require('./routes/transfer-requests');
 const isAuthenticated = require('./middleware/isAuthenticated');
 
 const app = express();
@@ -32,5 +33,6 @@ app.use((req, res, next) => {
 app.use('/auth', authRouter);
 app.use('/users', isAuthenticated, usersRouter);
 app.use('/boards', isAuthenticated , boardRouter);
+app.use('/transfer-requests', isAuthenticated, transferRequestRouter);
 
 module.exports = app;

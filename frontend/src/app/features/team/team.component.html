@@ -1,4 +1,4 @@
-<div class="users-page">
+<div class="list-page">
   @if (teamService.isLoading()) {
   <app-loading-spinner />
   }@else if(!team().length) {
@@ -41,7 +41,7 @@
   </div>
   <!-- Build a table -->
   <div class="table-container">
-    <table class="users-table">
+    <table class="list-table">
       <thead>
         <tr>
           <th>Member</th>
@@ -75,10 +75,8 @@
           <td>
             <div class="status-column">
               @if (user.active === false) {
-              <div class="dot inactive"></div>
               <span class="status-badge inactive">Pending</span>
               } @else {
-              <div class="dot active"></div>
               <span class="status-badge active">Active</span>
               }
             </div>

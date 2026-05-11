@@ -134,8 +134,8 @@ label {
   }
 
   &.sm {
-    width: 1rem;
-    height: 1rem;
+    width: 1.4rem;
+    height: 1.4rem;
   }
 
   border-radius: 50%;
@@ -266,7 +266,7 @@ label {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 2rem;
   height: 70vh;
   text-align: center;
   color: var(--color-neutral);
@@ -299,6 +299,7 @@ label {
   border: none;
   padding: 0;
   cursor: pointer;
+
   &:hover {
     text-decoration: underline;
   }
@@ -308,6 +309,236 @@ label {
 .divider {
   margin: 1.5rem 0;
 }
+
+// Shared styles for list pages (team, users, transfer requests)
+.list-page {
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .list-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--color-light-grey);
+    border-radius: var(--radius-lg);
+
+    tbody {}
+
+    tbody td {
+      background: var(--color-primary-contrast);
+      border-top: 1px solid var(--color-light-grey);
+    }
+
+    th,
+    td {
+      padding: 0.75rem 1.25rem;
+      text-align: left;
+      font-size: 0.8rem;
+      color: var(--color-dark);
+    }
+
+    th {
+      padding: 0.6rem 1.25rem;
+      font-weight: 600;
+      background: var(--color-primary-contrast);
+      color: var(--color-neutral);
+    }
+
+    thead tr:first-child th:first-child {
+      border-radius: var(--radius-lg) 0 0 0;
+    }
+
+    thead tr:first-child th:last-child {
+      border-radius: 0 var(--radius-lg) 0 0;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-radius: 0 0 0 var(--radius-lg);
+    }
+
+    tbody tr:last-child td:last-child {
+      border-radius: 0 0 var(--radius-lg) 0;
+    }
+
+    tr {
+      &.inactive {
+        opacity: 0.75;
+
+        .user-avatar {
+          filter: grayscale(1);
+        }
+
+        .user-name {
+          color: var(--color-neutral);
+        }
+      }
+    }
+
+    .status-column {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .delete-btn {
+      color: var(--color-danger);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      transition: background-color 0.2s ease-in;
+
+      &:hover {
+        background-color: var(--color-danger-light);
+
+        img {
+          filter: invert(33%) sepia(100%) saturate(6487%) hue-rotate(15deg) brightness(68%) contrast(87%);
+        }
+      }
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        overflow: visible;
+      }
+    }
+
+    .action-btn {
+      border: 1px solid var(--color-light-grey);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      cursor: pointer;
+
+      mat-icon {
+        color: var(--color-icon);
+        font-weight: 700;
+      }
+
+      &.positive {
+        border: none;
+        background-color: var(--color-success);
+
+        mat-icon {
+          color: var(--color-primary-contrast);
+        }
+      }
+
+      &.negative {
+        border: none;
+        background-color: var(--color-danger);
+
+        mat-icon {
+          color: var(--color-primary-contrast);
+        }
+
+      }
+
+      &.neutral {
+        border: none;
+        background-color: var(--color-light-grey);
+
+        mat-icon {
+          color: var(--color-icon);
+        }
+      }
+    }
+  }
+}
+
+.status-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  &.active,
+  &.APPROVED {
+    color: var(--color-success);
+
+    &::before {
+      background-color: var(--color-success);
+    }
+  }
+
+  &.inactive,
+  &.PENDING {
+    color: var(--color-warning);
+
+    &::before {
+      background-color: var(--color-warning);
+    }
+  }
+
+  &.REJECTED {
+    color: var(--color-danger);
+
+    &::before {
+      background-color: var(--color-danger);
+    }
+  }
+
+  &::before {
+    content: '';
+    display: inline-block;
+
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 0.5rem;
+  }
+}
+
+// Filter Group 
+.filter-group {
+  display: flex;
+  gap: 0.5rem;
+
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary-contrast);
+  padding: 0.2rem;
+  border: 1px solid var(--color-light-grey);
+
+
+  button.tab-btn {
+    background: var(--color-primary-contrast) !important;
+    color: var(--color-dark) !important;
+    box-shadow: none;
+
+    &.active {
+      background: var(--color-primary) !important;
+      color: var(--color-primary-contrast) !important;
+    }
+
+    &:hover:not(.active) {
+      background: var(--menu-item-color-hover) !important;
+      color: var(--color-primary) !important;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 450px) {
+    gap: 0.2rem !important;
+
+    .tab-btn {
+      padding: 0.5rem .9rem;
+    }
+  }
+}
+
+.icon-color {
+  color: var(--color-icon);
+}
+
 
 // Style scrollbar for all browsers
 * {

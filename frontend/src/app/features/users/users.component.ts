@@ -13,6 +13,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
+import { TransferRequestsService } from '../transfer-requests/transfer-requests.service';
 
 @Component({
   selector: 'app-users',
@@ -29,6 +30,7 @@ export class UsersComponent implements OnInit {
   protected currentPage = signal(1);
   protected readonly limit = 10;
   users = this.usersService.users;
+  private transferRequestsService = inject(TransferRequestsService);
 
   private matchesSearch(name: string): boolean {
     const q = this.searchTerm().toLowerCase().trim();
@@ -63,6 +65,30 @@ export class UsersComponent implements OnInit {
       },
       error: (err) => {
         this.snackbar.open(err?.error?.message || 'Failed to delete user. Please try again.', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
+      },
+    });
+  }
+
+  // 
+  @Confirmable({
+    title: 'Request Transfer',
+    message: 'Are you sure you want to request that this member be transferred to be under your management ?',
+  })
+  requestTransfer(memberId: string): void {
+    this.transferRequestsService.addTransferRequest(memberId).subscribe({
+      next: () => {
+        this.snackbar.open('Transfer request sent successfully!', '', 
+          { 
+            duration: 3000 , 
+            panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
+          });
+      },
+      error: (err) => {
+        this.snackbar.open(err?.error?.message || 'Failed to send transfer request. Please try again.', '', 
           { 
             duration: 3000 , 
             panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'

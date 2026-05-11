@@ -120,6 +120,13 @@ html {
       track-height: 0.7rem,
       active-indicator-height: 0.7rem,
     ));
+
+  // Tootltip overrides
+  .mat-mdc-tooltip {
+    background-color: var(--color-dark) !important;
+    color: var(--color-primary-contrast) !important;
+    border-radius: var(--radius-md) !important;
+  }
 }
 
 .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {

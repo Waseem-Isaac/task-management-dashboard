@@ -1,1 +1,115 @@
-<p>Not implemented yet!</p>
+<div class="list-page">
+  @if (transferRequestsService.isLoading()) {
+  <app-loading-spinner />
+  } @else if(!transferRequestsService.transferRequests().length) {
+  <div class="empty-state">
+    <mat-icon class="empty-state-icon">group</mat-icon>
+    <h2 class="empty-title">No Transfer Requests Yet</h2>
+    @if(authService.currentUser()?.role === 'TEAM_LEAD') {
+    <p class="empty-description">Need to ask for team members to get started?</p>
+    <button class="btn btn-primary" (click)="openAddTransferRequest()">Request a Transfer</button>
+    }
+  </div>
+  }@else {
+  <div class="page-header d-flex align-items-center justify-content-between mb-5">
+    <div class="filter-group">
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === null" (click)="setFilter(null)">
+        All
+      </button>
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === 'INCOMING'"
+        (click)="setFilter('INCOMING')">
+        Incoming
+      </button>
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === 'OUTGOING'"
+        (click)="setFilter('OUTGOING')">
+        Outgoing
+      </button>
+      <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === 'RESOLVED'"
+        (click)="setFilter('RESOLVED')">
+        Resolved
+      </button>
+    </div>
+    @if(authService.currentUser()?.role === 'TEAM_LEAD') {
+    <button class="btn btn-primary" (click)="openAddTransferRequest()">
+      <span class="d-flex align-items-center justify-content-center gap-1">
+        <mat-icon class="d-flex align-items-center justify-content-center mx-2">person_add</mat-icon>
+        Request Transfer
+      </span>
+    </button>
+    }
+  </div>
+
+  <!-- Build a table -->
+  <div class="table-container">
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Transfer</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (request of transferRequestsService.transferRequests(); track request._id) {
+        <tr>
+          <td class="d-flex align-items-center gap-3">
+            <div class="user-avatar lg"><img [src]="request?.member?.avatarUrl" alt=""></div>
+            <div class="user-info">
+              <div class="user-name d-flex align-items-center">
+                {{ request?.member?.name }}
+                @if (request._id === authService.currentUser()?._id) {
+                <span class="me-badge d-flex align-items-center justify-content-center"></span>
+                }
+              </div>
+              <span class="user-email">{{ request?.member?.email }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="transfer-lead-badge">
+                <div class="user-avatar sm"><img [src]="request?.fromLead?.avatarUrl" alt=""></div>
+                  {{ transferRequestsService.isItMe(request.fromLead._id) ? 'You' : request?.fromLead?.name }}
+              </div>
+              <mat-icon class="icon-color ">arrow_forward</mat-icon>
+              <div class="transfer-lead-badge">
+                <div class="user-avatar sm"><img [src]="request?.toLead?.avatarUrl" alt=""></div>
+                 {{ transferRequestsService.isItMe(request.toLead._id) ? 'You' : request?.toLead?.name }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="status-column">
+              <span class="status-badge {{request.status}}">{{ TRANSFER_REQUEST_STATUS_LABELS[request.status] }}</span>
+            </div>
+
+          </td>
+          <td>
+            
+            <div class="actions d-flex align-items-center gap-3">
+              @if(request.status === 'PENDING' && transferRequestsService.isItMe(request.fromLead._id)) {
+              <button class="action-btn positive" mat-icon-button (click)="approveRequest(request._id)">
+                  <mat-icon class="icon-size-1">check</mat-icon>
+              </button>
+              <button class="action-btn negative" mat-icon-button (click)="rejectRequest(request._id)">
+                  <mat-icon class="icon-size-1">close</mat-icon>
+              </button>
+              }@else if(request.status === 'PENDING' && transferRequestsService.isItMe(request.toLead._id)) {
+              <button class="action-btn negative" mat-icon-button (click)="cancelRequest(request._id)" [matTooltip]="'Cancel'">
+                  <mat-icon class="icon-size-1">close</mat-icon>
+              </button>
+              }
+            </div>
+
+          </td>
+
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if(transferRequestsService.meta() && transferRequestsService.meta()!.totalPages > 1) {
+  <app-pagination [meta]="transferRequestsService.meta()" (pageChange)="onPageChange($event)" />
+  }
+  }
+</div>

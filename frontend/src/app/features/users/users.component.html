@@ -1,4 +1,4 @@
-<div class="users-page">
+<div class="list-page">
   @if (usersService.isLoading()) {
   <app-loading-spinner />
   } @else {
@@ -30,13 +30,14 @@
   </div>
   <!-- Build a table -->
   <div class="table-container">
-    <table class="users-table">
+    <table class="list-table">
       <thead>
         <tr>
           <th>Member</th>
           <th>Role</th>
           <th>Status</th>
           <th>Managed By</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -64,28 +65,44 @@
           <td>
             <div class="status-column">
               @if (user.active === false) {
-              <div class="dot inactive"></div>
+              <!-- <div class="dot inactive"></div> -->
               <span class="status-badge inactive">Pending</span>
               } @else {
-              <div class="dot active"></div>
+              <!-- <div class="dot active"></div> -->
               <span class="status-badge active">Active</span>
               }
             </div>
 
           </td>
-          <td class="align-items-center gap-3" [class.d-flex]="user?.role === 'MEMBER' && user?.managedBy">
+          <td >
             @if(user?.role === 'MEMBER'){
-            <div class="user-avatar lg"><img [src]="user?.managedBy?.avatarUrl" alt=""></div>
-            <div class="user-info">
-              <div class="user-name d-flex align-items-center">
-                {{ user.managedBy?.name }}
+              <div class="d-flex align-items-center gap-3">
+              <div class="user-avatar md"><img [src]="user?.managedBy?.avatarUrl" alt=""></div>
+              <div class="user-info md">
+                <div class="user-name d-flex align-items-center">
+                  {{ user.managedBy?.name }}
+                </div>
+                <span class="user-email">{{ user.managedBy?.email }}</span>
               </div>
-              <span class="user-email">{{ user.managedBy?.email }}</span>
             </div>
             } @else {
             <div>-</div>
             }
           </td>
+
+          <!-- Actions -->
+           <td>
+              @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
+                <!-- Ask for team member to be transferred to my management -->
+                @if(user.role === 'MEMBER' && user.managedBy?._id !== authService.currentUser()?._id)
+                  {
+                    <button class="action-btn neutral" mat-icon-button (click)="requestTransfer(user._id!)">
+                      <!-- <img class="icon-size-1" src="icons/transfer-request.svg" alt=""> -->
+                      <mat-icon class="icon-size-1">person_add</mat-icon>
+                    </button>
+                  }
+              }
+           </td>
 
         </tr>
         }
