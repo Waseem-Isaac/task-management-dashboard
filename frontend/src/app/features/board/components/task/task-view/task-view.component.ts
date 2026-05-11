@@ -10,7 +10,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TasksService } from '../../../tasks.service';
 import { LoadingSpinner } from '../../../../../shared/components/loading-spinner/loading-spinner';
 import { FormsModule } from '@angular/forms';
-import { AuthUser } from '../../../../../core/services/auth.service';
 import { UsersService } from '../../../../users/users.service';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { QuillModule } from 'ngx-quill';
@@ -20,6 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { toLocalDateString } from '../../../../../shared/utils/date.utils';
 import { TASK_PRIORITY_LABELS, TASK_STATUS_LABELS } from '../../../constants/task.constants';
+import { User } from '../../../../../shared/models/user.model';
 
 @Component({
   selector: 'app-task-view',
@@ -49,7 +49,7 @@ export class TaskViewComponent implements OnInit {
   private taskService = inject(TasksService);
   usersService = inject(UsersService);
   private dialogRef = inject(MatDialogRef<TaskViewComponent>);
-  data = inject<{ taskId: string, users: AuthUser[] }>(MAT_DIALOG_DATA);
+  data = inject<{ taskId: string, users: User[] }>(MAT_DIALOG_DATA);
   private snackbar = inject(MatSnackBar);
   task = signal<Task | undefined>(undefined);
   isLoading = signal(true);
@@ -163,7 +163,7 @@ export class TaskViewComponent implements OnInit {
     return this.usersService.loadUsers(true);
   }
 
-  updateAssignee(task: Task, newAssignee: AuthUser): void {
+  updateAssignee(task: Task, newAssignee: User): void {
     this.patchTask(task, { assignee: newAssignee._id }, 'Assignee updated successfully', 'Failed to update assignee');
   }
 

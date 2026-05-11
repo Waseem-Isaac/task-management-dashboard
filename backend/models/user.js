@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   password:               { type: String, select: false },
   active:                 { type: Boolean, default: false },
   invitationToken:        { type: String, select: false },   // stored as SHA-256 hash
-  role:                   { type: String, enum: ['TEAM_LEAD', 'MEMBER'], required: true }
+  role:                   { type: String, enum: ['TEAM_LEAD', 'MEMBER'], required: true },
+  managedBy:              { type: mongoose.Schema.Types.ObjectId, ref: 'User', select: '_id name email avatarUrl'}, // for MEMBER role
 }, { 
   timestamps: true,
   toJSON:   { virtuals: true },  // avatar auto-included in res.json()

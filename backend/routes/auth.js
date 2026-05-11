@@ -44,7 +44,7 @@ router.post('/register', async (req, res, next) => {
     await Board.create({ name: 'My First Board', createdBy: user._id });
 
     const token = jwt.sign(
-      { _id: user._id, email: user.email, role: user.role },
+      { _id: user._id, email: user.email, role: user.role},
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
@@ -75,9 +75,7 @@ router.post('/login', async (req, res, next) => {
       return res.status(400).json({ message: 'email and password are required' });
     }
 
-    console.log('Attempting login for email:', email);
-    const user = await User.findOne({ email }).select('+password');
-        console.log('Comparing password for user:', user);
+    const user = await User.findOne({ email }).select('+password').populate('managedBy', '_id name email avatarUrl');
 
     if (!user || !user.active) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -89,11 +87,12 @@ router.post('/login', async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { _id: user._id, email: user.email, role: user.role },
+      { _id: user._id, email: user.email, role: user.role, managedBy: user.managedBy?._id },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
 
+    // return user.managedBy in case it exist in that user model.
     res.json({
       token,
       user: {
@@ -102,7 +101,13 @@ router.post('/login', async (req, res, next) => {
         email: user.email,
         active: user.active,
         role: user.role,
-        avatarUrl: user.avatarUrl
+        avatarUrl: user.avatarUrl,
+        managedBy: user.managedBy && {
+          _id: user.managedBy._id,
+          name: user.managedBy.name,
+          email: user.managedBy.email,
+          avatarUrl: user.managedBy.avatarUrl,
+        } 
       },
     });
   } catch (err) {

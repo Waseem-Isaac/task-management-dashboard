@@ -17,7 +17,48 @@ router.get('/', async (req, res, next) => {
     const skip  = (page - 1) * limit;
 
     const [users, totalCount] = await Promise.all([
-      User.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }),
+      User.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }).populate('managedBy', '_id name email avatarUrl'),
+      User.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      users,
+      meta: {
+        totalCount,
+        totalPages,
+        page,
+        limit,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Get current user team members
+router.get('/me/team', async (req, res, next) => {
+   try {
+    // users who are either:
+    // 2. managed by the current user
+    // 3. managed by the same person who manages the current user (siblings)
+
+      const filter = req.user.role === 'TEAM_LEAD'
+        ? { $or: [{ _id: req.user._id } ,{ managedBy: req.user._id }] }
+        : { $or: [{ managedBy: req.user.managedBy }, { _id: req.user.managedBy }] };
+
+      
+    if (req.query.active === 'true') filter.active = true;
+
+    const page  = Math.max(1, parseInt(req.query.page,  10) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
+    const skip  = (page - 1) * limit;
+
+    const [users, totalCount] = await Promise.all([
+      User.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }).populate('managedBy', '_id name email avatarUrl'),
       User.countDocuments(filter),
     ]);
 
@@ -59,7 +100,8 @@ router.post('/', async (req, res, next) => {
       name,
       email: normalizedEmail,
       invitationToken: hashedToken,
-      role: 'MEMBER' // for invited users
+      role: 'MEMBER', // for invited users
+      managedBy: req.user._id  // ← automatically set to the inviting lead
     });
 
     // Send invitation email with the plain token
@@ -80,7 +122,7 @@ router.post('/', async (req, res, next) => {
 // GET a specific user by ID
 router.get('/:id', async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate('managedBy', '_id name email avatarUrl');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }

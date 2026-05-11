@@ -4,21 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { PaginationMeta } from '../../shared/components/pagination/pagination.component';
-
-export interface User {
-  _id: string;
-  name: string;
-  email: string;
-  active?: boolean;
-  role: 'TEAM_LEAD' | 'MEMBER';
-  avatarUrl?: string;
-}
-
-export interface UserFormData {
-  name: string;
-  email: string;
-  password: string;
-}
+import { User, UserFormData } from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root',

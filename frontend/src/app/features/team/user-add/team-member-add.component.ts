@@ -4,9 +4,9 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { UsersService } from '../users.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { TeamService } from '../team.service';
 import { UserFormData } from '../../../shared/models/user.model';
 
 @Component({
@@ -21,12 +21,12 @@ import { UserFormData } from '../../../shared/models/user.model';
     MatSnackBarModule,
     MatIconModule
   ],
-  templateUrl: './user-add.component.html',
-  styleUrls: ['./user-add.component.scss'],
+  templateUrl: './team-member-add.component.html',
+  styleUrls: ['./team-member-add.component.scss'],
 })
-export class UserAddComponent {
-  private usersService = inject(UsersService);
-  private dialogRef = inject(MatDialogRef<UserAddComponent>);
+export class TeamMemberAddComponent {
+  private teamService = inject(TeamService);
+  private dialogRef = inject(MatDialogRef<TeamMemberAddComponent>);
   private fb = inject(FormBuilder);
   private snackbar = inject(MatSnackBar);
   isSubmitting = signal(false);
@@ -53,18 +53,18 @@ export class UserAddComponent {
 
     this.isSubmitting.set(true);
 
-    this.usersService.addUser(this.form.value as UserFormData).subscribe({
+    this.teamService.addTeamMember(this.form.value as UserFormData).subscribe({
       next: () => {
         this.dialogRef.close(true);
-        this.snackbar.open('User created successfully!', '', 
+        this.snackbar.open('Team member created successfully!', '', 
           { 
             duration: 3000 , 
             panelClass: ['snackbar-success'] , horizontalPosition: 'center', verticalPosition: 'top'
           });
       },
       error: (err) => {
-        console.error('Error creating user:', err);
-        this.snackbar.open(err?.error?.message || 'Failed to create user. Please try again.', '', 
+        console.error('Error creating team member:', err);
+        this.snackbar.open(err?.error?.message || 'Failed to create team member. Please try again.', '', 
           { 
             duration: 3000 , 
             panelClass: ['snackbar-error'] , horizontalPosition: 'center', verticalPosition: 'top'

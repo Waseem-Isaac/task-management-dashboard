@@ -9,11 +9,7 @@
     <!-- <h2 class="user-name">{{ authService.currentUser()?.name }}</h2> -->
 <div class="user-name">
       <mat-form-field subscriptSizing="dynamic" appearance="outline" class="profile-name-field editable-text" >
-        <input matInput [value]="authService.currentUser()?.name" (blur)="updateMyName($event.target.value); nameEditable = false" [disabled]="!nameEditable" />
-            <!-- <mat-icon matPrefix class="edit-icon">edit</mat-icon> -->
-             
-
-              
+        <input matInput [value]="authService.currentUser()?.name" (blur)="updateMyName($event.target.value); nameEditable = false" [disabled]="!nameEditable" />             
       </mat-form-field>
       
       <button (click)="nameEditable = !nameEditable" class="edit-btn btn-primary-icon">
@@ -45,6 +41,11 @@
       <div class="info-row">
         <mat-icon>shield_outline</mat-icon>
         <span>{{ authService.currentUser()?.role === 'TEAM_LEAD' ? 'Team Lead' : 'Team Member' }}</span>
+      </div>
+      <!-- Managed By -->
+      <div class="info-row">
+        <mat-icon>supervisor_account</mat-icon>
+        <span> <strong>Reports to: </strong> {{ authService.currentUser()?.managedBy?.name || '-' }}</span>
       </div>
       <!-- Status -->
       <div class="info-row">

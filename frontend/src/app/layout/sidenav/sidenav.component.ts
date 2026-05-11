@@ -26,7 +26,8 @@ export class SidenavComponent {
 
   navItems = [
     { label: 'Board', route: '/board', matIcon: 'dashboard' },
-    { label: 'Team', route: '/users', matIcon: 'supervisor_account' },
+    { label: 'Team', route: '/team', matIcon: 'group' },
+    { label: 'Users', route: '/users', matIcon: 'person' },
     { label: 'Analytics', route: '/analytics', matIcon: 'show_chart' },
 
   ];

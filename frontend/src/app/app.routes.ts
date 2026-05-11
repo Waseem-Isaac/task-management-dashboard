@@ -28,6 +28,18 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'team',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/team/team.component').then((m) => m.TeamComponent),
+        data: { title: 'Team' },
+      },
+    ],
+  },
+  {
     path: 'users',
     canActivate: [authGuard],
     loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
@@ -35,7 +47,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./features/users/users.component').then((m) => m.UsersComponent),
-        data: { title: 'Team' },
+        data: { title: 'Users' },
       },
     ],
   },

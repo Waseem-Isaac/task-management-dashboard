@@ -42,7 +42,16 @@ body {
   }
 
   box-shadow: 0 4px 18px rgba(227, 120, 62, 0.38);
-  //     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+
+  &.danger {
+    background-color: var(--color-danger) !important;
+    color: var(--color-primary-contrast) !important;
+    box-shadow: 0 4px 18px rgba(227, 120, 62, 0.38);
+
+    &:enabled:hover {
+      background-color: var(--color-danger) !important;
+    }
+  }
 }
 
 .btn-secondary {
@@ -257,7 +266,7 @@ label {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 1rem;
   height: 70vh;
   text-align: center;
   color: var(--color-neutral);

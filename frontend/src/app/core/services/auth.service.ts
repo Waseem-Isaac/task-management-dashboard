@@ -3,19 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { BoardService } from '../../features/board/board.service';
+import { User } from '../../shared/models/user.model';
 
-export interface AuthUser {
-  _id: string;
-  name: string;
-  email: string;
-  avatarUrl?: string;
-  role?: 'TEAM_LEAD' | 'MEMBER';
-  active?: boolean;
-}
 
 interface AuthResponse {
   token: string;
-  user: AuthUser;
+  user: User;
 }
 
 export interface LoginRequest {
@@ -42,7 +35,7 @@ export class AuthService {
   private router = inject(Router);
   private boardService = inject(BoardService);
 
-  private _currentUser = signal<AuthUser | null>(this._loadUser());
+  private _currentUser = signal<User | null>(this._loadUser());
   readonly currentUser = this._currentUser.asReadonly();
 
   get isAuthenticated(): boolean {
@@ -87,18 +80,18 @@ export class AuthService {
     this._currentUser.set(res.user);
   }
 
-  private _loadUser(): AuthUser | null {
+  private _loadUser(): User | null {
     try {
       const raw = localStorage.getItem('auth_user');
-      return raw ? (JSON.parse(raw) as AuthUser) : null;
+      return raw ? (JSON.parse(raw) as User) : null;
     } catch {
       return null;
     }
   }
 
   // Update me
-  updateProfile(data: Partial<AuthUser>): Observable<AuthUser> {
-    return this.http.put<AuthUser>('users/me', data).pipe(
+  updateProfile(data: Partial<User>): Observable<User> {
+    return this.http.put<User>('users/me', data).pipe(
       tap((updated) => {
         const current = this.currentUser();
         if (current) {
