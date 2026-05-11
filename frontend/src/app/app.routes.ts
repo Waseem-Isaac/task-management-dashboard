@@ -51,6 +51,19 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'transfer-requests',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/transfer-requests/transfer-requests.component').then((m) => m.TransferRequestsComponent),
+        data: { title: 'Transfer Requests' },
+      },
+    ],
+  },
 
   // Profile route with auth guard and lazy loading
   {
