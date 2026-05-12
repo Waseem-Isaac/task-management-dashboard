@@ -1,0 +1,11 @@
+<span #FieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="statusMenu"></span>
+
+<button (click)="FieldMenuTrigger.openMenu()" class="z-index-9999 btn-primary-icon icon-color" [matTooltip]="tooltip()">
+   <mat-icon class="icon-size-1">{{ matIcon()  || 'more_vert'}}</mat-icon>
+</button>
+
+<mat-menu #statusMenu="matMenu">
+  @for(s of options(); track s) {
+   <button mat-menu-item (click)="onSelectOption(s)" [class.selected]="(s[bindValue()] === selectedOption()?.[bindValue()])">{{ s[bindLabel()]  }} </button>
+  }
+</mat-menu>

@@ -1,0 +1,6 @@
+button.selected {
+  background-color: #fef1e8;
+  --mat-menu-item-hover-state-layer-color: var(--color-primary-active);
+  --mat-menu-item-active-state-layer-color: var(--color-primary-active);
+  --mat-menu-item-focus-state-layer-color: var(--color-primary-active);
+}

@@ -55,10 +55,16 @@ html {
   }
 
   .editable-text {
-    &.mat-form-field-disabled .mat-mdc-notch-piece {
+    &.mat-form-field-disabled {
+      .mat-mdc-text-field-wrapper {
+        padding: 0;
+      }
+      .mat-mdc-notch-piece {
       background-color: transparent !important;
       border: none !important;
     }
+  }
+    
 
     .mat-mdc-form-field-infix {
       width: auto !important;

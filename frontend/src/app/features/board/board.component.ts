@@ -2,7 +2,7 @@
  * Board shell — renders the board header and delegates task management to BoardTasksComponent.
  * SMART component (manages board-level state: active board selection)
  */
-import { ChangeDetectionStrategy, Component, effect, inject, OnInit, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BoardTasksComponent } from './components/board-tasks/board-tasks.component';
@@ -10,7 +10,7 @@ import { BoardService } from './board.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { BoardAddComponent } from './components/board-add/board-add.component';
 import { AuthService } from '../../core/services/auth.service';
@@ -19,6 +19,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoadingSpinner } from "../../shared/components/loading-spinner/loading-spinner";
 import { FormsModule } from "@angular/forms";
 import { AutoWidthDirective } from '../../shared/directives/auto-width.directive';
+import { IconSelectField } from "../../shared/icon-select-field/icon-select-field";
+import { Board } from './models';
+import { MatDivider } from "@angular/material/divider";
 
 @Component({
   selector: 'app-board',
@@ -33,8 +36,11 @@ import { AutoWidthDirective } from '../../shared/directives/auto-width.directive
     MatSnackBarModule,
     LoadingSpinner,
     FormsModule,
-    AutoWidthDirective
-  ],
+    AutoWidthDirective,
+    IconSelectField,
+    MatTooltip,
+    MatDivider
+],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,7 +55,7 @@ export class BoardComponent implements OnInit {
   isLoading = this.boardsService.isLoading;
   boardNameFieldEnabled = false;
   nameInput = viewChild(AutoWidthDirective);
-
+  boardNameInput = viewChild<ElementRef<HTMLInputElement>>('boardNameInput');
   constructor() {
     effect(() => this.nameInput()?.adjust(this.activeBoard()?.name));
   }
@@ -58,9 +64,18 @@ export class BoardComponent implements OnInit {
     this.boardsService.loadBoards().subscribe();
   }
 
-  onBoardChange(boardId: string): void {
-    const board = this.boards().find((b) => b._id === boardId);
+  onBoardChange(board: Board): void {
+    console.log('Selected board ID:', board);
+    // if the selected board is already active, do nothing. This prevents unnecessary reloads when clicking the already active board.
+    if (this.activeBoard()?._id === board._id) return;
+
     if (board) this.boardsService.setActiveBoard(board);
+  }
+
+  enableEditBoardName(): void {
+    this.boardNameFieldEnabled = !this.boardNameFieldEnabled; 
+
+    if (this.boardNameFieldEnabled) { setTimeout(() => this.boardNameInput()?.nativeElement.focus()); }
   }
 
   openAddBoardDialog(): void {
@@ -99,6 +114,4 @@ export class BoardComponent implements OnInit {
       },
     });
   }
-
-
 }

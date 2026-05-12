@@ -15,6 +15,11 @@
           font-size: 1.1rem;
           font-weight: 700;
           color: var(--color-dark) !important;
+
+          .mat-mdc-notch-piece {
+            background-color: transparent !important;
+            border: none !important;
+          }
         }
 
         .edit-icon {
@@ -61,25 +66,24 @@
         }
       }
 
-      @media screen and (max-width: 700px) {
-        flex-direction: column;
+      @media screen and (max-width: 500px) {
+        // flex-direction: column;
         gap: 0.5rem;
-        align-items: flex-start;
-        padding: 0 1rem;
-
+        // align-items: flex-start;
+        // padding: 0 1rem;
+        flex-wrap: wrap;
 
         .board-title {
           width: 100%;
 
           .board-name-field {
             width: 100%;
-
-
           }
         }
 
         .board-actions {
           width: 100%;
+          justify-content: flex-end;
 
           .filter-select {
             width: 100%;
