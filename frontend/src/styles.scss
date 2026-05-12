@@ -487,6 +487,13 @@ label {
     }
   }
 
+  &.status-todo {
+
+    &::before {
+     display: none;
+    }
+  }
+
   &::before {
     content: '';
     display: inline-block;

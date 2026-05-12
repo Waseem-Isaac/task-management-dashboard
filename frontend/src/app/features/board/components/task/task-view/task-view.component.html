@@ -1,3 +1,6 @@
+@if (isLoading()) {
+<app-loading-spinner />
+} @else if (task(); as t) {
 <div mat-dialog-title class="dialog-title">
   <span>{{ task()?.referenceId || 'Task Details' }}</span>
   <button mat-icon-button (click)="close()">
@@ -6,9 +9,8 @@
 </div>
 
 <mat-dialog-content>
-  @if (isLoading()) {
-  <app-loading-spinner />
-  } @else if (task(); as t) {
+
+
   <div class="task-view" [ngClass]="{ overdue: isOverdue(t) }">
 
     <!-- Header row: priority + status -->
@@ -61,8 +63,7 @@
       <mat-form-field [class.p-0]="!isEditingTitle()" appearance="outline" class="task-title editable-text full-width"
         subscriptSizing="dynamic">
         <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" #titleFieldInput [value]="t.title"
-          (blur)="commitTitle(t, titleFieldInput)"
-          (keydown.enter)="$event.preventDefault(); titleFieldInput.blur()"
+          (blur)="commitTitle(t, titleFieldInput)" (keydown.enter)="$event.preventDefault(); titleFieldInput.blur()"
           [disabled]="!isEditingTitle()" class="task-title-input"></textarea>
       </mat-form-field>
 
@@ -75,20 +76,14 @@
     <div class="field d-flex align-items-center gap-3 mb-4">
       <!-- <p class="task-description" [innerHTML]="t.description"></p> -->
 
-      <quill-editor
-        class="editable-text full-width task-description-input"
-        [class.disabled]="!isEditingDescription()"
-        [ngModel]="t?.description"
-        
-        #editor
-        (onBlur)="commitDescription(t, editor.quillEditor.root.innerHTML)"        
-        
-        [readOnly]="!isEditingDescription()"
-        >
+      <quill-editor class="editable-text full-width task-description-input" [class.disabled]="!isEditingDescription()"
+        [ngModel]="t?.description" #editor (onBlur)="commitDescription(t, editor.quillEditor.root.innerHTML)"
+        [readOnly]="!isEditingDescription()">
       </quill-editor>
 
 
-      <button (click)="isEditingDescription.set(!isEditingDescription())" class="z-index-9999 edit-btn btn-primary-icon">
+      <button (click)="isEditingDescription.set(!isEditingDescription())"
+        class="z-index-9999 edit-btn btn-primary-icon">
         <img class="icon-size-1" src="icons/edit.svg" alt="Edit">
       </button>
     </div>
@@ -111,9 +106,8 @@
           </span>
 
           <!-- Hidden anchor input — calendar opens from here, value display is above -->
-          <input [matDatepicker]="dueDatePicker" [min]="today"
-                 (dateChange)="updateDueDate(t, $event.value)"
-                 style="width:0;height:0;opacity:0;position:absolute;pointer-events:none;" />
+          <input [matDatepicker]="dueDatePicker" [min]="today" (dateChange)="updateDueDate(t, $event.value)"
+            style="width:0;height:0;opacity:0;position:absolute;pointer-events:none;" />
           <mat-datepicker #dueDatePicker />
 
           <button (click)="dueDatePicker.open()" class="z-index-9999 edit-btn btn-primary-icon">
@@ -146,7 +140,8 @@
             <span>{{ t.assignee?.name || 'Unassigned' }}</span>
           </span>
 
-          <button (click)="loadAssignees(); assigneeFieldMenuTrigger.openMenu(); " class="z-index-9999 edit-btn btn-primary-icon">
+          <button (click)="loadAssignees(); assigneeFieldMenuTrigger.openMenu(); "
+            class="z-index-9999 edit-btn btn-primary-icon">
             <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
           </button>
 
@@ -193,5 +188,6 @@
     }
 
   </div>
-  }
+
 </mat-dialog-content>
+}
