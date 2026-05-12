@@ -35,7 +35,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./features/team/team.component').then((m) => m.TeamComponent),
-        data: { title: 'Team' },
+        data: { title: 'My Team' },
       },
     ],
   },
@@ -47,7 +47,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./features/users/users.component').then((m) => m.UsersComponent),
-        data: { title: 'Users' },
+        data: { title: 'People' },
       },
     ],
   },

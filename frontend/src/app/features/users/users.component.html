@@ -2,30 +2,35 @@
   @if (usersService.isLoading()) {
   <app-loading-spinner />
   } @else {
-  <div class="page-header d-flex align-items-center justify-content-between mb-5">
-    <div class="search-bar">
-      <mat-icon>search</mat-icon>
-      <input type="text" placeholder="Search members…" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}" />
-      @if (searchTerm()) {
-      <button mat-icon-button class="clear-btn" (click)="searchTerm.set('')">
-        <mat-icon>close</mat-icon>
-      </button>
-      }
+  <div class="page-header  mb-5">
+     <div>
+       <div class="title">
+        Need to find someone across the system ?
+      </div>
+      <div class="description">
+        Browse all members across the system — find someone and request a transfer to your team.
+      </div>
     </div>
-    @if(authService.currentUser()?.role === 'TEAM_LEAD') {
-    <button class="btn btn-primary" (click)="openAddUserDialog()">
-      <span class="d-flex align-items-center justify-content-center gap-1">
-        <mat-icon class="d-flex align-items-center justify-content-center mx-2">person_add</mat-icon>
-        Add User
-      </span>
-    </button>
-    }
+    
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search members…" [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)" [ngModelOptions]="{standalone: true}" />
+        @if (searchTerm()) {
+        <button mat-icon-button class="clear-btn" (click)="searchTerm.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </div>
+    </div>
+
   </div>
+
   <div class="inactive-hint">
     <mat-icon>info</mat-icon>
     <span>
-      Inactive members are those who have been invited but haven't accepted the invitation yet. They will have limited
-      access until they accept the invite.
+      Inactive members have been invited but haven't accepted yet — they'll have limited access until they do.
     </span>
   </div>
   <!-- Build a table -->
@@ -41,7 +46,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (user of usersService.users(); track user._id) {
+        @for (user of filteredUsers(); track user._id) {
         <tr [class.inactive]="user.active === false">
           <td class="d-flex align-items-center gap-3">
             <div class="user-avatar lg"><img [src]="user?.avatarUrl" alt=""></div>
@@ -74,12 +79,12 @@
             </div>
 
           </td>
-          <td >
+          <td>
             @if(user?.transferStatus === 'PENDING_TRANSFER'){
-               <span class="status-badge inactive">Pending Transfer</span>
+            <span class="status-badge inactive">Pending Transfer</span>
             }
             @else if(user?.role === 'MEMBER' && user?.managedBy && user.transferStatus !== 'PENDING_TRANSFER') {
-              <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3">
               <div class="user-avatar md"><img [src]="user?.managedBy?.avatarUrl" alt=""></div>
               <div class="user-info md">
                 <div class="user-name d-flex align-items-center">
@@ -94,18 +99,20 @@
           </td>
 
           <!-- Actions -->
-           <td>
-              @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
-                <!-- Ask for team member to be transferred to my management -->
-                @if(user.role === 'MEMBER' && user.managedBy?._id !== authService.currentUser()?._id && user.transferStatus !== 'PENDING_TRANSFER')
-                  {
-                    <button class="action-btn neutral" mat-icon-button (click)="requestTransfer(user)" [matTooltip]="'Request Transfer'">
-                      <!-- <img class="icon-size-1" src="icons/transfer-request.svg" alt=""> -->
-                      <mat-icon class="icon-size-1">person_add</mat-icon>
-                    </button>
-                  }
-              }
-           </td>
+          <td>
+            @if(user._id !== authService.currentUser()?._id && authService.currentUser()?.role === 'TEAM_LEAD'){
+            <!-- Ask for team member to be transferred to my management -->
+            @if(user.role === 'MEMBER' && user.managedBy?._id !== authService.currentUser()?._id && user.transferStatus
+            !== 'PENDING_TRANSFER')
+            {
+            <button class="action-btn neutral" mat-icon-button (click)="requestTransfer(user)"
+              [matTooltip]="'Request Transfer'">
+              <!-- <img class="icon-size-1" src="icons/transfer-request.svg" alt=""> -->
+              <mat-icon class="icon-size-1">person_add</mat-icon>
+            </button>
+            }
+            }
+          </td>
 
         </tr>
         }

@@ -39,6 +39,10 @@ export class UsersComponent implements OnInit {
     return !q || name.toLowerCase().includes(q);
   }
 
+  protected filteredUsers = computed(() =>
+    this.usersService.users().filter(u => this.matchesSearch(u.name))
+  );
+
   ngOnInit(): void {
     this.usersService.loadUsers(false, 1, this.limit);
   }

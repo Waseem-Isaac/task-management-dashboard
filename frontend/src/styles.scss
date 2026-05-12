@@ -543,6 +543,18 @@ label {
   color: var(--color-icon);
 }
 
+.title {
+  font-weight: bold;
+  margin: 0rem 0 0.5rem;
+  font-size: 1.2rem;
+  color: var(--color-dark);
+}
+
+.description {
+  font-size: 0.8rem;
+  color: var(--color-neutral);
+  margin: 0rem 0rem 1.5rem;
+}
 
 // Style scrollbar for all browsers
 * {

@@ -24,15 +24,6 @@ export class SidenavComponent {
   authService = inject(AuthService);
   router = inject(Router);
 
-  navItems = [
-    { label: 'Board', route: '/board', matIcon: 'dashboard' },
-    { label: 'Users', route: '/users', matIcon: 'person' },
-    { label: 'Team', route: '/team', matIcon: 'group' },
-    { label: 'Transfer Requests', route: '/transfer-requests', matIcon: 'swap_horiz' },
-    { label: 'Analytics', route: '/analytics', matIcon: 'show_chart' },
-
-  ];
-
   openAddBoardDialog(): void {
     const dialogRef = this.dialog.open(BoardAddComponent, { panelClass: ['app-dialog', 'sm'], disableClose: true });
 

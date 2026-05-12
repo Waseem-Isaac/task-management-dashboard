@@ -6,14 +6,33 @@
     <!-- <span class="logo-name">Boardly</span> -->
   </a>
   <div class="nav-items">
-    @for (item of navItems; track item.route) {
-    <a class="nav-item" mat-list-item [routerLink]="item.route" routerLinkActive="active-nav-item"
+    <a class="nav-item" mat-list-item routerLink="/board" routerLinkActive="active-nav-item"
       [routerLinkActiveOptions]="{ exact: true }" (click)="layout.isMobile() && layout.close()">
-      <!-- <img [src]="item.iconPath" alt="{{ item.label }} icon" class="nav-icon"> -->
-      <mat-icon class="nav-icon">{{ item.matIcon }}</mat-icon>
-      {{ item.label }}
+      <mat-icon class="nav-icon">dashboard</mat-icon>
+      Board
     </a>
-    }
+    <mat-divider class="mt-2 mb-2"></mat-divider>
+    <a class="nav-item" mat-list-item routerLink="/team" routerLinkActive="active-nav-item"
+      [routerLinkActiveOptions]="{ exact: true }" (click)="layout.isMobile() && layout.close()">
+      <mat-icon class="nav-icon">group</mat-icon>
+      My Team
+    </a>
+    <a class="nav-item" mat-list-item routerLink="/users" routerLinkActive="active-nav-item"
+      [routerLinkActiveOptions]="{ exact: true }" (click)="layout.isMobile() && layout.close()">
+      <mat-icon class="nav-icon">person</mat-icon>
+      People
+    </a>
+    <a class="nav-item" mat-list-item routerLink="/transfer-requests" routerLinkActive="active-nav-item"
+      [routerLinkActiveOptions]="{ exact: true }" (click)="layout.isMobile() && layout.close()">
+      <mat-icon class="nav-icon">swap_horiz</mat-icon>
+      Transfer Requests
+    </a>
+    <mat-divider class="mt-2 mb-2"></mat-divider>
+    <a class="nav-item" mat-list-item routerLink="/analytics" routerLinkActive="active-nav-item"
+      [routerLinkActiveOptions]="{ exact: true }" (click)="layout.isMobile() && layout.close()">
+      <mat-icon class="nav-icon">show_chart</mat-icon>
+      Analytics
+    </a>
   </div>
 
 

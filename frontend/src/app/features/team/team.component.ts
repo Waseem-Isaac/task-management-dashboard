@@ -36,6 +36,10 @@ export class TeamComponent implements OnInit {
     return !q || name.toLowerCase().includes(q);
   }
 
+  protected filteredTeam = computed(() =>
+    this.team().filter(u => this.matchesSearch(u.name))
+  );
+
   ngOnInit(): void {
     this.teamService.loadTeamMembers(false, 1, this.limit);
   }

@@ -12,7 +12,18 @@
   </div>
   }@else {
   @if(authService.currentUser()?.role === 'TEAM_LEAD') {
-  <div class="page-header d-flex align-items-center justify-content-between mb-5">
+  <div class="page-header mb-5">
+
+    <div>
+       <div class="title">
+        Manage Your Transfer Requests
+      </div>
+      <div class="description">
+        Approve or reject incoming transfer requests, or cancel outgoing ones — keep track of all your transfer activities in one place.
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between ">
     <div class="filter-group">
       <button class="btn btn-primary tab-btn" [class.active]="activeStatus() === null" (click)="setFilter(null)">
         All
@@ -38,7 +49,8 @@
       </span>
     </button>
   </div>
-  }
+</div>
+}
 
 
   <!-- Build a table -->
