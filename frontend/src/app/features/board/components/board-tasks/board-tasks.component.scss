@@ -2,17 +2,9 @@
   display: block;
 
   .tasks-list-container {
-
-    // border: 1px solid var(--color-light-grey);
-    // border-radius: var(--radius-lg);
-    // background: radial-gradient(ellipse at center top, var(--color-primary-active-rgba) 0%, transparent 100%);
     border-radius: 12px;
-    // box-shadow: 0px 2px 4px 0px #00000014;
-    padding: 1rem;
-
     display: flex;
     flex-direction: column;
-
     .task-list-header {
       display: flex;
       justify-content: space-between;
