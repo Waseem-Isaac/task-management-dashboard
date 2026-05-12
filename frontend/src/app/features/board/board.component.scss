@@ -4,7 +4,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
 
       .board-title {
         font-weight: 700;
@@ -12,33 +12,37 @@
         gap: 1rem;
 
         .board-name-field {
-          font-size: 1rem;
+          font-size: 1.1rem;
           font-weight: 700;
-          color: var(--color-neutral);
+          color: var(--color-dark) !important;
         }
 
         .edit-icon {
           font-size: 1.2rem;
           width: 1.2rem;
           height: 1.2rem;
-          color: var(--color-neutral);
         }
-
-
-
 
         .mine-badge {
           display: inline-flex;
           align-items: center;
           gap: 4px;
-          background: linear-gradient(135deg, var(--color-primary), var(--color-neutral));
+          background: var(--color-primary);
           color: #fff;
-          font-size: 0.5rem;
-          font-weight: 800;
-          padding: 2px 7px;
+
+          padding: 0.2rem 0.5rem;
           border-radius: 20px;
-          text-transform: uppercase;
-          letter-spacing: 0.1rem;
+
+          span {
+            font-size: 0.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            @media screen and (max-width: 480px) {
+              display: none; 
+            }
+          }
+
         }
       }
 
@@ -95,39 +99,4 @@
       }
     }
   }
-}
-
-// mat-option board row with delete button (global — mat-select panel is outside :host)
-.mat-mdc-option {
-  .mdc-list-item__primary-text {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  &:hover .option-delete-btn {
-    opacity: 1;
-  }
-}
-
-
-::ng-deep {
-  mat-form-field:not(.filter-select) {
-    .mat-mdc-form-field-infix {
-      width: auto !important;
-      min-width: 80px;
-      max-width: 100%;
-    }
-  }
-}
-
-.input-mirror {
-  position: absolute;
-  visibility: hidden;
-  white-space: pre; // preserves spaces
-  font-size: 15px; // must match your input font
-  font-family: 'Sora', sans-serif;
-  font-weight: 700;
-  pointer-events: none;
 }

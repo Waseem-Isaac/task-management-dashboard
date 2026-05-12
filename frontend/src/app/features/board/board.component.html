@@ -16,7 +16,7 @@
       @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
         <span class="mine-badge" >
           <mat-icon class="icon-size-0-8">star</mat-icon>
-          Mine
+          <span>Yours</span>
         </span>
 
       
@@ -31,7 +31,7 @@
 
     </div>
 
-    <div class="board-actions d-flex align-items-center">
+    <div class="board-actions d-flex align-items-center gap-3">
       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-select">
         <mat-select [value]="activeBoard()?._id" (selectionChange)="onBoardChange($event.value)" placeholder="Board"
           hideSingleSelectionIndicator="true">
@@ -47,7 +47,7 @@
          <img src="icons/add.svg" class="icon-size-1" alt="">
       </button>
 
-      <button  class="delete-btn btn-primary-icon justify-content-center icon-width-2"
+      <button  class="btn-primary-icon justify-content-center icon-width-2"
         (click)="deleteBoard(activeBoard()?._id, $event)">
          <img src="icons/remove-minus.svg" class="icon-size-1" alt="">
       </button>

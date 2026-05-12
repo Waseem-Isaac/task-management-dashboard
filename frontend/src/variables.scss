@@ -1,9 +1,12 @@
 :root {
   --color-primary: #e3783e;
-  --color-primary-hover: #ea580c;
+  --color-primary-dark: #ea580c;
   --color-primary-light: #fad4bb;
   --color-primary-contrast: #ffffff;
-  --color-body-bg: #faf6f0;
+  
+  --color-body-bg: #f7f6f3;
+
+
   --color-primary-active: #fef0e8;
   --color-primary-active-rgba: rgba(227, 120, 62, 0.1);
   --color-dark: #212121;
@@ -25,6 +28,7 @@
   --radius-md: 4px;
   --radius-xl: 12px;
   --mat-toolbar-standard-height: 45px;
+  --mat-toolbar-mobile-height: 45px;
   --footer-height: 55px;
   --sidenav-width: 210px;
   --menu-item-color-hover: #fdf6f0;

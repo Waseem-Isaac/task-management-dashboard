@@ -5,14 +5,14 @@
 import { Component, inject, input, output } from '@angular/core';
 import { Task } from '../../../../models';
 import { DatePipe, NgClass } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { UsersService } from '../../../../../users/users.service';
-import { StripHtmlPipe } from '../../../../../../shared/pipes/strip-html.pipe';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-task-card',
-  imports: [ NgClass, MatIconModule, MatMenuModule, DatePipe , StripHtmlPipe],
+  imports: [ NgClass, MatIcon, MatMenuModule, DatePipe, MatTooltip],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.scss',
 })

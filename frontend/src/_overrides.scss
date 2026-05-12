@@ -60,7 +60,11 @@ html {
       border: none !important;
     }
 
-    // --mat-form-field-outlined-input-text-color: var(--color-neutral);
+    .mat-mdc-form-field-infix {
+      width: auto !important;
+      min-width: 80px;
+      max-width: 100%;
+    }
   }
 
 
@@ -228,7 +232,15 @@ html {
     // padding: 0 !important;
     padding: 1rem 2rem !important;
   }
+
+  box-shadow: 0 1px 4px var(--color-light-grey);
 }
+
+.cdk-overlay-dark-backdrop {
+  background-color:var(--color-body-bg) !important;
+  opacity: 0.9 !important;
+}
+
 
 // Quill Editor overrides
 .ql-container.ql-snow {
@@ -277,6 +289,4 @@ quill-editor.ng-invalid.ng-touched .ql-toolbar.ql-snow {
       line-height: 2;
     }
   }
-
-
 }

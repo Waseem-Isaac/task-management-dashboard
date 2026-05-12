@@ -9,7 +9,7 @@
     <!-- <h2 class="user-name">{{ authService.currentUser()?.name }}</h2> -->
     <div class="user-name">
       <mat-form-field subscriptSizing="dynamic" appearance="outline" class="profile-name-field editable-text">
-        <input matInput [value]="authService.currentUser()?.name"
+        <input matInput appAutoWidth [value]="authService.currentUser()?.name"
           (blur)="updateMyName($event.target.value); nameEditable = false" [disabled]="!nameEditable" />
       </mat-form-field>
 

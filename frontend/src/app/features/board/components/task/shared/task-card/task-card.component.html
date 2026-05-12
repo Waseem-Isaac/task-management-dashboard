@@ -7,9 +7,10 @@
     </div>
 
     <div class="actions d-flex align-items-center">
-      <button class="btn" (click)="deleteRequested.emit(task()._id); $event.stopPropagation()">
-        <img class="icon-size-1" src="icons/remove-minus.svg" alt="Delete">
+       <button class="btn action-btn md negative" mat-icon-button (click)="deleteRequested.emit(task()._id); $event.stopPropagation()" [matTooltip]="'Delete Task'">
+          <mat-icon class="icon-size-0-9">remove</mat-icon>
       </button>
+      
     </div>
   </div>
 
@@ -24,7 +25,7 @@
   <!-- 5. Tags -->
   <div class="tags d-flex flex-wrap gap-1 mt-1">
     @for (tag of task().tags; track tag) {
-      <span class="tag">{{ tag }}</span>
+    <span class="tag">{{ tag }}</span>
     }
   </div>
 
@@ -32,20 +33,23 @@
   <hr class="card-divider" />
 
   <!-- 7. Assignee avatar + name -->
-   <div class="d-flex align-items-center justify-content-between ">
-<div class="assignee d-flex align-items-center gap-2" [class.not-found]="!task().assignee?.name">
-    <div class="user-avatar">
-      @if(task().assignee?.avatarUrl) {
+  <div class="d-flex align-items-center justify-content-between ">
+    <div class="assignee d-flex align-items-center gap-2" [class.not-found]="!task().assignee?.name">
+      <div class="user-avatar">
+        @if(task().assignee?.avatarUrl) {
         <img [src]="task().assignee?.avatarUrl" alt="">
-      } @else {
+        } @else {
         <img [src]="'icons/non-found-user-avatar.png'" alt="">
-      }
-    </div>
-     
-    <span class="assignee-name">{{ task().assignee?.name || 'Unassigned' }}</span>
-  </div>
-      <span class="due-date-badge">{{ task().dueDate | date }}</span>
+        }
+      </div>
 
-   </div>
-  
+      <span class="assignee-name">{{ task().assignee?.name || 'Unassigned' }}</span>
+    </div>
+    <div class="due-date-badge d-flex align-items-center gap-1">
+      <mat-icon class="icon-size-0-9">calendar_today</mat-icon>
+      <span >{{ task().dueDate | date }}</span>
+    </div>
+
+  </div>
+
 </div>

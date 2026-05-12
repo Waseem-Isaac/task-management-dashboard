@@ -5,7 +5,7 @@
   <div class="page-header  mb-5">
      <div>
        <div class="title">
-        Need to find someone across the system ?
+        Need To Find Someone Across The System ?
       </div>
       <div class="description">
         Browse all members across the system — find someone and request a transfer to your team.
@@ -105,7 +105,7 @@
             @if(user.role === 'MEMBER' && user.managedBy?._id !== authService.currentUser()?._id && user.transferStatus
             !== 'PENDING_TRANSFER')
             {
-            <button class="action-btn neutral" mat-icon-button (click)="requestTransfer(user)"
+            <button class="action-btn neutral" (click)="requestTransfer(user)"
               [matTooltip]="'Request Transfer'">
               <!-- <img class="icon-size-1" src="icons/transfer-request.svg" alt=""> -->
               <mat-icon class="icon-size-1">person_add</mat-icon>
