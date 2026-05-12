@@ -20,7 +20,6 @@
   <!-- <p class="card-description" >{{ task().description | stripHtml }}</p> -->
 
   <!-- 4. Due date -->
-  <span class="due-date-badge">{{ task().dueDate | date }}</span>
 
   <!-- 5. Tags -->
   <div class="tags d-flex flex-wrap gap-1 mt-1">
@@ -33,7 +32,8 @@
   <hr class="card-divider" />
 
   <!-- 7. Assignee avatar + name -->
-  <div class="assignee d-flex align-items-center gap-2" [class.not-found]="!task().assignee?.name">
+   <div class="d-flex align-items-center justify-content-between ">
+<div class="assignee d-flex align-items-center gap-2" [class.not-found]="!task().assignee?.name">
     <div class="user-avatar">
       @if(task().assignee?.avatarUrl) {
         <img [src]="task().assignee?.avatarUrl" alt="">
@@ -44,4 +44,8 @@
      
     <span class="assignee-name">{{ task().assignee?.name || 'Unassigned' }}</span>
   </div>
+      <span class="due-date-badge">{{ task().dueDate | date }}</span>
+
+   </div>
+  
 </div>

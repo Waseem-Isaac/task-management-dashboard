@@ -11,7 +11,7 @@
   .task-card {
     position: relative;
     cursor: pointer;
-    background: radial-gradient(ellipse at center top, var(--color-primary-active-rgba) 0%, transparent 100%);
+    background: radial-gradient(ellipse at left top, var(--color-primary-active-rgba) 0%, transparent 50%);
     box-shadow: 0 1px 4px var(--color-light-grey);
     // border: 1px solid var(--color-light-grey);
     border-radius: 8px;
@@ -25,8 +25,14 @@
     }
 
     &:hover:not(.overdue) {
-      box-shadow: 0 4px 8px rgba(227, 120, 62, .3);
+      box-shadow: 0 2px 4px var(--color-light-grey);
       transition: box-shadow .15s, transform .15s;;
+    }
+
+    &:hover {
+      .card-header .actions .btn {
+        opacity: 1;
+      }
     }
   }
 
@@ -65,8 +71,9 @@
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.2s ease-in;
-
+    transition: background-color 0.2s ease-in, opacity 0.15s linear;
+    opacity: 0;
+    // transition: opacity 0.15s ease-in;
     &:hover {
       background-color: var(--color-danger-light);
 
@@ -80,7 +87,7 @@
   .card-title {
     font-size: 0.85rem;
     font-weight: bold;
-    margin: 0.7rem 0 2rem;    
+    margin: 0.7rem 0 1rem;    
     color: var(--color-dark);
     width: 90%;
 
