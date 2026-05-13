@@ -12,42 +12,15 @@
         gap: 1rem;
 
         .board-name-field {
-          font-size: 1.1rem;
+          font-size: 1rem;
           font-weight: 700;
           color: var(--color-dark) !important;
+          line-height: 1;
 
           .mat-mdc-notch-piece {
             background-color: transparent !important;
             border: none !important;
           }
-        }
-
-        .edit-icon {
-          font-size: 1.2rem;
-          width: 1.2rem;
-          height: 1.2rem;
-        }
-
-        .mine-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-          background: var(--color-primary);
-          color: #fff;
-
-          padding: 0.2rem 0.5rem;
-          border-radius: 20px;
-
-          span {
-            font-size: 0.5rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1rem;
-            @media screen and (max-width: 480px) {
-              display: none; 
-            }
-          }
-
         }
       }
 
@@ -63,6 +36,12 @@
       .board-actions {
         .mat-mdc-select-panel {
           padding: 0;
+        }
+
+        .action-btn:hover {
+          mat-icon {
+            color: var(--color-primary) !important;
+          }
         }
       }
 

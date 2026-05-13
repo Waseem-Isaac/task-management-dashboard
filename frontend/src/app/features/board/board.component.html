@@ -6,42 +6,41 @@
   <div class="board-header">
     <div class="board-title d-flex align-items-center">
       <!-- Board name & Inline text field to edit the board name into one element -->
+       @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
+      <button (click)="enableEditBoardName()" class="edit-btn btn-primary-icon">
+        @if(boardNameFieldEnabled) {
+        <img width="16px" height="16px" src="icons/edit-filled.svg" alt="Edit">
+        }@else {
+        <img width="16px" height="16px" src="icons/edit.svg" alt="Edit">
+        }
+      </button>
+      }
       <mat-form-field subscriptSizing="dynamic" appearance="outline" class="board-name-field editable-text">
         <input matInput appAutoWidth [value]="activeBoard()?.name"
           (blur)="updateBoardName(activeBoard()?._id, $event.target.value, $event.target); boardNameFieldEnabled = false"
-          [disabled]="authService.currentUser()?.role !== 'TEAM_LEAD'"
-          [disabled]="!boardNameFieldEnabled" #boardNameInput />
+          [disabled]="authService.currentUser()?.role !== 'TEAM_LEAD'" [disabled]="!boardNameFieldEnabled"
+          #boardNameInput />
       </mat-form-field>
 
-      @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
-        <span class="mine-badge" >
-          <mat-icon class="icon-size-0-8">star</mat-icon>
-          <span>Yours</span>
-        </span>
-
-        <button (click)="enableEditBoardName()" class="edit-btn btn-primary-icon">
-          @if(boardNameFieldEnabled) {
-          <img width="16px" height="16px" src="icons/edit-filled.svg" alt="Edit">
-          }@else {
-          <img width="16px" height="16px" src="icons/edit.svg" alt="Edit">
-          }
-        </button>
-      }
+      
 
     </div>
 
     <div class="board-actions d-flex align-items-center gap-3">
-      <app-icon-select-field [options]="boards()" (onSelect)="onBoardChange($event)" [matIcon]="'dashboard'" [tooltip]="'Select Board'" [selectedOption]="activeBoard()" [bindLabel]="'name'" [bindValue]="'_id'"></app-icon-select-field>
+      <app-icon-select-field [options]="boards()" (onSelect)="onBoardChange($event)" [matIcon]="'dashboard'"
+        [tooltip]="'Select Board'" [selectedOption]="activeBoard()" [bindLabel]="'name'"
+        [bindValue]="'_id'"></app-icon-select-field>
 
       @if(authService.currentUser()?.role === 'TEAM_LEAD' && boardsService.isBoardCreatedByCurrentUser(activeBoard())) {
-      <button  (click)="openAddBoardDialog()" class="action-btn" [matTooltip]="'New Board'">
+      <div class="d-flex align-items-center gap-2">
+        <button (click)="openAddBoardDialog()" class="action-btn" [matTooltip]="'New Board'">
           <mat-icon class="icon-size-1">add</mat-icon>
-      </button>
+        </button>
 
-      <button  class="action-btn" [matTooltip]="'Delete Board'"
-        (click)="deleteBoard(activeBoard()?._id, $event)">
-        <mat-icon class="icon-size-1">remove</mat-icon>
-      </button>
+        <button class="action-btn" [matTooltip]="'Delete Board'" (click)="deleteBoard(activeBoard()?._id, $event)">
+          <mat-icon class="icon-size-1">remove</mat-icon>
+        </button>
+      </div>
       }
     </div>
   </div>

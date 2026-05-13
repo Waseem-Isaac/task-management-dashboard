@@ -15,17 +15,16 @@
 
     <!-- Header row: priority + status -->
     <div class="meta-row">
-
       <!-- Priority field -->
       <div class="field d-flex align-items-center">
         <span #priorityFieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="priorityMenu"
           style="width:0;height:0;overflow:hidden;"></span>
-
-        <span class="priority-badge priority-{{ t.priority }}">{{ TASK_PRIORITY_LABELS[t.priority] }}</span>
-
-        <button (click)="priorityFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
+<button (click)="priorityFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
           <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
         </button>
+        <span class="priority-badge priority-{{ t.priority }}">{{ TASK_PRIORITY_LABELS[t.priority] }}</span>
+
+        
 
         <mat-menu #priorityMenu="matMenu">
           @for(s of priorityOptions; track s) {
@@ -38,12 +37,12 @@
       <div class="field d-flex align-items-center">
         <span #statusFieldMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="statusMenu"
           style="width:0;height:0;overflow:hidden;"></span>
-
-        <span class="status-badge status-{{ t.status }}">{{ TASK_STATUS_LABELS[t.status] }}</span>
-
-        <button (click)="statusFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
+<button (click)="statusFieldMenuTrigger.openMenu()" class="z-index-9999 edit-btn btn-primary-icon">
           <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
         </button>
+        <span class="task-status-badge  status-badge status-{{ t.status }}">{{ TASK_STATUS_LABELS[t.status] }}</span>
+
+        
 
         <mat-menu #statusMenu="matMenu">
           @for(s of statusOptions; track s) {
@@ -60,6 +59,9 @@
 
     <!-- Title -->
     <div class="field d-flex align-items-center gap-3">
+       <button (click)="isEditingTitle.set(!isEditingTitle())" class="z-index-9999 edit-btn btn-primary-icon">
+        <img class="icon-size-1" src="icons/edit.svg" alt="Edit">
+      </button>
       <mat-form-field [class.p-0]="!isEditingTitle()" appearance="outline" class="task-title editable-text full-width"
         subscriptSizing="dynamic">
         <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" #titleFieldInput [value]="t.title"
@@ -67,25 +69,23 @@
           [disabled]="!isEditingTitle()" class="task-title-input"></textarea>
       </mat-form-field>
 
-      <button (click)="isEditingTitle.set(!isEditingTitle())" class="z-index-9999 edit-btn btn-primary-icon">
-        <img class="icon-size-1" src="icons/edit.svg" alt="Edit">
-      </button>
+     
     </div>
 
     <!-- Description -->
     <div class="field d-flex align-items-center gap-3 mb-4">
       <!-- <p class="task-description" [innerHTML]="t.description"></p> -->
 
+      <button (click)="isEditingDescription.set(!isEditingDescription())"
+        class="z-index-9999 edit-btn btn-primary-icon">
+        <img class="icon-size-1" src="icons/edit.svg" alt="Edit">
+      </button>
       <quill-editor class="editable-text full-width task-description-input" [class.disabled]="!isEditingDescription()"
         [ngModel]="t?.description" #editor (onBlur)="commitDescription(t, editor.quillEditor.root.innerHTML)"
         [readOnly]="!isEditingDescription()">
       </quill-editor>
 
 
-      <button (click)="isEditingDescription.set(!isEditingDescription())"
-        class="z-index-9999 edit-btn btn-primary-icon">
-        <img class="icon-size-1" src="icons/edit.svg" alt="Edit">
-      </button>
     </div>
     <mat-divider />
 
@@ -101,6 +101,10 @@
         <!-- <span style="width:0;height:0;overflow:hidden;"></span> -->
 
         <div class="field d-flex align-items-center gap-1">
+          
+          <button (click)="dueDatePicker.open()" class="z-index-9999 edit-btn btn-primary-icon">
+            <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
+          </button>
           <span class="detail-value" [class.overdue-text]="isOverdue(t)">
             {{ t.dueDate + 'T00:00:00' | date: 'mediumDate' }}
           </span>
@@ -110,9 +114,6 @@
             style="width:0;height:0;opacity:0;position:absolute;pointer-events:none;" />
           <mat-datepicker #dueDatePicker />
 
-          <button (click)="dueDatePicker.open()" class="z-index-9999 edit-btn btn-primary-icon">
-            <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
-          </button>
         </div>
       </div>
 
@@ -133,6 +134,10 @@
           style="width:0;height:0;overflow:hidden;"></span>
 
         <div class="field d-flex align-items-center gap-1">
+          <button (click)="loadAssignees(); assigneeFieldMenuTrigger.openMenu(); "
+            class="z-index-9999 edit-btn btn-primary-icon">
+            <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
+          </button>
           <span class="detail-value user-cell">
             @if (t.assignee?.avatarUrl) {
             <div class="user-avatar sm"><img [src]="t.assignee!.avatarUrl" alt="" /></div>
@@ -140,10 +145,7 @@
             <span>{{ t.assignee?.name || 'Unassigned' }}</span>
           </span>
 
-          <button (click)="loadAssignees(); assigneeFieldMenuTrigger.openMenu(); "
-            class="z-index-9999 edit-btn btn-primary-icon">
-            <img class="icon-size-0-7" src="icons/edit.svg" alt="Edit">
-          </button>
+          
 
           <mat-menu #assigneeMenu="matMenu">
             @for(s of teamService.teamMembers(); track s._id) {

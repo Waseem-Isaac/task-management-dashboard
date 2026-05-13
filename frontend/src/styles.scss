@@ -407,6 +407,8 @@ label {
       cursor: pointer;
 
       mat-icon {
+        transition: all 0.2s linear;
+
         color: var(--color-icon);
         font-weight: 700;
       }
@@ -437,6 +439,14 @@ label {
         mat-icon {
           color: var(--color-icon);
         }
+
+        &:hover {
+          // background-color: var(--color-light-grey) !important;
+
+          mat-icon {
+            color: var(--color-primary) !important;
+          }
+        }
       }
 
       &.primary {
@@ -449,7 +459,7 @@ label {
       }
     }
 
-.status-badge {
+.status-badge, .task-status-badge {
   font-size: 0.8rem;
   font-weight: 700;
 
@@ -479,14 +489,7 @@ label {
     }
   }
 
-  &.status-todo {
-
-    &::before {
-     display: none;
-    }
-  }
-
-  &::before {
+  &:not(.task-status-badge)::before {
     content: '';
     display: inline-block;
 

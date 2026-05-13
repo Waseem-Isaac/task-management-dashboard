@@ -28,7 +28,7 @@
 .meta-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -61,7 +61,7 @@
   }
 
   &.status-todo {
-    background: var(--color-inactive);
+    background: var(--color-light-grey);
     color: var(--color-neutral);
   }
 
