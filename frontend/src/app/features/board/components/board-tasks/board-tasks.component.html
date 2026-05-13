@@ -81,16 +81,12 @@
           <div class="skeleton skeleton-avatar-row"></div>
         </div>
         }
-      }@else if(!(filteredTasks() | filterByStatus: col.status).length) {
+      }@else if(!isDragging() && !(filteredTasks() | filterByStatus: col.status).length) {
         <div class="empty-state sm">
           <mat-icon class="empty-state-icon">assignment</mat-icon>
           <h3 class="mb-3 bold dark font-size-1">No tasks</h3>
           @if(col.status === 'todo'){
           <p class="mb-4">You don't have any tasks to do. <button class="link" (click)="openAddDialog()">Create one</button></p>
-          <!-- <button  class="action-btn mt-3" (click)="openAddDialog()">
-                      <mat-icon class="icon-size-1">add</mat-icon>
-
-          </button> -->
           }@else if(col.status === 'in_progress') {
             <p>No tasks in progress</p>
           }@else if(col.status === 'done'){
@@ -101,6 +97,7 @@
       @else {
         @for (task of filteredTasks() | filterByStatus: col.status; track task._id) {
       <app-task-card cdkDrag [cdkDragData]="task" [task]="task"
+          (cdkDragStarted)="isDragging.set(true)" (cdkDragEnded)="isDragging.set(false)"
           (deleteRequested)="handleDelete($event)" (viewRequested)="openViewDialog($event)">
 
           <div class="task-drag-handle" cdkDragHandle (click)="$event.stopPropagation()">

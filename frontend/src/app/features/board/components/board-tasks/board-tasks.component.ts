@@ -58,6 +58,7 @@ export class BoardTasksComponent {
   activeStatus = signal<Task['status'] | null>(null);
   activePriority = signal<Task['priority'] | null>(null);
   activeAssignee = signal<string | null>(null);
+  isDragging = signal(false);
 
   constructor() {
     // Re-load tasks whenever the active board changes (initial load + board switching).
