@@ -5,13 +5,16 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
+      gap: 0.5rem;
 
       .board-title {
         font-weight: 700;
         color: var(--color-neutral);
         gap: 1rem;
-
+        width: 100%;
+        flex: 5;
         .board-name-field {
+          flex: 1;
           font-size: 1rem;
           font-weight: 700;
           color: var(--color-dark) !important;
@@ -20,6 +23,23 @@
           .mat-mdc-notch-piece {
             background-color: transparent !important;
             border: none !important;
+          }
+
+          textarea{
+            overflow: hidden;
+          }
+        }
+      }
+
+      .board-actions {
+        flex: 1;
+        .mat-mdc-select-panel {
+          padding: 0;
+        }
+
+        .action-btn:hover {
+          mat-icon {
+            color: var(--color-primary) !important;
           }
         }
       }
@@ -33,24 +53,11 @@
         }
       }
 
-      .board-actions {
-        .mat-mdc-select-panel {
-          padding: 0;
-        }
-
-        .action-btn:hover {
-          mat-icon {
-            color: var(--color-primary) !important;
-          }
-        }
-      }
+   
 
       @media screen and (max-width: 500px) {
-        // flex-direction: column;
         gap: 0.5rem;
-        // align-items: flex-start;
-        // padding: 0 1rem;
-        flex-wrap: wrap;
+        // flex-wrap: wrap;
 
         .board-title {
           width: 100%;
