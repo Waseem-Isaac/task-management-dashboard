@@ -16,18 +16,40 @@ export class UsersService {
   readonly users = this._users.asReadonly();
   readonly isLoading = signal(true);
   readonly meta = signal<PaginationMeta | null>(null);
+  payloadCriteria = signal<{
+    limit: number;
+    page: number;
+    active? : boolean;
+    eligibleForTransfer?: boolean;
+    search?: string | null;
+  }>({
+    limit: 10,
+    page: 1
+  });
 
-  loadUsers(active?: boolean , page = 1, limit = 10): void {
-    let params = new HttpParams().set('page', String(page)).set('limit', String(limit));
-    if (active === true) params = params.set('active', 'true');
+  updateCriteria(partial: Partial<{ limit: number; page: number; active?: boolean; eligibleForTransfer?: boolean; search?: string | null }>): void {
+    this.payloadCriteria.update((current) => ({ ...current, ...partial }));
+  }
+
+  
+  reset(): void {
+    this._users.set([]);
+    this.payloadCriteria.set({ limit: 10, page: 1});
+  }
+
+  loadUsers(append = false): Observable<{ users: User[]; meta: PaginationMeta }> {
+    const params = new HttpParams({ fromObject: this.payloadCriteria() as any });
+
     this.isLoading.set(true);
-    this.http.get<{ users: User[]; meta: PaginationMeta }>('users', { params }).subscribe({
-      next: (data) => {
-        this._users.set(data.users);
+    return this.http.get<{ users: User[]; meta: PaginationMeta }>('users', { params }).pipe(
+      tap((data) => {
+        append
+          ? this._users.update((u) => [...u, ...data.users])
+          : this._users.set(data.users);
         this.meta.set(data.meta);
         this.isLoading.set(false);
-      },
-    });
+      })
+    );
   }
 
   getUserById(id: string): Observable<User> {

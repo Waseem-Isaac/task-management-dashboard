@@ -12,6 +12,21 @@ router.get('/', async (req, res, next) => {
   try {
     const filter = {};
     if (req.query.active === 'true') filter.active = true;
+    if(req.query.eligibleForTransfer === 'true') {
+      // find users who are managed by someone else, and not already requested for transfer to me
+      filter.managedBy = { $ne: null, $ne: req.user._id };
+      filter.role = 'MEMBER';
+      filter.transferStatus = { $ne: 'PENDING_TRANSFER' }; // exclude members already pending transfer
+    }
+
+    if(req.query.search) {
+      // if search query word is p[p[ , then we want to handle error from regex - so we can escape special characters in the search string before using it in the regex
+      const escapedSearch = req.query.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      filter.$or = [
+        { name:  { $regex: escapedSearch, $options: 'i' } },
+        { email: { $regex: escapedSearch, $options: 'i' } },
+      ];
+    }
 
     const page  = Math.max(1, parseInt(req.query.page,  10) || 1);
     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
@@ -87,6 +102,43 @@ router.get('/me/team', async (req, res, next) => {
     next(err);
   }
 });
+
+// // Get a paginated list of members available for transfer to my management (i.e. members managed by others but not already requested for transfer to me),
+// router.get('/me/available-for-transfer', async (req, res, next) => {
+//   try {
+//     const page  = Math.max(1, parseInt(req.query.page,  10) || 1);
+//     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
+//     const skip  = (page - 1) * limit;
+
+//     // find users who are managed by someone else, and not already requested for transfer to me
+//     const filter = {
+//       managedBy: { $ne: null, $ne: req.user._id },
+//       role: 'MEMBER',
+//       transferStatus: { $ne: 'PENDING_TRANSFER' }, // exclude members already pending transfer
+//     };
+
+//     const [users, totalCount] = await Promise.all([
+//       User.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }).populate('managedBy', '_id name email avatarUrl'),
+//       User.countDocuments(filter),
+//     ]);
+
+//     const totalPages = Math.ceil(totalCount / limit);
+
+//     res.json({
+//       users,
+//       meta: {
+//         totalCount,
+//         totalPages,
+//         page,
+//         limit, 
+//         hasNextPage: page < totalPages,
+//         hasPrevPage: page > 1,
+//       },
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 // POST create a new user (admin — no password, active: false by default)
 router.post('/', async (req, res, next) => {

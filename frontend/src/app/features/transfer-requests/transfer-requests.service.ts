@@ -1,7 +1,7 @@
 /** Transfer Requests Service */
 import { inject, Injectable, signal } from '@angular/core';
 import { PaginationMeta } from '../../shared/components/pagination/pagination.component';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 import { TransferRequest } from './transfer-requests.model';
 import { Observable, tap } from 'rxjs';
@@ -16,9 +16,21 @@ export class TransferRequestsService {
   readonly transferRequests = this._transferRequests.asReadonly();
   readonly isLoading = signal(true);
   readonly meta = signal<PaginationMeta | null>(null);
- 
-  loadTransferRequests(page = 1, limit = 10): void {
-    let params = new HttpParams().set('page', String(page)).set('limit', String(limit));
+  
+  payloadCriteria = signal<{
+    limit: number;
+    page: number;
+    filterType: 'incoming' | 'outgoing' | null;
+  }>({
+    limit: 10,
+    page: 1,
+    filterType: null,
+  });
+
+  loadTransferRequests(): void {
+    const { filterType, ...rest } = this.payloadCriteria();
+    const params = filterType ? { ...rest, filterType } : rest;
+
     this.isLoading.set(true);
 
     this.http.get<{ requests: TransferRequest[]; meta: PaginationMeta }>('transfer-requests', { params }).subscribe({
@@ -30,11 +42,20 @@ export class TransferRequestsService {
     });
   }
 
+  updateCriteria(partial: Partial<{ limit: number; page: number; filterType: 'incoming' | 'outgoing' | null }>): void {
+    this.payloadCriteria.update((current) => ({ ...current, ...partial }));
+  }
+
+  reset(): void {
+    this._transferRequests.set([]);
+    this.payloadCriteria.set({ limit: 10, page: 1, filterType: null });
+  }
+
   // Add Transfer Request
   addTransferRequest(memberId: string): Observable<TransferRequest> {
     return this.http.post<TransferRequest>('transfer-requests', { memberId }).pipe(
       tap((created) => {
-        this._transferRequests.update((requests) => [...requests, created]);
+        this._transferRequests.update((requests) => [created, ...requests]);
       })
     );
   }

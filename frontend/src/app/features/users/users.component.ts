@@ -1,7 +1,7 @@
 /**
  * Team members view displaying user avatars and task assignments.
  */
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { UsersService } from './users.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
@@ -24,7 +24,7 @@ import { TransferRequest } from '../transfer-requests/transfer-requests.model';
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit , OnDestroy {
   protected usersService = inject(UsersService);
   private dialog = inject(MatDialog);
   private snackbar = inject(MatSnackBar);
@@ -44,12 +44,17 @@ export class UsersComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    this.usersService.loadUsers(false, 1, this.limit);
+    this.usersService.loadUsers().subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.usersService.reset();
   }
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
-    this.usersService.loadUsers(false, page, this.limit);
+    this.usersService.updateCriteria({ page }); 
+    this.usersService.loadUsers().subscribe();
   }
 
   openAddUserDialog(): void {

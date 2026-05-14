@@ -1,5 +1,5 @@
 <div class="list-page">
-  @if (usersService.isLoading()) {
+  @if (usersService.isLoading() && !usersService.users().length) {
   <app-loading-spinner />
   } @else {
   <div class="page-header  mb-5">
@@ -33,6 +33,9 @@
       Inactive members have been invited but haven't accepted yet — they'll have limited access until they do.
     </span>
   </div>
+   @if (usersService.isLoading()) {
+  <app-loading-spinner />
+  } @else {
   <!-- Build a table -->
   <div class="table-container">
     <table class="list-table">
@@ -122,5 +125,9 @@
   @if(usersService.meta() && usersService.meta()!.totalPages > 1) {
   <app-pagination [meta]="usersService.meta()" (pageChange)="onPageChange($event)" />
   }
+
+
+
+}
   }
 </div>

@@ -80,14 +80,23 @@ router.get('/', async (req, res, next) => {
     const page  = Math.max(1, parseInt(req.query.page)  || 1);
     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
     const skip  = (page - 1) * limit;
+    // as a lead , I need to allow filtering by if the request is an incoming request to me (toLead) or an outgoing request from me (fromLead)
+    const filterType = req.query.filterType; // expected values: 'incoming', 'outgoing', or undefined for all
+    let query;
 
-    const query = {
-      $or: [
-        { member: req.user._id },   // requests involves me - as member
-        { fromLead: req.user._id }, // requests made by me - as current lead
+    if (filterType === 'incoming') {
+      query = { toLead: req.user._id };
+    } else if (filterType === 'outgoing') {
+      query = { fromLead: req.user._id };
+    } else {
+      query = {
+        $or: [
+          { member: req.user._id },   // requests involves me - as member
+          { fromLead: req.user._id }, // requests made by me - as current lead
         { toLead: req.user._id },    // requests made to me - as new lead
-      ]
-    };
+        ]
+      };
+    }
 
     const [transferRequests, totalCount] = await Promise.all([
       TransferRequest.find(query).populate(populateOptions).sort({ createdAt: -1 }).skip(skip).limit(limit),

@@ -1,7 +1,7 @@
 /**
  * Team members view displaying user avatars and task assignments.
  */
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +22,7 @@ import { TransferRequestAddComponent } from './transfer-request-add/transfer-req
   templateUrl: './transfer-requests.component.html',
   styleUrl: './transfer-requests.component.scss',
 })
-export class TransferRequestsComponent implements OnInit {
+export class TransferRequestsComponent implements OnInit, OnDestroy {
   protected transferRequestsService = inject(TransferRequestsService);
   private dialog = inject(MatDialog);
   private snackbar = inject(MatSnackBar);
@@ -30,19 +30,27 @@ export class TransferRequestsComponent implements OnInit {
   authService = inject(AuthService);
   protected currentPage = signal(1);
   protected readonly limit = 10;
-  activeStatus = signal<'INCOMING' | 'OUTGOING' | 'RESOLVED' | null>(null);
+  activeStatus = signal<'incoming' | 'outgoing' | null>(null);
   TRANSFER_REQUEST_STATUS_LABELS = TRANSFER_REQUEST_STATUS_LABELS;
-  setFilter(status: 'INCOMING' | 'OUTGOING' | 'RESOLVED' | null): void {
-    this.activeStatus.set(status);
+
+  setFilter(filterType: 'incoming' | 'outgoing' | null): void {
+    this.activeStatus.set(filterType);
+    this.transferRequestsService.updateCriteria({ filterType, page: 1 });
+    this.transferRequestsService.loadTransferRequests();
   }
-  
+
   ngOnInit(): void {
-    this.transferRequestsService.loadTransferRequests(1, this.limit);
+    this.transferRequestsService.loadTransferRequests();
+  }
+
+  ngOnDestroy(): void {
+    this.transferRequestsService.reset();
   }
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
-    this.transferRequestsService.loadTransferRequests(page, this.limit);
+    this.transferRequestsService.updateCriteria({ page });
+    this.transferRequestsService.loadTransferRequests();
   }
 
   openAddTransferRequest(): void {

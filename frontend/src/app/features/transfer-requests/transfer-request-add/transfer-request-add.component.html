@@ -1,3 +1,7 @@
+  @if (usersService.isLoading() && !usersService.users().length) {
+  <app-loading-spinner />
+  } @else {
+
 <div mat-dialog-title class="dialog-title">
   <span>New Transfer Request</span>
   <button mat-icon-button (click)="onCancel()">
@@ -6,15 +10,62 @@
 </div>
 
 <mat-dialog-content>
+  <div class="field d-flex align-items-center">
 
-  Not implemented yet. 
-  <br>but you can request a transfer from the <strong>users page</strong> by clicking the transfer icon next to a team member that is not under your management.
+  <!-- Search input field -->
+  <mat-form-field appearance="outline" class="search-input full-width" subscriptSizing="dynamic">
+    <input matInput placeholder="Search by name or email" [formControl]="searchControl" (keydown.enter)="onSearch()" />
+
+      @if (searchControl.value) {
+        <button mat-icon-button matSuffix class="clear-btn" (click)="searchControl.setValue(''); onSearch();">
+          <mat-icon class="icon-size-1">close</mat-icon>
+        </button>
+      }
+  </mat-form-field>
   
+    <button class="search-btn btn-primary-icon" (click)="onSearch()">
+      <mat-icon >search</mat-icon>
+    </button>
+  </div>
+
+  @if (usersService.isLoading() && !usersService.users().length) {
+  <app-loading-spinner />
+  } @else if (!usersService.isLoading() && !usersService.users().length) {
+    <div class="empty-state sm gap-4">
+      <mat-icon class="empty-state-icon">person_off</mat-icon>
+      <h3>No members found</h3>
+    </div>
+  }
+  @else {
+    <div class="members-list" (scroll)="onListScroll($event)">
+      @for (user of usersService.users(); track user._id) {
+      <button [class.selected]="selectedMemberControl.value === user._id" class="member-btn full-width d-flex justify-content-between  align-items-center gap-3" (click)="selectedMemberControl.setValue(user._id)">
+        <div class="member-content d-flex align-items-center gap-3">
+          <div class="user-avatar md"><img [src]="user?.avatarUrl" alt=""></div>
+          <div class="user-info md">
+            <div class="user-name d-flex align-items-center">
+              {{ user?.name }}
+            </div>
+            <span class="user-email">{{ user?.email }}</span>
+          </div>
+        </div>
+
+        @if(selectedMemberControl.value === user._id) {
+          <mat-icon class="icon-color">check</mat-icon>
+          } 
+      </button>
+      }
+      @if (usersService.isLoading()) {
+       <div class="list-loading">Loading...</div>
+      }
+    </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="form-actions">
   <button mat-button type="button" (click)="onCancel()">Cancel</button>
-  <!-- <button mat-button class="btn-primary" type="submit" (click)="onSubmit()">
-    Create
-  </button> -->
+  <button mat-button class="btn-primary" type="submit" (click)="onSubmit()">
+    Request
+  </button>
 </mat-dialog-actions>
+  }

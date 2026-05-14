@@ -18,3 +18,97 @@
   gap: 0.75rem;
   padding-top: 0rem;
 }
+
+  .field {
+    .search-btn {
+      padding: 0.5rem !important;
+
+      background-color: var(--color-primary) !important;
+      color: var(--color-primary-contrast) !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+
+    ::ng-deep {
+      .mdc-notched-outline__trailing {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+    }
+  }
+
+
+
+.members-list {
+  margin-top: 1rem;
+  flex-direction: column;
+  height: 450px;
+  overflow: auto; 
+  @media screen and (max-width: 500px) {
+    height: 300px;
+  }
+  .member-btn {
+    border: none;
+    border-bottom: 1px solid var(--color-light-grey);
+    padding: 0.5rem;
+    background-color: transparent;
+    transition: background-color 0.2s linear;
+    cursor: pointer;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: var(--color-body-bg);
+    }
+
+    &.selected {
+      background-color: var(--color-primary-active);
+    }
+  }
+
+  .list-loading {
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--color-neutral);
+  }
+
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  line-height: 1.5;
+
+  &.md {
+    .user-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .user-email {
+      font-size: 0.7rem;
+    }
+  }
+}
+
+.user-name,
+.user-email {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.user-email {
+  font-size: 0.75rem;
+  color: var(--color-neutral);
+}
